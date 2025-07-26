@@ -4,11 +4,13 @@ namespace Domain.Model
 {
     public class Plan: BusinessEntity
     {
+        public int Id { get; private set; }
         public string Descripcion { get; private set; }
         public int IdEspecialidad { get; private set; }
 
-        public Plan(string descripcion, int idEspecialidad) : base()
+        public Plan(int id,string descripcion, int idEspecialidad) : base()
         {
+            Id = id;
             SetDescripcion(descripcion);
             SetIdEspecialidad(idEspecialidad);
         }
@@ -24,5 +26,12 @@ namespace Domain.Model
                 throw new ArgumentException("El ID de especialidad debe ser un número positivo.", nameof(idEspecialidad));
             IdEspecialidad = idEspecialidad;
         }
+
+        public int getId() {
+
+            return Id;
+
+        }
+
     }
 }

@@ -5,9 +5,11 @@ namespace Domain.Model
     public class Especialidad: BusinessEntity
     {
         public string Descripcion { get; private set; }
+        public int Id { get; private set; }
 
-        public Especialidad(string descripcion) : base()
+        public Especialidad(int id,string descripcion) : base()
         {
+            Id = id;
             SetDescripcion(descripcion);
         }
 
