@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Data;
+﻿using Data;
 using Domain.Model;
-using Domain.Utils;
 
 namespace Domain.Services
 {
@@ -14,7 +8,9 @@ namespace Domain.Services
 
         public void Add(Especialidad especialidad)
         {
-            especialidad.SetId(IdGenerator.GetNextId(EspecialidadMemory.Especialidades));
+
+            especialidad.SetId(GetNextId());
+            
             EspecialidadMemory.Especialidades.Add(especialidad);
         }
 
@@ -33,29 +29,44 @@ namespace Domain.Services
             }
         }
 
-        public List<Especialidad> GetAll()
-        {
-            return EspecialidadMemory.Especialidades;
-        }
-
-        public Especialidad? GetById(int id)
+        public Especialidad Get(int id)
         {
             return EspecialidadMemory.Especialidades.Find(e => e.Id == id);
         }
 
+        public IEnumerable<Especialidad> GetAll()
+        {
+            return EspecialidadMemory.Especialidades.ToList();
+        }
+
         public bool Update(Especialidad especialidad)
         {
-            Especialidad? existingEspecialidad = EspecialidadMemory.Especialidades.Find(e => e.Id == especialidad.Id);
-            if (existingEspecialidad != null)
+            Especialidad? especialidadToUpdate = EspecialidadMemory.Especialidades.Find(e => e.Id == especialidad.Id);
+
+            if (especialidadToUpdate != null)
             {
-                existingEspecialidad.SetDescripcion(especialidad.Descripcion);
+               especialidadToUpdate.SetDescripcion(especialidad.Descripcion);
                 return true;
             }
             else
             {
                 return false;
             }
-        }   
+        }
+        private static int GetNextId()
+        {
+            int nextId;
 
+            if (EspecialidadMemory.Especialidades.Count > 0)
+            {
+                nextId = EspecialidadMemory.Especialidades.Max(x => x.Id) + 1;
+            }
+            else
+            {
+                nextId = 1;
+            }
+
+            return nextId;
+        }
     }
 }

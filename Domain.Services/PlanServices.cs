@@ -1,7 +1,5 @@
 ﻿using Domain.Model;
 using Data;
-using Domain.Utils;
-
 
 namespace Domain.Services
 {
@@ -10,7 +8,7 @@ namespace Domain.Services
         public void Add(Plan plan)
         {
 
-            plan.SetId(IdGenerator.GetNextId(PlanMemory.Planes));
+            plan.SetId(GetNextId());
 
             PlanMemory.Planes.Add(plan);
 
@@ -31,29 +29,44 @@ namespace Domain.Services
             }
         }
 
-        public Plan? GetById(int id)
+        public Plan Get(int id)
         {
-            return PlanMemory.Planes.Find(p => p.Id == id);
+            return PlanMemory.Planes.Find(x => x.Id == id);
         }
 
-        public List<Plan> GetAll()
+        public IEnumerable<Plan> GetAll()
         {
-            return PlanMemory.Planes;
+            return PlanMemory.Planes.ToList();
         }
 
         public bool Update(Plan plan)
         {
-            Plan? existingPlan = PlanMemory.Planes.Find(p => p.Id == plan.Id);
-            if (existingPlan != null)
+            Plan? planToUpdate = PlanMemory.Planes.Find(p => p.Id == plan.Id);
+            if (planToUpdate != null)
             {
-                existingPlan.SetDescripcion(plan.Descripcion);
-                existingPlan.SetIdEspecialidad(plan.IdEspecialidad);
+                planToUpdate.SetDescripcion(plan.Descripcion);
+                planToUpdate.SetIdEspecialidad(plan.IdEspecialidad);
                 return true;
             }
             else
             {
                 return false;
             }
+        }
+        private static int GetNextId()
+        {
+            int nextId;
+
+            if (PlanMemory.Planes.Count > 0)
+            {
+                nextId = PlanMemory.Planes.Max(x => x.Id) + 1;
+            }
+            else
+            {
+                nextId = 1;
+            }
+
+            return nextId;
         }
 
 

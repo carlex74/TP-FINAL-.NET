@@ -2,18 +2,25 @@
 
 namespace Domain.Model
 {
-    public class Plan: BusinessEntity
+    public class Plan
     {
         public int Id { get; private set; }
         public string Descripcion { get; private set; }
         public int IdEspecialidad { get; private set; }
 
-        public Plan(int id,string descripcion, int idEspecialidad) : base()
+        public Plan(int id,string descripcion, int idEspecialidad)
         {
-            Id = id;
+            SetId(id);
             SetDescripcion(descripcion);
             SetIdEspecialidad(idEspecialidad);
         }
+        public void SetId(int id)
+        {
+            if (id < 0)
+                throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
+            Id = id;
+        }
+
         public void SetDescripcion(string descripcion)
         {
             if (string.IsNullOrWhiteSpace(descripcion))

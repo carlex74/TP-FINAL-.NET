@@ -2,15 +2,22 @@
 
 namespace Domain.Model
 {
-    public class Especialidad: BusinessEntity
+    public class Especialidad
     {
         public string Descripcion { get; private set; }
         public int Id { get; private set; }
 
-        public Especialidad(int id,string descripcion) : base()
+        public Especialidad(int id,string descripcion)
         {
-            Id = id;
+            SetId(id);
             SetDescripcion(descripcion);
+        }
+
+        public void SetId(int id)
+        {
+            if (id < 0)
+                throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
+            Id = id;
         }
 
         public void SetDescripcion(string descripcion)
