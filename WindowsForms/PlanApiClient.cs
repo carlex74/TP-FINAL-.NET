@@ -9,10 +9,10 @@ using DTOs;
 
 namespace WindowsForms
 {
-    public class PlanesApiPlan
+    public class PlanApiClient
     {
         private static HttpClient client = new HttpClient();
-        static PlanesApiPlan()
+        static PlanApiClient()
         {
             client.BaseAddress = new Uri("http://localhost:5183/");
             client.DefaultRequestHeaders.Accept.Clear();
@@ -64,6 +64,4 @@ namespace WindowsForms
             response.EnsureSuccessStatusCode();
         }
     }
-
-
 }

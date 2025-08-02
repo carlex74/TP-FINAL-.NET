@@ -1,30 +1,28 @@
-using DTOs;
-using System.Reflection.Emit;
-using System.Text.RegularExpressions;
+﻿using DTOs;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace WindowsForms
+namespace WindowsForms.Vistas
 {
-    public enum FormMode
+    public partial class PlanDetalle : Form
     {
-        Add,
-        Update
-    }
-
-    public partial class EspecialidadDetalle : Form
-    {
-        private EspecialidadDTO especialidad;
+        private PlanDTO plan;
         private FormMode mode;
 
-        public EspecialidadDTO Especialidad
+        public PlanDTO Plan
         {
-            get { return especialidad; }
+            get { return plan; }
             set
             {
-                especialidad = value;
-                this.SetEspecialidad();
+                plan = value;
+                this.SetPlan();
             }
         }
         public FormMode Mode
@@ -38,7 +36,7 @@ namespace WindowsForms
                 SetFormMode(value);
             }
         }
-        public EspecialidadDetalle()
+        public PlanDetalle()
         {
             InitializeComponent();
             Mode = FormMode.Add;
@@ -46,16 +44,17 @@ namespace WindowsForms
 
         private async void aceptarButton_Click(object sender, EventArgs e)
         {
-            if (this.ValidateEspecialidad())
+            if (this.ValidatePlan())
             {
                 try
                 {
-                    if (this.Especialidad == null)
+                    if (this.Plan == null)
                     {
-                        this.Especialidad = new EspecialidadDTO();
+                        this.Plan = new PlanDTO();
                     }
-                    this.Especialidad.Id = int.Parse(IdTextBox.Text);
-                    this.Especialidad.Descripcion = DescripcionTextBox.Text;
+                    this.Plan.Id = int.Parse(IdTextBox.Text);
+                    this.Plan.Descripcion = DescripcionTextBox.Text;
+                    this.Plan.IdEspecialidad = int.Parse(IdEspecialidadTextBox.Text);
 
                     //El Detalle se esta llevando la responsabilidad de llamar al servicio
                     //pero tal vez deberia ser solo una vista y que esta responsabilidad quede
@@ -63,13 +62,12 @@ namespace WindowsForms
 
                     if (this.Mode == FormMode.Update)
                     {
-                        await EspecialidadApiEspecialidad.UpdateAsync(this.Especialidad);
+                        await PlanApiClient.UpdateAsync(this.Plan);
                     }
                     else
                     {
-                        await EspecialidadApiEspecialidad.AddAsync(this.Especialidad);
+                        await PlanApiClient.AddAsync(this.Plan);
                     }
-
                     this.Close();
                 }
                 catch (Exception ex)
@@ -84,10 +82,11 @@ namespace WindowsForms
             this.Close();
         }
 
-        private void SetEspecialidad()
+        private void SetPlan()
         {
-            this.IdTextBox.Text = this.Especialidad.Id.ToString();
-            this.DescripcionTextBox.Text = this.Especialidad.Descripcion;
+            this.IdTextBox.Text = this.Plan.Id.ToString();
+            this.DescripcionTextBox.Text = this.Plan.Descripcion;
+            this.IdEspecialidadTextBox.Text = this.Plan.IdEspecialidad.ToString();
         }
 
         private void SetFormMode(FormMode value)
@@ -107,30 +106,27 @@ namespace WindowsForms
             }
         }
 
-        private bool ValidateEspecialidad()
+        private bool ValidatePlan()
         {
             bool isValid = true;
 
             errorProvider.SetError(IdTextBox, string.Empty);
             errorProvider.SetError(DescripcionTextBox, string.Empty);
-
-            if (this.IdTextBox.Text == string.Empty)
-            {
-                isValid = false;
-                errorProvider.SetError(IdTextBox, "El Id es Requerido");
-            }
+            errorProvider.SetError(IdEspecialidadTextBox, string.Empty);
 
             if (this.DescripcionTextBox.Text == string.Empty)
             {
                 isValid = false;
                 errorProvider.SetError(DescripcionTextBox, "La Descripcion es Requerida");
             }
+
+            if (this.IdEspecialidadTextBox.Text == string.Empty)
+            {
+                isValid = false;
+                errorProvider.SetError(IdEspecialidadTextBox, "El Id Especialidad es Requerido");
+            }
+
             return isValid;
-        }
-
-        private void IdTextBox_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

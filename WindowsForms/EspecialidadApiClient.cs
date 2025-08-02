@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace WindowsForms
 {
-    public class EspecialidadApiEspecialidad
+    public class EspecialidadApiClient
     {
         private static HttpClient client = new HttpClient();
-        static EspecialidadApiEspecialidad()
+        static EspecialidadApiClient()
         {
             client.BaseAddress = new Uri("http://localhost:5183/");
             client.DefaultRequestHeaders.Accept.Clear();

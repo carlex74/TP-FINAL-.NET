@@ -14,6 +14,8 @@ namespace DTOs
             {
                 case "EspecialidadDTO":
                     return new EspecialidadDTO();
+                case "PlanDTO":
+                    return new PlanDTO();
                 // Add more DTO types here as needed
                 default:
                     throw new ArgumentException($"DTO type '{dto}' is not recognized.");

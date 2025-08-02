@@ -46,7 +46,6 @@
             especialidadesDataGridView.RowHeadersWidth = 51;
             especialidadesDataGridView.Size = new Size(679, 268);
             especialidadesDataGridView.TabIndex = 0;
-            especialidadesDataGridView.CellContentClick += especialidadesDataGridView_CellContentClick;
             // 
             // agregarButton
             // 

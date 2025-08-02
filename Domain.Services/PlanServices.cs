@@ -76,6 +76,7 @@ namespace Domain.Services
                     throw new ArgumentException($"Ya existe otro plan con la Descripcion '{dto.Descripcion}'.");
                 }
                 planToUpdate.SetDescripcion(dto.Descripcion);
+                planToUpdate.SetIdEspecialidad(dto.IdEspecialidad);
 
                 return true;
             }

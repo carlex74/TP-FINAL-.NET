@@ -38,7 +38,7 @@ namespace WindowsForms
 
                 int id = this.SelectedItem().Id;
 
-                EspecialidadDTO especialidad = await EspecialidadApiEspecialidad.GetAsync(id);
+                EspecialidadDTO especialidad = await EspecialidadApiClient.GetAsync(id);
 
                 especialidadDetalle.Mode = FormMode.Update;
                 especialidadDetalle.Especialidad = especialidad;
@@ -63,7 +63,7 @@ namespace WindowsForms
 
                 if (result == DialogResult.Yes)
                 {
-                    await EspecialidadApiEspecialidad.DeleteAsync(id);
+                    await EspecialidadApiClient.DeleteAsync(id);
                     this.GetAllAndLoad();
                 }
             }
@@ -78,7 +78,7 @@ namespace WindowsForms
             try
             {
                 this.especialidadesDataGridView.DataSource = null;
-                this.especialidadesDataGridView.DataSource = await EspecialidadApiEspecialidad.GetAllAsync();
+                this.especialidadesDataGridView.DataSource = await EspecialidadApiClient.GetAllAsync();
 
                 if (this.especialidadesDataGridView.Rows.Count > 0)
                 {
@@ -108,12 +108,5 @@ namespace WindowsForms
 
             return especialidad;
         }
-
-        private void especialidadesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-     
     }
 }

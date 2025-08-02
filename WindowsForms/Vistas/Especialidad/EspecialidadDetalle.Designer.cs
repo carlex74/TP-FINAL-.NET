@@ -41,10 +41,9 @@
             // 
             // aceptarButton
             // 
-            aceptarButton.Location = new Point(183, 153);
-            aceptarButton.Margin = new Padding(3, 2, 3, 2);
+            aceptarButton.Location = new Point(173, 173);
             aceptarButton.Name = "aceptarButton";
-            aceptarButton.Size = new Size(130, 34);
+            aceptarButton.Size = new Size(149, 45);
             aceptarButton.TabIndex = 0;
             aceptarButton.Text = "Aceptar";
             aceptarButton.UseVisualStyleBackColor = true;
@@ -52,10 +51,9 @@
             // 
             // cancelarButton
             // 
-            cancelarButton.Location = new Point(330, 153);
-            cancelarButton.Margin = new Padding(3, 2, 3, 2);
+            cancelarButton.Location = new Point(341, 173);
             cancelarButton.Name = "cancelarButton";
-            cancelarButton.Size = new Size(130, 34);
+            cancelarButton.Size = new Size(149, 45);
             cancelarButton.TabIndex = 1;
             cancelarButton.Text = "Cancelar";
             cancelarButton.UseVisualStyleBackColor = true;
@@ -65,9 +63,9 @@
             // 
             IdLabel.AutoSize = true;
             IdLabel.Font = new Font("Segoe UI", 12F);
-            IdLabel.Location = new Point(33, 28);
+            IdLabel.Location = new Point(38, 37);
             IdLabel.Name = "IdLabel";
-            IdLabel.Size = new Size(25, 21);
+            IdLabel.Size = new Size(31, 28);
             IdLabel.TabIndex = 2;
             IdLabel.Text = "ID";
             // 
@@ -75,30 +73,27 @@
             // 
             DescripcionLabel.AutoSize = true;
             DescripcionLabel.Font = new Font("Segoe UI", 12F);
-            DescripcionLabel.Location = new Point(33, 80);
+            DescripcionLabel.Location = new Point(38, 107);
             DescripcionLabel.Name = "DescripcionLabel";
-            DescripcionLabel.Size = new Size(91, 21);
+            DescripcionLabel.Size = new Size(114, 28);
             DescripcionLabel.TabIndex = 3;
             DescripcionLabel.Text = "Descripcion";
             // 
             // IdTextBox
             // 
             IdTextBox.BackColor = SystemColors.Window;
-            IdTextBox.Location = new Point(183, 32);
-            IdTextBox.Margin = new Padding(3, 2, 3, 2);
+            IdTextBox.Location = new Point(209, 43);
             IdTextBox.Name = "IdTextBox";
             IdTextBox.ReadOnly = true;
-            IdTextBox.Size = new Size(57, 23);
+            IdTextBox.Size = new Size(65, 27);
             IdTextBox.TabIndex = 4;
             IdTextBox.TabStop = false;
-            IdTextBox.TextChanged += IdTextBox_TextChanged;
             // 
             // DescripcionTextBox
             // 
-            DescripcionTextBox.Location = new Point(183, 81);
-            DescripcionTextBox.Margin = new Padding(3, 2, 3, 2);
+            DescripcionTextBox.Location = new Point(209, 108);
             DescripcionTextBox.Name = "DescripcionTextBox";
-            DescripcionTextBox.Size = new Size(246, 23);
+            DescripcionTextBox.Size = new Size(281, 27);
             DescripcionTextBox.TabIndex = 5;
             // 
             // errorProvider
@@ -107,16 +102,15 @@
             // 
             // EspecialidadDetalle
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(474, 196);
+            ClientSize = new Size(506, 236);
             Controls.Add(DescripcionTextBox);
             Controls.Add(IdTextBox);
             Controls.Add(DescripcionLabel);
             Controls.Add(IdLabel);
             Controls.Add(cancelarButton);
             Controls.Add(aceptarButton);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "EspecialidadDetalle";
             Text = "EspecialidadDetalle";
             ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
