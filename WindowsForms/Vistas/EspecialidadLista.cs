@@ -17,6 +17,7 @@ namespace WindowsForms
 
         private void agregarButton_Click(object sender, EventArgs e)
         {
+
             EspecialidadDetalle especialidadDetalle = new EspecialidadDetalle();
 
             EspecialidadDTO especialidadNuevo = new EspecialidadDTO();
@@ -107,5 +108,12 @@ namespace WindowsForms
 
             return especialidad;
         }
+
+        private void especialidadesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+     
     }
 }

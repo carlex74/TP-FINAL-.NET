@@ -41,9 +41,10 @@
             // 
             // aceptarButton
             // 
-            aceptarButton.Location = new Point(209, 204);
+            aceptarButton.Location = new Point(183, 153);
+            aceptarButton.Margin = new Padding(3, 2, 3, 2);
             aceptarButton.Name = "aceptarButton";
-            aceptarButton.Size = new Size(149, 45);
+            aceptarButton.Size = new Size(130, 34);
             aceptarButton.TabIndex = 0;
             aceptarButton.Text = "Aceptar";
             aceptarButton.UseVisualStyleBackColor = true;
@@ -51,20 +52,22 @@
             // 
             // cancelarButton
             // 
-            cancelarButton.Location = new Point(377, 204);
+            cancelarButton.Location = new Point(330, 153);
+            cancelarButton.Margin = new Padding(3, 2, 3, 2);
             cancelarButton.Name = "cancelarButton";
-            cancelarButton.Size = new Size(149, 45);
+            cancelarButton.Size = new Size(130, 34);
             cancelarButton.TabIndex = 1;
             cancelarButton.Text = "Cancelar";
             cancelarButton.UseVisualStyleBackColor = true;
+            cancelarButton.Click += cancelarButton_Click;
             // 
             // IdLabel
             // 
             IdLabel.AutoSize = true;
             IdLabel.Font = new Font("Segoe UI", 12F);
-            IdLabel.Location = new Point(38, 38);
+            IdLabel.Location = new Point(33, 28);
             IdLabel.Name = "IdLabel";
-            IdLabel.Size = new Size(31, 28);
+            IdLabel.Size = new Size(25, 21);
             IdLabel.TabIndex = 2;
             IdLabel.Text = "ID";
             // 
@@ -72,26 +75,30 @@
             // 
             DescripcionLabel.AutoSize = true;
             DescripcionLabel.Font = new Font("Segoe UI", 12F);
-            DescripcionLabel.Location = new Point(38, 107);
+            DescripcionLabel.Location = new Point(33, 80);
             DescripcionLabel.Name = "DescripcionLabel";
-            DescripcionLabel.Size = new Size(114, 28);
+            DescripcionLabel.Size = new Size(91, 21);
             DescripcionLabel.TabIndex = 3;
             DescripcionLabel.Text = "Descripcion";
             // 
             // IdTextBox
             // 
-            IdTextBox.Location = new Point(209, 42);
+            IdTextBox.BackColor = SystemColors.Window;
+            IdTextBox.Location = new Point(183, 32);
+            IdTextBox.Margin = new Padding(3, 2, 3, 2);
             IdTextBox.Name = "IdTextBox";
             IdTextBox.ReadOnly = true;
-            IdTextBox.Size = new Size(65, 27);
+            IdTextBox.Size = new Size(57, 23);
             IdTextBox.TabIndex = 4;
             IdTextBox.TabStop = false;
+            IdTextBox.TextChanged += IdTextBox_TextChanged;
             // 
             // DescripcionTextBox
             // 
-            DescripcionTextBox.Location = new Point(209, 108);
+            DescripcionTextBox.Location = new Point(183, 81);
+            DescripcionTextBox.Margin = new Padding(3, 2, 3, 2);
             DescripcionTextBox.Name = "DescripcionTextBox";
-            DescripcionTextBox.Size = new Size(280, 27);
+            DescripcionTextBox.Size = new Size(246, 23);
             DescripcionTextBox.TabIndex = 5;
             // 
             // errorProvider
@@ -100,15 +107,16 @@
             // 
             // EspecialidadDetalle
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(542, 262);
+            ClientSize = new Size(474, 196);
             Controls.Add(DescripcionTextBox);
             Controls.Add(IdTextBox);
             Controls.Add(DescripcionLabel);
             Controls.Add(IdLabel);
             Controls.Add(cancelarButton);
             Controls.Add(aceptarButton);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "EspecialidadDetalle";
             Text = "EspecialidadDetalle";
             ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();

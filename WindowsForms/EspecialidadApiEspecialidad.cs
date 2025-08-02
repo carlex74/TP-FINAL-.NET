@@ -35,7 +35,7 @@ namespace WindowsForms
         public static async Task<IEnumerable<EspecialidadDTO>> GetAllAsync()
         {
             IEnumerable<EspecialidadDTO> especialidades = null;
-            HttpResponseMessage response = await client.GetAsync("especialidades");
+            HttpResponseMessage response = await client.GetAsync("especialidad");
             if (response.IsSuccessStatusCode)
             {
                 especialidades = await response.Content.ReadAsAsync<IEnumerable<EspecialidadDTO>>();

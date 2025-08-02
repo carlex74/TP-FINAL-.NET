@@ -17,4 +17,9 @@
     <ProjectReference Include="..\DTOs\DTOs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Apis\" />
+    <Folder Include="Vistas\Listas\" />
+  </ItemGroup>
+
 </Project>
