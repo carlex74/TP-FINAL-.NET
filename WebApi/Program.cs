@@ -37,6 +37,7 @@ app.MapGet("/especialidades/{id}", (int id) =>
     return Results.Ok(dto);
 })
 .WithName("GetEspecialidad")
+.WithTags("Especialidades")
 .Produces<EspecialidadDTO>(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status404NotFound)
 .WithOpenApi();
@@ -50,6 +51,7 @@ app.MapGet("/especialidad", () =>
     return Results.Ok(dtos);
 })
 .WithName("GetAllEspecialidades")
+.WithTags("Especialidades")
 .Produces<List<EspecialidadDTO>>(StatusCodes.Status200OK)
 .WithOpenApi();
 
@@ -69,6 +71,7 @@ app.MapPost("/especialidades", (EspecialidadDTO dto) =>
     }
 })
 .WithName("AddEspecialidad")
+.WithTags("Especialidades")
 .Produces<EspecialidadDTO>(StatusCodes.Status201Created)
 .Produces(StatusCodes.Status400BadRequest)
 .WithOpenApi();
@@ -94,6 +97,7 @@ app.MapPut("/especialidades", (EspecialidadDTO dto) =>
     }
 })
 .WithName("UpdateEspecialidad")
+.WithTags("Especialidades")
 .Produces(StatusCodes.Status404NotFound)
 .Produces(StatusCodes.Status400BadRequest)
 .WithOpenApi();
@@ -113,6 +117,7 @@ app.MapDelete("/especialidades/{id}", (int id) =>
 
 })
 .WithName("DeleteEspecialidad")
+.WithTags("Especialidades")
 .Produces(StatusCodes.Status204NoContent)
 .Produces(StatusCodes.Status404NotFound)
 .WithOpenApi();
@@ -130,6 +135,7 @@ app.MapGet("/planes/{id}", (int id) =>
     return Results.Ok(dto);
 })
 .WithName("GetPlan")
+.WithTags("Planes")
 .Produces<PlanDTO>(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status404NotFound)
 .WithOpenApi();
@@ -143,6 +149,7 @@ app.MapGet("/plan", () =>
     return Results.Ok(dtos);
 })
 .WithName("GetAllPlanes")
+.WithTags("Planes")
 .Produces<List<PlanDTO>>(StatusCodes.Status200OK)
 .WithOpenApi();
 
@@ -162,6 +169,7 @@ app.MapPost("/planes", (PlanDTO dto) =>
     }
 })
 .WithName("AddPlan")
+.WithTags("Planes")
 .Produces<PlanDTO>(StatusCodes.Status201Created)
 .Produces(StatusCodes.Status400BadRequest)
 .WithOpenApi();
@@ -187,6 +195,7 @@ app.MapPut("/planes", (PlanDTO dto) =>
     }
 })
 .WithName("UpdatePlan")
+.WithTags("Planes")
 .Produces(StatusCodes.Status404NotFound)
 .Produces(StatusCodes.Status400BadRequest)
 .WithOpenApi();
@@ -206,6 +215,7 @@ app.MapDelete("/plan/{id}", (int id) =>
 
 })
 .WithName("DeletePlan")
+.WithTags("Planes")
 .Produces(StatusCodes.Status204NoContent)
 .Produces(StatusCodes.Status404NotFound)
 .WithOpenApi();

@@ -1,5 +1,4 @@
 ﻿using DTOs;
-using API.Especialidades;
 
 namespace WindowsForms
 {

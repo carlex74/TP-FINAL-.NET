@@ -26,7 +26,6 @@ namespace Domain.Services
             return dto;
         }
 
-
         public bool Delete(int id)
         {
             Especialidad? especialidadToDelete = EspecialidadMemory.Especialidades.Find(e => e.Id == id);
@@ -95,7 +94,6 @@ namespace Domain.Services
             {
                 nextId = 1;
             }
-
             return nextId;
         }
     }
