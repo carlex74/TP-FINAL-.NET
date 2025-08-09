@@ -15,6 +15,5 @@ namespace Domain.Interfaces
         void Delete(Especialidad especialidad);
         Especialidad GetById(int id);
         IEnumerable<Especialidad> GetAll();
-        Especialidad GetByName(string name);
     }
 }

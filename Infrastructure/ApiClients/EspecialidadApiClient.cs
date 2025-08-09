@@ -1,12 +1,15 @@
-﻿using Application.DTOs;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using Application.DTOs;
+using Application.Interfaces;
 
-namespace WindowsForms
+
+namespace Infrastructure.ApiClients
 {
     public class EspecialidadApiClient
     {
         private static HttpClient client = new HttpClient();
+
         static EspecialidadApiClient()
         {
             client.BaseAddress = new Uri("http://localhost:5183/");
@@ -15,8 +18,7 @@ namespace WindowsForms
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-
-        public static async Task<EspecialidadDTO> GetAsync(int id)
+        public static async Task<EspecialidadDTO> GetById(int id)
         {
             EspecialidadDTO especialidad = null;
             HttpResponseMessage response = await client.GetAsync("especialidades/" + id);
@@ -27,10 +29,11 @@ namespace WindowsForms
             return especialidad;
         }
 
-        public static async Task<IEnumerable<EspecialidadDTO>> GetAllAsync()
+
+        public static async Task<IEnumerable<EspecialidadDTO>> GetAll()
         {
             IEnumerable<EspecialidadDTO> especialidades = null;
-            HttpResponseMessage response = await client.GetAsync("especialidad");
+            HttpResponseMessage response = await client.GetAsync("especialidades");
             if (response.IsSuccessStatusCode)
             {
                 especialidades = await response.Content.ReadAsAsync<IEnumerable<EspecialidadDTO>>();
@@ -38,22 +41,25 @@ namespace WindowsForms
             return especialidades;
         }
 
-        public async static Task AddAsync(EspecialidadDTO especialidad)
+
+        public static async Task Add(EspecialidadDTO especialidad)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("especialidades", especialidad);
             response.EnsureSuccessStatusCode();
         }
 
-        public static async Task DeleteAsync(int id)
+        public static async Task Delete(int id)
         {
             HttpResponseMessage response = await client.DeleteAsync("especialidades/" + id);
             response.EnsureSuccessStatusCode();
         }
 
-        public static async Task UpdateAsync(EspecialidadDTO especialidad)
+
+        public static async Task Update(EspecialidadDTO especialidad)
         {
-            HttpResponseMessage response = await client.PutAsJsonAsync("especialidades", especialidad);
+            HttpResponseMessage response = await client.PutAsJsonAsync("especialidades/" + especialidad.Id, especialidad);
             response.EnsureSuccessStatusCode();
         }
     }
 }
+

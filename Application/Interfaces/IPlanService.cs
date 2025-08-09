@@ -5,15 +5,15 @@ namespace Application.Interfaces
     public interface IPlanService
     {
         
-        PlanDTO add(PlanDTO plan);
+        PlanDTO Add(PlanDTO plan);
 
-        PlanDTO update(PlanDTO plan);
+        PlanDTO Update(PlanDTO plan);
 
-        bool delete(int id);
+        bool Delete(int id);
 
-        PlanDTO getById(int id);
+        PlanDTO GetById(int id);
 
-        IEnumerable<PlanDTO> getAll();
+        IEnumerable<PlanDTO> GetAll();
 
 
     }

@@ -34,7 +34,7 @@ namespace Domain.Entities
             IdEspecialidad = idEspecialidad;
         }
 
-        public int getId() {
+        public int GetId() {
 
             return Id;
 

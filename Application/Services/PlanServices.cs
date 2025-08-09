@@ -16,7 +16,7 @@ namespace Application.Services
             _planRepository = planRepository;
         }
 
-        public PlanDTO add(PlanDTO planDTO) 
+        public PlanDTO Add(PlanDTO planDTO) 
         {
 
             if(_planRepository.GetById(planDTO.Id) != null)
@@ -37,7 +37,7 @@ namespace Application.Services
         }
 
 
-        public PlanDTO getById(int id)
+        public PlanDTO GetById(int id)
         {
             Plan plan = _planRepository.GetById(id);
             if (plan == null)
@@ -52,7 +52,7 @@ namespace Application.Services
             };
         }
 
-        public IEnumerable<PlanDTO> getAll()
+        public IEnumerable<PlanDTO> GetAll()
         {
             return _planRepository.GetAll().Select(plan => new PlanDTO
             {
@@ -63,7 +63,7 @@ namespace Application.Services
         }
 
 
-        public PlanDTO update(PlanDTO planDTO)
+        public PlanDTO Update(PlanDTO planDTO)
         {
             Plan existingPlan = _planRepository.GetById(planDTO.Id);
             if (existingPlan == null)
@@ -86,7 +86,7 @@ namespace Application.Services
             };
         }
 
-        public bool delete(int id)
+        public bool Delete(int id)
         {
             Plan plan = _planRepository.GetById(id);
             if (plan == null)

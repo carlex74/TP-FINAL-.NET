@@ -1,32 +1,32 @@
-﻿using Application.DTOs;
-using Application.Services;
+﻿using Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Application.DTOs; 
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlanesController : ControllerBase
+public class EspecialidadesController : ControllerBase
 {
-    private readonly PlanServices _planServices;
+    private readonly EspecialidadServices _especialidadServices;
 
-    public PlanesController(PlanServices planServices)
+    public EspecialidadesController(EspecialidadServices especialidadServices)
     {
-        _planServices = planServices;
+        _especialidadServices = especialidadServices;
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(List<PlanDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<EspecialidadDTO>), StatusCodes.Status200OK)]
     public IActionResult GetAll()
     {
-        var dtos = _planServices.GetAll();
+        var dtos = _especialidadServices.GetAll();
         return Ok(dtos);
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(PlanDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(EspecialidadDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetById(int id)
     {
-        var dto = _planServices.GetById(id);
+        var dto = _especialidadServices.GetById(id);
         if (dto == null)
         {
             return NotFound();
@@ -35,14 +35,14 @@ public class PlanesController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(PlanDTO), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(EspecialidadDTO), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create(PlanDTO dto)
+    public IActionResult Create(EspecialidadDTO dto)
     {
         try
         {
-            var planDTO = _planServices.Add(dto);
-            return CreatedAtAction(nameof(GetById), new { id = planDTO.Id }, planDTO);
+            var especialidadDTO = _especialidadServices.Add(dto);
+            return CreatedAtAction(nameof(GetById), new { id = especialidadDTO.Id }, especialidadDTO);
         }
         catch (ArgumentException ex)
         {
@@ -54,7 +54,7 @@ public class PlanesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Update(int id, PlanDTO dto)
+    public IActionResult Update(int id, EspecialidadDTO dto)
     {
         if (id != dto.Id)
         {
@@ -63,7 +63,7 @@ public class PlanesController : ControllerBase
 
         try
         {
-            _planServices.Update(dto);
+            _especialidadServices.Update(dto);
             return NoContent();
         }
         catch (Exception ex)
@@ -77,7 +77,7 @@ public class PlanesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Delete(int id)
     {
-        var deleted = _planServices.Delete(id);
+        var deleted = _especialidadServices.Delete(id);
         if (!deleted)
         {
             return NotFound();

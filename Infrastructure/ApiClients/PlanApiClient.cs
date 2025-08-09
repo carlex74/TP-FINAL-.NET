@@ -60,8 +60,5 @@ namespace Infrastructure.ApiClients
             HttpResponseMessage response = await client.PutAsJsonAsync("planes/" + plan.Id, plan);
             response.EnsureSuccessStatusCode();
         }
-
-
     }
-
 }

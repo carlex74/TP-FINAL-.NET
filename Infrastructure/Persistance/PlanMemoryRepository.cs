@@ -6,29 +6,29 @@ namespace Infrastructure.Persistance
 {
     public class PlanMemoryRepository:IPlanRepository
     {
-        public void add(Plan plan)
+        public void Add(Plan plan)
         {
             PlanMemory.Planes.Add(plan);
         }
 
-        public void update(Plan plan)
+        public void Update(Plan plan)
         {
          
             PlanMemory.Planes.Remove(plan);
             PlanMemory.Planes.Add(plan);
         }
 
-        public void delete(Plan plan)
+        public void Delete(Plan plan)
         {
             PlanMemory.Planes.Remove(plan);
         }
 
-        public Plan getById(int id)
+        public Plan GetById(int id)
         {
             return PlanMemory.Planes.FirstOrDefault(p => p.Id == id);
         }
 
-        public IEnumerable<Plan> getAll()
+        public IEnumerable<Plan> GetAll()
         {
             return PlanMemory.Planes;
         }

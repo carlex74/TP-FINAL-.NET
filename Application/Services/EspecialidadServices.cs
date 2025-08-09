@@ -10,11 +10,11 @@ using Domain.Interfaces;
 
 namespace Application.Services
 {
-    public class EspecialidadService: IEspecialidadService
+    public class EspecialidadServices: IEspecialidadService
     {
         private IEspecialidadRepository _repository;
 
-        public EspecialidadService(IEspecialidadRepository repository)
+        public EspecialidadServices(IEspecialidadRepository repository)
         {
             _repository = repository;
         }
