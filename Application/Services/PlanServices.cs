@@ -19,7 +19,7 @@ namespace Application.Services
         public PlanDTO add(PlanDTO planDTO) 
         {
 
-            if(_planRepository.getById(planDTO.Id) != null)
+            if(_planRepository.GetById(planDTO.Id) != null)
             {
                 throw new Exception("Ya existe un plan con el mismo ID");
             }
@@ -28,7 +28,7 @@ namespace Application.Services
 
             Plan plan = new Plan(id, planDTO.Descripcion, planDTO.IdEspecialidad);
 
-            _planRepository.add(plan);
+            _planRepository.Add(plan);
 
             planDTO.Id = plan.Id;
             planDTO.Descripcion = plan.Descripcion;
@@ -39,7 +39,7 @@ namespace Application.Services
 
         public PlanDTO getById(int id)
         {
-            Plan plan = _planRepository.getById(id);
+            Plan plan = _planRepository.GetById(id);
             if (plan == null)
             {
                 throw new Exception("No existe un plan con el ID especificado");
@@ -54,7 +54,7 @@ namespace Application.Services
 
         public IEnumerable<PlanDTO> getAll()
         {
-            return _planRepository.getAll().Select(plan => new PlanDTO
+            return _planRepository.GetAll().Select(plan => new PlanDTO
             {
                 Id = plan.Id,
                 Descripcion = plan.Descripcion,
@@ -65,7 +65,7 @@ namespace Application.Services
 
         public PlanDTO update(PlanDTO planDTO)
         {
-            Plan existingPlan = _planRepository.getById(planDTO.Id);
+            Plan existingPlan = _planRepository.GetById(planDTO.Id);
             if (existingPlan == null)
             {
                 throw new Exception("No existe un plan con el ID especificado");
@@ -77,7 +77,7 @@ namespace Application.Services
 
             existingPlan.SetDescripcion(planDTO.Descripcion);
             existingPlan.SetIdEspecialidad(planDTO.IdEspecialidad);
-            _planRepository.update(existingPlan);
+            _planRepository.Update(existingPlan);
             return new PlanDTO
             {
                 Id = existingPlan.Id,
@@ -88,14 +88,14 @@ namespace Application.Services
 
         public bool delete(int id)
         {
-            Plan plan = _planRepository.getById(id);
+            Plan plan = _planRepository.GetById(id);
             if (plan == null)
             {
                 throw new Exception("No existe un plan con el ID especificado");
 
                 return false;
             }
-            _planRepository.delete(plan);
+            _planRepository.Delete(plan);
 
 
             return true;

@@ -1,5 +1,4 @@
-﻿using DTOs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,14 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Application.Interfaces;
 
 namespace WindowsForms.Vistas
 {
     public partial class PlanLista : Form
     {
-        public PlanLista()
+        private readonly IPlanService _planService;
+        public PlanLista(IPlanService planservices)
         {
             InitializeComponent();
+            _planService = planservices;
         }
 
         private void Plan_Load(object sender, EventArgs e)
@@ -114,6 +116,11 @@ namespace WindowsForms.Vistas
             plan = (PlanDTO)planesDataGridView.SelectedRows[0].DataBoundItem;
 
             return plan;
+        }
+
+        private void planesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

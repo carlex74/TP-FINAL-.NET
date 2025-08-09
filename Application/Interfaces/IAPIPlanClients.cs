@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Application.DTOs;
+
+namespace Application.Interfaces
+{
+    public interface IAPIPlanClients
+    {
+        Task<PlanDTO> GetById(int id);
+        Task<IEnumerable<PlanDTO>> GetAll();
+
+        Task Add(PlanDTO plan);
+
+        Task Delete(int id);
+
+        Task Update(PlanDTO plan);
+
+    }
+}

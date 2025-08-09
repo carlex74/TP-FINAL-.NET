@@ -4,11 +4,11 @@ namespace Domain.Interfaces
 {
     public interface IPlanRepository
     {
-        void add(Plan plan);
-        void update(Plan plan);
-        void delete(Plan plan);
-        Plan getById(int id);
-        IEnumerable<Plan> getAll();
+        void Add(Plan plan);
+        void Update(Plan plan);
+        void Delete(Plan plan);
+        Plan GetById(int id);
+        IEnumerable<Plan> GetAll();
 
     }
 }
