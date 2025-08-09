@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Domain.Model
+﻿namespace Domain.Entities
 {
     public class AlumnoInscripcion : BusinessEntity
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Domain.Model
+namespace Domain.Entities
 {
     abstract class Personas : BusinessEntity
     {

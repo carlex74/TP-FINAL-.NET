@@ -1,6 +1,10 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Domain.Model
+namespace Domain.Entities
 {
     public abstract class BusinessEntity
     {
@@ -12,7 +16,7 @@ namespace Domain.Model
         public int Id { get; private set; }
         public Estado Estados { get; private set; }
 
-        protected BusinessEntity() 
+        protected BusinessEntity()
         {
             Estados = Estado.Activo;
         }

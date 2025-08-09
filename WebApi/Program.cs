@@ -1,6 +1,6 @@
-using Domain.Services;
-using Domain.Model;
-using DTOs;
+using Application.Services;
+using Domain.Interfaces;
+using Infrastructure.Persistance;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpLogging(o => { });
 
+builder.Services.AddScoped<IPlanRepository,PlanMemoryRepository>();
+builder.Services.AddScoped<PlanServices>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,7 +25,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+/*
 app.MapGet("/especialidades/{id}", (int id) =>
 {
     EspecialidadServices especialidadServices = new EspecialidadServices();
@@ -219,5 +221,5 @@ app.MapDelete("/plan/{id}", (int id) =>
 .Produces(StatusCodes.Status204NoContent)
 .Produces(StatusCodes.Status404NotFound)
 .WithOpenApi();
-
+*/
 app.Run();
