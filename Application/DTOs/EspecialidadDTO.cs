@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs
+﻿namespace ApplicationClean.DTOs
 {
     public class EspecialidadDTO
     {

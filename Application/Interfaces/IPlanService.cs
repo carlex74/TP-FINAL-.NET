@@ -1,6 +1,6 @@
-﻿using Application.DTOs;
+﻿using ApplicationClean.DTOs;
 
-namespace Application.Interfaces
+namespace ApplicationClean.Interfaces
 {
     public interface IPlanService
     {

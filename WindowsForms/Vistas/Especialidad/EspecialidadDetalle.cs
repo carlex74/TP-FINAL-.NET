@@ -1,4 +1,5 @@
-using DTOs;
+using ApplicationClean.DTOs;
+using ApplicationClean.Interfaces;
 using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace WindowsForms
     {
         private EspecialidadDTO especialidad;
         private FormMode mode;
+        private readonly IAPIEspecialidadClients _especialidadClient;
 
         public EspecialidadDTO Especialidad
         {
@@ -38,9 +40,10 @@ namespace WindowsForms
                 SetFormMode(value);
             }
         }
-        public EspecialidadDetalle()
+        public EspecialidadDetalle(IAPIEspecialidadClients especialidadClient)
         {
             InitializeComponent();
+            _especialidadClient = especialidadClient;
             Mode = FormMode.Add;
         }
 
@@ -63,11 +66,11 @@ namespace WindowsForms
 
                     if (this.Mode == FormMode.Update)
                     {
-                        await EspecialidadApiClient.UpdateAsync(this.Especialidad);
+                        await _especialidadClient.Update(this.Especialidad);
                     }
                     else
                     {
-                        await EspecialidadApiClient.AddAsync(this.Especialidad);
+                        await _especialidadClient.Add(this.Especialidad);
                     }
 
                     this.Close();

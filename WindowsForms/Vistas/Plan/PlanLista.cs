@@ -7,17 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Application.Interfaces;
+using ApplicationClean.Interfaces;
+using ApplicationClean.DTOs;
 
 namespace WindowsForms.Vistas
 {
     public partial class PlanLista : Form
     {
-        private readonly IPlanService _planService;
-        public PlanLista(IPlanService planservices)
+        private readonly IAPIPlanClients _planClient;
+        public PlanLista(IAPIPlanClients planClient)
         {
             InitializeComponent();
-            _planService = planservices;
+            _planClient = planClient;
         }
 
         private void Plan_Load(object sender, EventArgs e)
@@ -27,7 +28,7 @@ namespace WindowsForms.Vistas
 
         private void agregarButton_Click(object sender, EventArgs e)
         {
-            PlanDetalle planDetalle = new PlanDetalle();
+            PlanDetalle planDetalle = new PlanDetalle(_planClient);
 
             PlanDTO planNuevo = new PlanDTO();
 
@@ -43,11 +44,11 @@ namespace WindowsForms.Vistas
         {
             try
             {
-                PlanDetalle planDetalle = new PlanDetalle();
+                PlanDetalle planDetalle = new PlanDetalle(_planClient);
 
                 int id = this.SelectedItem().Id;
 
-                PlanDTO plan = await PlanApiClient.GetAsync(id);
+                PlanDTO plan = await _planClient.GetById(id);
 
                 planDetalle.Mode = FormMode.Update;
                 planDetalle.Plan = plan;
@@ -72,7 +73,7 @@ namespace WindowsForms.Vistas
 
                 if (result == DialogResult.Yes)
                 {
-                    await PlanApiClient.DeleteAsync(id);
+                    await _planClient.Delete(id);
                     this.GetAllAndLoad();
                 }
             }
@@ -87,7 +88,7 @@ namespace WindowsForms.Vistas
             try
             {
                 this.planesDataGridView.DataSource = null;
-                this.planesDataGridView.DataSource = await PlanApiClient.GetAllAsync();
+                this.planesDataGridView.DataSource = await _planClient.GetAll();
 
                 if (this.planesDataGridView.Rows.Count > 0)
                 {

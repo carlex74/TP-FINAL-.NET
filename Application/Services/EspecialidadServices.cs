@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application.DTOs;
-using Application.Interfaces;
+using ApplicationClean.DTOs;
+using ApplicationClean.Interfaces;
 using Data;
 using Domain.Interfaces;
 
-namespace Application.Services
+namespace ApplicationClean.Services
 {
     public class EspecialidadServices: IEspecialidadService
     {

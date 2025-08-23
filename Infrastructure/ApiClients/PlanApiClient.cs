@@ -1,27 +1,24 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using Application.DTOs;
-using Application.Interfaces;
+using ApplicationClean.DTOs;
+using ApplicationClean.Interfaces;
 
 
 namespace Infrastructure.ApiClients
 {
-    public class PlanApiClient:IAPIPlanClients
+    public class PlanApiClient : IAPIPlanClients
     {
-        private static HttpClient client = new HttpClient();
+        private readonly HttpClient _client;
 
-        static PlanApiClient()
+        public PlanApiClient(HttpClient client)
         {
-            client.BaseAddress = new Uri("http://localhost:5183/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+            _client = client;
         }
 
         public async Task<PlanDTO> GetById(int id)
         {
             PlanDTO plan = null;
-            HttpResponseMessage response = await client.GetAsync("planes/" + id);
+            HttpResponseMessage response = await _client.GetAsync("planes/" + id);
             if (response.IsSuccessStatusCode)
             {
                 plan = await response.Content.ReadAsAsync<PlanDTO>();
@@ -30,10 +27,10 @@ namespace Infrastructure.ApiClients
         }
 
 
-        public static async Task<IEnumerable<PlanDTO>> GetAll()
+        public async Task<IEnumerable<PlanDTO>> GetAll()
         {
             IEnumerable<PlanDTO> planes = null;
-            HttpResponseMessage response = await client.GetAsync("planes");
+            HttpResponseMessage response = await _client.GetAsync("planes");
             if (response.IsSuccessStatusCode)
             {
                 planes = await response.Content.ReadAsAsync<IEnumerable<PlanDTO>>();
@@ -42,22 +39,22 @@ namespace Infrastructure.ApiClients
         }
 
 
-        public static async Task Add(PlanDTO plan)
+        public async Task Add(PlanDTO plan)
         {
-            HttpResponseMessage response = await client.PostAsJsonAsync("planes", plan);
+            HttpResponseMessage response = await _client.PostAsJsonAsync("planes", plan);
             response.EnsureSuccessStatusCode();
         }
 
-        public static async Task Delete(int id)
+        public async Task Delete(int id)
         {
-            HttpResponseMessage response = await client.DeleteAsync("planes/" + id);
+            HttpResponseMessage response = await _client.DeleteAsync("planes/" + id);
             response.EnsureSuccessStatusCode();
         }
 
         
-        public static async Task Update(PlanDTO plan)
+        public async Task Update(PlanDTO plan)
         {
-            HttpResponseMessage response = await client.PutAsJsonAsync("planes/" + plan.Id, plan);
+            HttpResponseMessage response = await _client.PutAsJsonAsync("planes/" + plan.Id, plan);
             response.EnsureSuccessStatusCode();
         }
     }

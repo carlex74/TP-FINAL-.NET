@@ -1,4 +1,6 @@
-﻿using DTOs;
+﻿using ApplicationClean.DTOs;
+using ApplicationClean.Interfaces;
+using Infrastructure.ApiClients;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +17,7 @@ namespace WindowsForms.Vistas
     {
         private PlanDTO plan;
         private FormMode mode;
+        private readonly IAPIPlanClients _planClient;
 
         public PlanDTO Plan
         {
@@ -36,9 +39,10 @@ namespace WindowsForms.Vistas
                 SetFormMode(value);
             }
         }
-        public PlanDetalle()
+        public PlanDetalle(IAPIPlanClients planClients)
         {
             InitializeComponent();
+            _planClient = planClients;
             Mode = FormMode.Add;
         }
 
@@ -62,11 +66,11 @@ namespace WindowsForms.Vistas
 
                     if (this.Mode == FormMode.Update)
                     {
-                        await PlanApiClient.UpdateAsync(this.Plan);
+                        await _planClient.Update(this.Plan);
                     }
                     else
                     {
-                        await PlanApiClient.AddAsync(this.Plan);
+                        await _planClient.Add(this.Plan);
                     }
                     this.Close();
                 }

@@ -1,12 +1,18 @@
-﻿using DTOs;
+﻿using ApplicationClean.DTOs;
+using ApplicationClean.Interfaces;
 
 namespace WindowsForms
 {
     public partial class EspecialidadLista : Form
     {
-        public EspecialidadLista()
+        private readonly IAPIEspecialidadClients _especialidadClient;
+
+        public EspecialidadLista(IAPIEspecialidadClients especialidadClient)
         {
             InitializeComponent();
+
+            _especialidadClient = especialidadClient;
+
         }
 
         private void Especialidad_Load(object sender, EventArgs e)
@@ -17,7 +23,7 @@ namespace WindowsForms
         private void agregarButton_Click(object sender, EventArgs e)
         {
 
-            EspecialidadDetalle especialidadDetalle = new EspecialidadDetalle();
+            EspecialidadDetalle especialidadDetalle = new EspecialidadDetalle(_especialidadClient);
 
             EspecialidadDTO especialidadNuevo = new EspecialidadDTO();
 
@@ -33,11 +39,11 @@ namespace WindowsForms
         {
             try
             {
-                EspecialidadDetalle especialidadDetalle = new EspecialidadDetalle();
+                EspecialidadDetalle especialidadDetalle = new EspecialidadDetalle(_especialidadClient);
 
                 int id = this.SelectedItem().Id;
 
-                EspecialidadDTO especialidad = await EspecialidadApiClient.GetAsync(id);
+                EspecialidadDTO especialidad = await _especialidadClient.GetById(id);
 
                 especialidadDetalle.Mode = FormMode.Update;
                 especialidadDetalle.Especialidad = especialidad;
@@ -62,7 +68,7 @@ namespace WindowsForms
 
                 if (result == DialogResult.Yes)
                 {
-                    await EspecialidadApiClient.DeleteAsync(id);
+                    await _especialidadClient.Delete(id);
                     this.GetAllAndLoad();
                 }
             }
@@ -77,7 +83,7 @@ namespace WindowsForms
             try
             {
                 this.especialidadesDataGridView.DataSource = null;
-                this.especialidadesDataGridView.DataSource = await EspecialidadApiClient.GetAllAsync();
+                this.especialidadesDataGridView.DataSource = await _especialidadClient.GetAll();
 
                 if (this.especialidadesDataGridView.Rows.Count > 0)
                 {

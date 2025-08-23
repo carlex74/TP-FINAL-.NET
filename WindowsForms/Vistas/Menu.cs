@@ -1,4 +1,4 @@
-﻿using DTOs;
+﻿using ApplicationClean.DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,23 +13,26 @@ namespace WindowsForms.Vistas
 {
     public partial class Menu : Form
     {
-        public Menu()
+        private readonly PlanLista _planLista;
+        private readonly EspecialidadLista _especialidadLista;
+
+        public Menu(PlanLista planLista, EspecialidadLista especialidadLista)
         {
             InitializeComponent();
+            _especialidadLista = especialidadLista;
+            _planLista = planLista;
         }
 
         private void planButton_Click(object sender, EventArgs e)
         {
-            PlanLista planLista = new PlanLista();
-
-            planLista.ShowDialog();
+          
+            _planLista.ShowDialog();
         }
 
         private void especialidadButton_Click(object sender, EventArgs e)
         {
-            EspecialidadLista especialidadLista = new EspecialidadLista();
-
-            especialidadLista.ShowDialog();
+           
+            _especialidadLista.ShowDialog();
         }
     }
 }

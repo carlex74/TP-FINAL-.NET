@@ -1,11 +1,11 @@
-﻿using Application.DTOs;
+﻿using ApplicationClean.DTOs;
 using Domain.Interfaces;
 using Domain.Entities;
-using Application.Interfaces;
+using ApplicationClean.Interfaces;
 using Data;
 
 
-namespace Application.Services
+namespace ApplicationClean.Services
 {
     public class PlanServices:IPlanService
     {
