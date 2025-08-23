@@ -6,7 +6,7 @@ using Application.Interfaces;
 
 namespace Infrastructure.ApiClients
 {
-    public class PlanApiClient
+    public class PlanApiClient:IAPIPlanClients
     {
         private static HttpClient client = new HttpClient();
 
@@ -18,7 +18,7 @@ namespace Infrastructure.ApiClients
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public static async Task<PlanDTO> GetById(int id)
+        public async Task<PlanDTO> GetById(int id)
         {
             PlanDTO plan = null;
             HttpResponseMessage response = await client.GetAsync("planes/" + id);

@@ -6,7 +6,7 @@ using Application.Interfaces;
 
 namespace Infrastructure.ApiClients
 {
-    public class EspecialidadApiClient
+    public class EspecialidadApiClient: IAPIEspecialidadClients
     {
         private static HttpClient client = new HttpClient();
 
