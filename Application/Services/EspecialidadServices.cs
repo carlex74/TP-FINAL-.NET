@@ -1,70 +1,65 @@
-﻿using System;
+﻿using ApplicationClean.DTOs;
+using ApplicationClean.Interfaces;
+using Domain.Entities;
+using Domain.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using ApplicationClean.DTOs;
-using ApplicationClean.Interfaces;
-using Data;
-using Domain.Interfaces;
 
 namespace ApplicationClean.Services
 {
-    public class EspecialidadServices: IEspecialidadService
+    public class EspecialidadServices : IEspecialidadService
     {
-        private IEspecialidadRepository _repository;
+        private readonly IEspecialidadRepository _repository;
 
         public EspecialidadServices(IEspecialidadRepository repository)
         {
             _repository = repository;
         }
 
-
-        public EspecialidadDTO Add(EspecialidadDTO especialidadDTO)
+        public async Task<EspecialidadDTO> AddAsync(EspecialidadDTO especialidadDTO)
         {
-            if (_repository.GetById(especialidadDTO.Id) != null)
-            {
-                throw new Exception("Ya existe una especialidad con el mismo ID");
-            }
-            int id = GetNextId();
-            Domain.Entities.Especialidad especialidad = new Domain.Entities.Especialidad(id, especialidadDTO.Descripcion);
-            _repository.Add(especialidad);
+            var especialidad = new Especialidad(0, especialidadDTO.Descripcion);
+
+            await _repository.AddAsync(especialidad);
+
             especialidadDTO.Id = especialidad.Id;
-            especialidadDTO.Descripcion = especialidad.Descripcion;
             return especialidadDTO;
         }
 
-        public EspecialidadDTO Update(EspecialidadDTO especialidadDTO)
+        public async Task<EspecialidadDTO> UpdateAsync(EspecialidadDTO especialidadDTO)
         {
-            var existingEspecialidad = _repository.GetById(especialidadDTO.Id);
+            var existingEspecialidad = await _repository.GetByIdAsync(especialidadDTO.Id);
+
             if (existingEspecialidad == null)
             {
-                throw new Exception("No existe una especialidad con el ID proporcionado");
+                throw new KeyNotFoundException($"No se encontró una especialidad con el ID {especialidadDTO.Id}.");
             }
+
             existingEspecialidad.SetDescripcion(especialidadDTO.Descripcion);
-            _repository.Update(existingEspecialidad);
+            await _repository.UpdateAsync(existingEspecialidad);
+
             return especialidadDTO;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var existingEspecialidad = _repository.GetById(id);
+            var existingEspecialidad = await _repository.GetByIdAsync(id);
             if (existingEspecialidad == null)
             {
-                throw new Exception("No existe una especialidad con el ID proporcionado");
+                return false;
             }
-            _repository.Delete(existingEspecialidad);
+
+            await _repository.DeleteAsync(existingEspecialidad);
             return true;
         }
 
-
-        public EspecialidadDTO GetById(int id)
+        public async Task<EspecialidadDTO> GetByIdAsync(int id)
         {
-            var especialidad = _repository.GetById(id);
-            if (especialidad == null)
-            {
-                throw new Exception("No existe una especialidad con el ID proporcionado");
-            }
+            var especialidad = await _repository.GetByIdAsync(id);
+
+            if (especialidad == null) return null;
+
             return new EspecialidadDTO
             {
                 Id = especialidad.Id,
@@ -72,29 +67,15 @@ namespace ApplicationClean.Services
             };
         }
 
-        public IEnumerable<EspecialidadDTO> GetAll()
+        public async Task<IEnumerable<EspecialidadDTO>> GetAllAsync()
         {
-            return _repository.GetAll().Select(e => new EspecialidadDTO
+            var especialidades = await _repository.GetAllAsync();
+
+            return especialidades.Select(e => new EspecialidadDTO
             {
                 Id = e.Id,
                 Descripcion = e.Descripcion
             });
-        }
-
-        private static int GetNextId()
-        {
-            int nextId;
-
-            if (PlanMemory.Planes.Count > 0)
-            {
-                nextId = PlanMemory.Planes.Max(x => x.Id) + 1;
-            }
-            else
-            {
-                nextId = 1;
-            }
-
-            return nextId;
         }
     }
 }

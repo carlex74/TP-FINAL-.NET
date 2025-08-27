@@ -7,6 +7,9 @@ namespace Domain.Entities
         public int Id { get; private set; }
         public string Descripcion { get; private set; }
         public int IdEspecialidad { get; private set; }
+        public virtual Especialidad Especialidad { get; private set; }
+
+        protected Plan() { }
 
         public Plan(int id,string descripcion, int idEspecialidad)
         {

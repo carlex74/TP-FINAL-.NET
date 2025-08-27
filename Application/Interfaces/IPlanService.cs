@@ -4,16 +4,16 @@ namespace ApplicationClean.Interfaces
 {
     public interface IPlanService
     {
-        
-        PlanDTO Add(PlanDTO plan);
 
-        PlanDTO Update(PlanDTO plan);
+        Task<PlanDTO> AddAsync(PlanDTO plan);
 
-        bool Delete(int id);
+        Task<PlanDTO> UpdateAsync(PlanDTO plan);
 
-        PlanDTO GetById(int id);
+        Task<bool> DeleteAsync(int id);
 
-        IEnumerable<PlanDTO> GetAll();
+        Task<PlanDTO> GetByIdAsync(int id);
+
+        Task<IEnumerable<PlanDTO>> GetAllAsync();
 
 
     }

@@ -1,0 +1,52 @@
+﻿using ApplicationClean.Interfaces;
+using Domain.Entities;
+using Domain.Interfaces;
+using Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Infrastructure.Repositories
+{
+    public class EspecialidadRepository : IEspecialidadRepository
+    {
+        private readonly TPIContext _context;
+
+        public EspecialidadRepository(TPIContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<Especialidad> GetByIdAsync(int id)
+        {
+            return await _context.Especialidades.FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async Task<IEnumerable<Especialidad>> GetAllAsync()
+        {
+            return await _context.Especialidades.ToListAsync();
+        }
+
+        public async Task AddAsync(Especialidad especialidad)
+        {
+            await _context.Especialidades.AddAsync(especialidad);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Especialidad especialidad)
+        {
+            _context.Especialidades.Update(especialidad);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Especialidad especialidad)
+        {
+            _context.Especialidades.Remove(especialidad);
+
+            await _context.SaveChangesAsync();
+        }
+    }
+}

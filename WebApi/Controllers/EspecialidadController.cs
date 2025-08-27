@@ -1,32 +1,34 @@
-﻿using ApplicationClean.Services;
+﻿using ApplicationClean.DTOs;
+using ApplicationClean.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using ApplicationClean.DTOs; 
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/[controller]")]
 public class EspecialidadesController : ControllerBase
 {
-    private readonly EspecialidadServices _especialidadServices;
+    private readonly IEspecialidadService _especialidadService;
 
-    public EspecialidadesController(EspecialidadServices especialidadServices)
+    public EspecialidadesController(IEspecialidadService especialidadService)
     {
-        _especialidadServices = especialidadServices;
+        _especialidadService = especialidadService;
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(List<EspecialidadDTO>), StatusCodes.Status200OK)]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
-        var dtos = _especialidadServices.GetAll();
+        var dtos = await _especialidadService.GetAllAsync();
         return Ok(dtos);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(EspecialidadDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetByIdAsync(int id)
     {
-        var dto = _especialidadServices.GetById(id);
+        var dto = await _especialidadService.GetByIdAsync(id);
         if (dto == null)
         {
             return NotFound();
@@ -37,14 +39,15 @@ public class EspecialidadesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(EspecialidadDTO), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create(EspecialidadDTO dto)
+    public async Task<IActionResult> CreateAsync(EspecialidadDTO dto)
     {
         try
         {
-            var especialidadDTO = _especialidadServices.Add(dto);
-            return CreatedAtAction(nameof(GetById), new { id = especialidadDTO.Id }, especialidadDTO);
+            var especialidadDTO = await _especialidadService.AddAsync(dto);
+
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = especialidadDTO.Id }, especialidadDTO);
         }
-        catch (ArgumentException ex)
+        catch (System.Exception ex)
         {
             return BadRequest(new { error = ex.Message });
         }
@@ -54,7 +57,7 @@ public class EspecialidadesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Update(int id, EspecialidadDTO dto)
+    public async Task<IActionResult> UpdateAsync(int id, EspecialidadDTO dto)
     {
         if (id != dto.Id)
         {
@@ -63,24 +66,28 @@ public class EspecialidadesController : ControllerBase
 
         try
         {
-            _especialidadServices.Update(dto);
+            await _especialidadService.UpdateAsync(dto);
             return NoContent();
         }
-        catch (Exception ex)
+        catch (KeyNotFoundException ex)
         {
             return NotFound(new { error = ex.Message });
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
         }
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> DeleteAsync(int id)
     {
-        var deleted = _especialidadServices.Delete(id);
+        var deleted = await _especialidadService.DeleteAsync(id);
         if (!deleted)
         {
-            return NotFound();
+            return NotFound($"No se encontró una especialidad con el ID {id} para eliminar.");
         }
         return NoContent();
     }

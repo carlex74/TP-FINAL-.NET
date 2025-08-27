@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{B92ACD60-5876-4843-B3AB-0C4808B8853D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{17CADB15-88C8-4900-AE5D-2D1E669ACD90}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsForms", "WindowsForms\WindowsForms.csproj", "{71FC0225-C81D-452B-897B-94624689F2FE}"
@@ -21,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B92ACD60-5876-4843-B3AB-0C4808B8853D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B92ACD60-5876-4843-B3AB-0C4808B8853D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B92ACD60-5876-4843-B3AB-0C4808B8853D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B92ACD60-5876-4843-B3AB-0C4808B8853D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{17CADB15-88C8-4900-AE5D-2D1E669ACD90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{17CADB15-88C8-4900-AE5D-2D1E669ACD90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17CADB15-88C8-4900-AE5D-2D1E669ACD90}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -9,11 +9,14 @@ namespace ApplicationClean.Interfaces
 {
    public interface IEspecialidadService
     {
-        EspecialidadDTO Add(EspecialidadDTO especialidadDTO);
-        EspecialidadDTO Update(EspecialidadDTO especialidadDTO);
+        Task<EspecialidadDTO> AddAsync(EspecialidadDTO especialidadDTO);
 
-        bool Delete(int id);
-        EspecialidadDTO GetById(int id);
-        IEnumerable<EspecialidadDTO> GetAll();
+        Task<EspecialidadDTO> UpdateAsync(EspecialidadDTO especialidadDTO);
+
+        Task<bool> DeleteAsync(int id);
+
+        Task<EspecialidadDTO> GetByIdAsync(int id);
+
+        Task<IEnumerable<EspecialidadDTO>> GetAllAsync();
     }
 }

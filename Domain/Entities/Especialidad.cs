@@ -6,11 +6,18 @@ namespace Domain.Entities
     {
         public int Id { get; private set; }
         public string Descripcion { get; private set; }
+        public virtual ICollection<Plan> Planes { get; set; }
+
+        protected Especialidad()
+        {
+            Planes = new HashSet<Plan>();
+        }
 
         public Especialidad(int id,string descripcion)
         {
             SetId(id);
             SetDescripcion(descripcion);
+            Planes = new HashSet<Plan>();
         }
 
         public void SetId(int id)

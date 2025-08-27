@@ -1,32 +1,34 @@
 ﻿using ApplicationClean.DTOs;
-using ApplicationClean.Services;
+using ApplicationClean.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/[controller]")]
 public class PlanesController : ControllerBase
 {
-    private readonly PlanServices _planServices;
+    private readonly IPlanService _planService;
 
-    public PlanesController(PlanServices planServices)
+    public PlanesController(IPlanService planService)
     {
-        _planServices = planServices;
+        _planService = planService;
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(List<PlanDTO>), StatusCodes.Status200OK)]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
-        var dtos = _planServices.GetAll();
+        var dtos = await _planService.GetAllAsync();
         return Ok(dtos);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(PlanDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetByIdAsync(int id)
     {
-        var dto = _planServices.GetById(id);
+        var dto = await _planService.GetByIdAsync(id);
         if (dto == null)
         {
             return NotFound();
@@ -37,14 +39,14 @@ public class PlanesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(PlanDTO), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create(PlanDTO dto)
+    public async Task<IActionResult> CreateAsync(PlanDTO dto)
     {
         try
         {
-            var planDTO = _planServices.Add(dto);
-            return CreatedAtAction(nameof(GetById), new { id = planDTO.Id }, planDTO);
+            var planDTO = await _planService.AddAsync(dto);
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = planDTO.Id }, planDTO);
         }
-        catch (ArgumentException ex)
+        catch (System.Exception ex)
         {
             return BadRequest(new { error = ex.Message });
         }
@@ -54,7 +56,7 @@ public class PlanesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Update(int id, PlanDTO dto)
+    public async Task<IActionResult> UpdateAsync(int id, PlanDTO dto)
     {
         if (id != dto.Id)
         {
@@ -63,24 +65,28 @@ public class PlanesController : ControllerBase
 
         try
         {
-            _planServices.Update(dto);
+            await _planService.UpdateAsync(dto);
             return NoContent();
         }
-        catch (Exception ex)
+        catch (KeyNotFoundException ex)
         {
             return NotFound(new { error = ex.Message });
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
         }
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> DeleteAsync(int id)
     {
-        var deleted = _planServices.Delete(id);
+        var deleted = await _planService.DeleteAsync(id);
         if (!deleted)
         {
-            return NotFound();
+            return NotFound($"No se encontró un plan con el ID {id} para eliminar.");
         }
         return NoContent();
     }

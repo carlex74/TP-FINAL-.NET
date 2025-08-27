@@ -1,49 +1,79 @@
 ﻿using ApplicationClean.DTOs;
-using Domain.Interfaces;
-using Domain.Entities;
 using ApplicationClean.Interfaces;
-using Data;
-
+using Domain.Entities;
+using Domain.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ApplicationClean.Services
 {
-    public class PlanServices:IPlanService
+    public class PlanServices : IPlanService
     {
         private readonly IPlanRepository _planRepository;
+        private readonly IEspecialidadRepository _especialidadRepository;
 
-        public PlanServices(IPlanRepository planRepository)
+        public PlanServices(IPlanRepository planRepository, IEspecialidadRepository especialidadRepository)
         {
             _planRepository = planRepository;
+            _especialidadRepository = especialidadRepository;
         }
 
-        public PlanDTO Add(PlanDTO planDTO) 
+        public async Task<PlanDTO> AddAsync(PlanDTO planDTO)
         {
-
-            if(_planRepository.GetById(planDTO.Id) != null)
+            var especialidad = await _especialidadRepository.GetByIdAsync(planDTO.IdEspecialidad);
+            if (especialidad == null)
             {
-                throw new Exception("Ya existe un plan con el mismo ID");
+                throw new KeyNotFoundException($"No existe una especialidad con el ID {planDTO.IdEspecialidad}. No se puede crear el plan.");
             }
 
-            int id = GetNextId();
-
-            Plan plan = new Plan(id, planDTO.Descripcion, planDTO.IdEspecialidad);
-
-            _planRepository.Add(plan);
+            var plan = new Plan(0, planDTO.Descripcion, planDTO.IdEspecialidad);
+            await _planRepository.AddAsync(plan);
 
             planDTO.Id = plan.Id;
-            planDTO.Descripcion = plan.Descripcion;
-            planDTO.IdEspecialidad = plan.IdEspecialidad;
             return planDTO;
         }
 
-
-        public PlanDTO GetById(int id)
+        public async Task<PlanDTO> UpdateAsync(PlanDTO planDTO)
         {
-            Plan plan = _planRepository.GetById(id);
+            var existingPlan = await _planRepository.GetByIdAsync(planDTO.Id);
+            if (existingPlan == null)
+            {
+                throw new KeyNotFoundException($"No se encontró un plan con el ID {planDTO.Id}.");
+            }
+
+            if (existingPlan.IdEspecialidad != planDTO.IdEspecialidad)
+            {
+                var nuevaEspecialidad = await _especialidadRepository.GetByIdAsync(planDTO.IdEspecialidad);
+                if (nuevaEspecialidad == null)
+                {
+                    throw new KeyNotFoundException($"No existe la nueva especialidad con ID {planDTO.IdEspecialidad}.");
+                }
+            }
+
+            existingPlan.SetDescripcion(planDTO.Descripcion);
+            existingPlan.SetIdEspecialidad(planDTO.IdEspecialidad);
+
+            await _planRepository.UpdateAsync(existingPlan);
+            return planDTO;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var plan = await _planRepository.GetByIdAsync(id);
             if (plan == null)
             {
-                throw new Exception("No existe un plan con el ID especificado");
+                return false;
             }
+            await _planRepository.DeleteAsync(plan);
+            return true;
+        }
+
+        public async Task<PlanDTO> GetByIdAsync(int id)
+        {
+            var plan = await _planRepository.GetByIdAsync(id);
+            if (plan == null) return null;
+
             return new PlanDTO
             {
                 Id = plan.Id,
@@ -52,70 +82,15 @@ namespace ApplicationClean.Services
             };
         }
 
-        public IEnumerable<PlanDTO> GetAll()
+        public async Task<IEnumerable<PlanDTO>> GetAllAsync()
         {
-            return _planRepository.GetAll().Select(plan => new PlanDTO
+            var planes = await _planRepository.GetAllAsync();
+            return planes.Select(plan => new PlanDTO
             {
                 Id = plan.Id,
                 Descripcion = plan.Descripcion,
                 IdEspecialidad = plan.IdEspecialidad
             });
         }
-
-
-        public PlanDTO Update(PlanDTO planDTO)
-        {
-            Plan existingPlan = _planRepository.GetById(planDTO.Id);
-            if (existingPlan == null)
-            {
-                throw new Exception("No existe un plan con el ID especificado");
-            }else if (existingPlan.Descripcion.Equals(planDTO.Descripcion, StringComparison.OrdinalIgnoreCase))
-            {
-                throw new Exception($"Ya existe un plan con la descripcion '{planDTO.Descripcion}'.");
-            }
-
-
-            existingPlan.SetDescripcion(planDTO.Descripcion);
-            existingPlan.SetIdEspecialidad(planDTO.IdEspecialidad);
-            _planRepository.Update(existingPlan);
-            return new PlanDTO
-            {
-                Id = existingPlan.Id,
-                Descripcion = existingPlan.Descripcion,
-                IdEspecialidad = existingPlan.IdEspecialidad
-            };
-        }
-
-        public bool Delete(int id)
-        {
-            Plan plan = _planRepository.GetById(id);
-            if (plan == null)
-            {
-                throw new Exception("No existe un plan con el ID especificado");
-
-                return false;
-            }
-            _planRepository.Delete(plan);
-
-
-            return true;
-        }
-
-        private static int GetNextId()
-        {
-            int nextId;
-
-            if (PlanMemory.Planes.Count > 0)
-            {
-                nextId = PlanMemory.Planes.Max(x => x.Id) + 1;
-            }
-            else
-            {
-                nextId = 1;
-            }
-
-            return nextId;
-        }
-
     }
 }

@@ -1,32 +1,42 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore.SqlServer;
 
 namespace Infrastructure.Context
 {
-    public class TpConterxt : DbContext
+    public class TPIContext : DbContext
     {
-        public DbSet<Plan> plan { get; set; }
-        public DbSet<Especialidad> especialidad { get; set; }
+        public DbSet<Plan> Planes { get; set; }
+        public DbSet<Especialidad> Especialidades { get; set; }
 
-        internal TpConterxt()
+        public TPIContext(DbContextOptions<TPIContext> options) : base(options)
         {
-            this.Database.EnsureCreated();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                var configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory()) // Ensure System.IO is included
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .Build();
+            base.OnModelCreating(modelBuilder);
 
-                string connectionString = configuration.GetConnectionString("DefaultConnection");
-                optionsBuilder.UseSqlServer(connectionString); // This requires the Microsoft.EntityFrameworkCore.SqlServer package
-            }
+            modelBuilder.Entity<Especialidad>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Descripcion)
+                    .IsRequired()
+                    .HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<Plan>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+
+                entity.Property(p => p.Descripcion)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.HasOne(p => p.Especialidad)
+                      .WithMany(e => e.Planes)
+                      .HasForeignKey(p => p.IdEspecialidad);
+            });
         }
     }
 }
