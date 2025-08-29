@@ -23,7 +23,7 @@ public class PlanesController : ControllerBase
         return Ok(dtos);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetPlanById")]
     [ProducesResponseType(typeof(PlanDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetByIdAsync(int id)
@@ -44,7 +44,7 @@ public class PlanesController : ControllerBase
         try
         {
             var planDTO = await _planService.AddAsync(dto);
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = planDTO.Id }, planDTO);
+            return CreatedAtRoute("GetPlanById", new { id = planDTO.Id }, planDTO);
         }
         catch (System.Exception ex)
         {

@@ -23,7 +23,7 @@ public class EspecialidadesController : ControllerBase
         return Ok(dtos);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetEspecialidadById")]
     [ProducesResponseType(typeof(EspecialidadDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetByIdAsync(int id)
@@ -45,7 +45,7 @@ public class EspecialidadesController : ControllerBase
         {
             var especialidadDTO = await _especialidadService.AddAsync(dto);
 
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = especialidadDTO.Id }, especialidadDTO);
+            return CreatedAtRoute("GetEspecialidadById", new { id = especialidadDTO.Id }, especialidadDTO);
         }
         catch (System.Exception ex)
         {
