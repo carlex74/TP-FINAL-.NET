@@ -1,6 +1,6 @@
-﻿using ApplicationClean.Interfaces; 
+﻿using ApplicationClean.Interfaces;
+using ApplicationClean.Interfaces.Repositories;
 using Domain.Entities;
-using Domain.Interfaces;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;

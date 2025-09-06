@@ -1,7 +1,7 @@
 ﻿using ApplicationClean.DTOs;
-using ApplicationClean.Interfaces;
+using ApplicationClean.Interfaces.Repositories;
+using ApplicationClean.Interfaces.Services;
 using Domain.Entities;
-using Domain.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

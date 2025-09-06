@@ -1,21 +1,35 @@
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Context;
-using Domain.Interfaces;
-using ApplicationClean.Interfaces; 
+using ApplicationClean.Interfaces;
 using Infrastructure.Repositories;
 using ApplicationClean.Services;
+using System.Text.Json.Serialization;
+using ApplicationClean.Interfaces.Repositories;
+using ApplicationClean.Interfaces.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddDbContext<TPIContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IEspecialidadRepository, EspecialidadRepository>();
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
 builder.Services.AddScoped<IEspecialidadService, EspecialidadServices>();
 builder.Services.AddScoped<IPlanService, PlanServices>();
+builder.Services.AddScoped<IPersonaService, PersonaService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpLogging(o => { });

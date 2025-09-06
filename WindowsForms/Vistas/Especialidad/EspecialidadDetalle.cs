@@ -1,18 +1,12 @@
 using ApplicationClean.DTOs;
-using ApplicationClean.Interfaces;
-using System.Reflection.Emit;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using ApplicationClean.Interfaces.ApiClients;
+using System;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WindowsForms
 {
-    public enum FormMode
-    {
-        Add,
-        Update
-    }
+    // El enum FormMode se puede mantener, es muy útil
+    public enum FormMode { Add, Update }
 
     public partial class EspecialidadDetalle : Form
     {
@@ -23,106 +17,84 @@ namespace WindowsForms
         public EspecialidadDTO Especialidad
         {
             get { return especialidad; }
-            set
-            {
-                especialidad = value;
-                this.SetEspecialidad();
-            }
+            set { especialidad = value; SetEspecialidad(); }
         }
+
         public FormMode Mode
         {
-            get
-            {
-                return mode;
-            }
-            set
-            {
-                SetFormMode(value);
-            }
+            get { return mode; }
+            set { mode = value; SetFormMode(value); }
         }
+
         public EspecialidadDetalle(IAPIEspecialidadClients especialidadClient)
         {
             InitializeComponent();
             _especialidadClient = especialidadClient;
-            Mode = FormMode.Add;
         }
 
         private async void aceptarButton_Click(object sender, EventArgs e)
         {
-            if (this.ValidateEspecialidad())
+            if (!ValidateEspecialidad()) return;
+
+            try
             {
-                try
+                especialidad.Descripcion = descripcionTextBox.Text;
+                if (Mode == FormMode.Update)
                 {
-                    if (this.Especialidad == null)
-                    {
-                        this.Especialidad = new EspecialidadDTO();
-                    }
-                    this.Especialidad.Id = int.Parse(IdTextBox.Text);
-                    this.Especialidad.Descripcion = DescripcionTextBox.Text;
-
-                    //El Detalle se esta llevando la responsabilidad de llamar al servicio
-                    //pero tal vez deberia ser solo una vista y que esta responsabilidad quede
-                    //en la Lista o tal vez en un Presenter o Controler
-
-                    if (this.Mode == FormMode.Update)
-                    {
-                        await _especialidadClient.Update(this.Especialidad);
-                    }
-                    else
-                    {
-                        await _especialidadClient.Add(this.Especialidad);
-                    }
-
-                    this.Close();
+                    especialidad.Id = int.Parse(idTextBox.Text);
+                    await _especialidadClient.Update(especialidad);
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await _especialidadClient.Add(especialidad);
                 }
+                this.DialogResult = DialogResult.OK; // Indicamos que la operación fue exitosa
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void cancelarButton_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
         private void SetEspecialidad()
         {
-            this.IdTextBox.Text = this.Especialidad.Id.ToString();
-            this.DescripcionTextBox.Text = this.Especialidad.Descripcion;
+            idTextBox.Text = especialidad.Id.ToString();
+            descripcionTextBox.Text = especialidad.Descripcion;
         }
 
         private void SetFormMode(FormMode value)
         {
             mode = value;
-
-            if (Mode == FormMode.Add)
+            if (mode == FormMode.Add)
             {
-                IdLabel.Visible = false;
-                IdTextBox.Visible = false;
+                titleLabel.Text = "Nueva Especialidad";
+                idLabel.Visible = false;
+                idTextBox.Visible = false;
             }
-
-            if (Mode == FormMode.Update)
+            else if (mode == FormMode.Update)
             {
-                IdLabel.Visible = true;
-                IdTextBox.Visible = true;
+                titleLabel.Text = "Modificar Especialidad";
+                idLabel.Visible = true;
+                idTextBox.Visible = true;
             }
         }
 
         private bool ValidateEspecialidad()
         {
-            bool isValid = true;
-
-            errorProvider.SetError(IdTextBox, string.Empty);
-            errorProvider.SetError(DescripcionTextBox, string.Empty);
-
-            if (this.DescripcionTextBox.Text == string.Empty)
+            errorProvider.SetError(descripcionTextBox, string.Empty);
+            if (string.IsNullOrWhiteSpace(descripcionTextBox.Text))
             {
-                isValid = false;
-                errorProvider.SetError(DescripcionTextBox, "La Descripcion es Requerida");
+                errorProvider.SetError(descripcionTextBox, "La descripción es requerida.");
+                return false;
             }
-            return isValid;
+            return true;
         }
     }
 }

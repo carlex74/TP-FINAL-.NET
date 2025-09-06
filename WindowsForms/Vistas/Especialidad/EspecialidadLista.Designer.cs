@@ -2,15 +2,8 @@
 {
     partial class EspecialidadLista
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,86 +15,162 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            especialidadesDataGridView = new DataGridView();
-            agregarButton = new Button();
-            modificarButton = new Button();
-            eliminarButton = new Button();
-            ((System.ComponentModel.ISupportInitialize)especialidadesDataGridView).BeginInit();
-            SuspendLayout();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.topPanel = new System.Windows.Forms.Panel();
+            this.titleLabel = new System.Windows.Forms.Label();
+            this.especialidadDataGridView = new System.Windows.Forms.DataGridView();
+            this.agregarButton = new System.Windows.Forms.Button();
+            this.modificarButton = new System.Windows.Forms.Button();
+            this.eliminarButton = new System.Windows.Forms.Button();
+            this.topPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.especialidadDataGridView)).BeginInit();
+            this.SuspendLayout();
             // 
-            // especialidadesDataGridView
+            // topPanel
             // 
-            especialidadesDataGridView.AllowUserToOrderColumns = true;
-            especialidadesDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            especialidadesDataGridView.Location = new Point(10, 9);
-            especialidadesDataGridView.Margin = new Padding(3, 2, 3, 2);
-            especialidadesDataGridView.Name = "especialidadesDataGridView";
-            especialidadesDataGridView.ReadOnly = true;
-            especialidadesDataGridView.RowHeadersWidth = 51;
-            especialidadesDataGridView.Size = new Size(679, 268);
-            especialidadesDataGridView.TabIndex = 0;
+            this.topPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.topPanel.Controls.Add(this.titleLabel);
+            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topPanel.Location = new System.Drawing.Point(0, 0);
+            this.topPanel.Name = "topPanel";
+            this.topPanel.Size = new System.Drawing.Size(750, 60);
+            this.topPanel.TabIndex = 3;
+            // 
+            // titleLabel
+            // 
+            this.titleLabel.AutoSize = true;
+            this.titleLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titleLabel.ForeColor = System.Drawing.Color.White;
+            this.titleLabel.Location = new System.Drawing.Point(25, 15);
+            this.titleLabel.Name = "titleLabel";
+            this.titleLabel.Size = new System.Drawing.Size(306, 32);
+            this.titleLabel.TabIndex = 0;
+            this.titleLabel.Text = "Gestión de Especialidades";
+            // 
+            // especialidadDataGridView
+            // 
+            this.especialidadDataGridView.AllowUserToAddRows = false;
+            this.especialidadDataGridView.AllowUserToDeleteRows = false;
+            this.especialidadDataGridView.AllowUserToResizeRows = false;
+            this.especialidadDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.especialidadDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.especialidadDataGridView.BackgroundColor = System.Drawing.Color.White;
+            this.especialidadDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.especialidadDataGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.especialidadDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.especialidadDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.especialidadDataGridView.ColumnHeadersHeight = 40;
+            this.especialidadDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.especialidadDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            this.especialidadDataGridView.EnableHeadersVisualStyles = false;
+            this.especialidadDataGridView.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
+            this.especialidadDataGridView.Location = new System.Drawing.Point(28, 140);
+            this.especialidadDataGridView.MultiSelect = false;
+            this.especialidadDataGridView.Name = "especialidadDataGridView";
+            this.especialidadDataGridView.ReadOnly = true;
+            this.especialidadDataGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.especialidadDataGridView.RowHeadersVisible = false;
+            this.especialidadDataGridView.RowTemplate.Height = 40;
+            this.especialidadDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.especialidadDataGridView.Size = new System.Drawing.Size(694, 429);
+            this.especialidadDataGridView.TabIndex = 3;
             // 
             // agregarButton
             // 
-            agregarButton.Location = new Point(559, 295);
-            agregarButton.Margin = new Padding(3, 2, 3, 2);
-            agregarButton.Name = "agregarButton";
-            agregarButton.Size = new Size(130, 34);
-            agregarButton.TabIndex = 2;
-            agregarButton.Text = "Agregar";
-            agregarButton.UseVisualStyleBackColor = true;
-            agregarButton.Click += agregarButton_Click;
+            this.agregarButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.agregarButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.agregarButton.FlatAppearance.BorderSize = 0;
+            this.agregarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.agregarButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.agregarButton.ForeColor = System.Drawing.Color.White;
+            this.agregarButton.Location = new System.Drawing.Point(28, 85);
+            this.agregarButton.Name = "agregarButton";
+            this.agregarButton.Size = new System.Drawing.Size(120, 32);
+            this.agregarButton.TabIndex = 1;
+            this.agregarButton.Text = "AGREGAR";
+            this.agregarButton.UseVisualStyleBackColor = false;
+            this.agregarButton.Click += new System.EventHandler(this.agregarButton_Click);
             // 
             // modificarButton
             // 
-            modificarButton.Location = new Point(402, 295);
-            modificarButton.Margin = new Padding(3, 2, 3, 2);
-            modificarButton.Name = "modificarButton";
-            modificarButton.Size = new Size(130, 34);
-            modificarButton.TabIndex = 3;
-            modificarButton.Text = "Modificar";
-            modificarButton.UseVisualStyleBackColor = true;
-            modificarButton.Click += modificarButton_Click;
+            this.modificarButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(117)))), ((int)(((byte)(125)))));
+            this.modificarButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.modificarButton.FlatAppearance.BorderSize = 0;
+            this.modificarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.modificarButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.modificarButton.ForeColor = System.Drawing.Color.White;
+            this.modificarButton.Location = new System.Drawing.Point(154, 85);
+            this.modificarButton.Name = "modificarButton";
+            this.modificarButton.Size = new System.Drawing.Size(120, 32);
+            this.modificarButton.TabIndex = 2;
+            this.modificarButton.Text = "MODIFICAR";
+            this.modificarButton.UseVisualStyleBackColor = false;
+            this.modificarButton.Click += new System.EventHandler(this.modificarButton_Click);
             // 
             // eliminarButton
             // 
-            eliminarButton.Location = new Point(242, 295);
-            eliminarButton.Margin = new Padding(3, 2, 3, 2);
-            eliminarButton.Name = "eliminarButton";
-            eliminarButton.Size = new Size(130, 34);
-            eliminarButton.TabIndex = 4;
-            eliminarButton.Text = "Eliminar";
-            eliminarButton.UseVisualStyleBackColor = true;
-            eliminarButton.Click += eliminarButton_Click;
+            this.eliminarButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+            this.eliminarButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.eliminarButton.FlatAppearance.BorderSize = 0;
+            this.eliminarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.eliminarButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.eliminarButton.ForeColor = System.Drawing.Color.White;
+            this.eliminarButton.Location = new System.Drawing.Point(280, 85);
+            this.eliminarButton.Name = "eliminarButton";
+            this.eliminarButton.Size = new System.Drawing.Size(120, 32);
+            this.eliminarButton.TabIndex = 3;
+            this.eliminarButton.Text = "ELIMINAR";
+            this.eliminarButton.UseVisualStyleBackColor = false;
+            this.eliminarButton.Click += new System.EventHandler(this.eliminarButton_Click);
             // 
             // EspecialidadLista
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 338);
-            Controls.Add(eliminarButton);
-            Controls.Add(modificarButton);
-            Controls.Add(agregarButton);
-            Controls.Add(especialidadesDataGridView);
-            Margin = new Padding(3, 2, 3, 2);
-            Name = "EspecialidadLista";
-            Text = "EspecialidadLista";
-            Load += Especialidad_Load;
-            ((System.ComponentModel.ISupportInitialize)especialidadesDataGridView).EndInit();
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
+            this.ClientSize = new System.Drawing.Size(750, 600);
+            this.Controls.Add(this.eliminarButton);
+            this.Controls.Add(this.modificarButton);
+            this.Controls.Add(this.agregarButton);
+            this.Controls.Add(this.especialidadDataGridView);
+            this.Controls.Add(this.topPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "EspecialidadLista";
+            this.Text = "EspecialidadLista";
+            this.Load += new System.EventHandler(this.Especialidad_Load);
+            this.topPanel.ResumeLayout(false);
+            this.topPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.especialidadDataGridView)).EndInit();
+            this.ResumeLayout(false);
+
         }
 
         #endregion
-
-        private DataGridView especialidadesDataGridView;
-        private Button agregarButton;
-        private Button modificarButton;
-        private Button eliminarButton;
+        private System.Windows.Forms.Panel topPanel;
+        private System.Windows.Forms.Label titleLabel;
+        private System.Windows.Forms.Button eliminarButton;
+        private System.Windows.Forms.Button modificarButton;
+        private System.Windows.Forms.Button agregarButton;
+        private System.Windows.Forms.DataGridView especialidadDataGridView;
     }
 }

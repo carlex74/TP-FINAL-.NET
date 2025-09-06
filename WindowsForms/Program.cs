@@ -1,52 +1,106 @@
-using System.Net.Http.Headers;
+using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces;
+using ApplicationClean.Interfaces.ApiClients;
 using Infrastructure.ApiClients;
 using Microsoft.Extensions.DependencyInjection;
-using WindowsForms.Vistas;
+using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Windows.Forms;
+using static Domain.Entities.Usuario;
 
 namespace WindowsForms
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
+        public static IServiceProvider ServiceProvider { get; private set; }
+
         [STAThread]
         static void Main()
         {
-            ApplicationConfiguration.Initialize();
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-            // Configuración de DI
             var services = new ServiceCollection();
+            ConfigureServices(services);
+            ServiceProvider = services.BuildServiceProvider();
 
-            // Registrar clientes de la capa Infrastructure
-            services.AddHttpClient<IAPIEspecialidadClients, EspecialidadApiClient>(client =>
+            // Bucle principal de la aplicación para Login/Logout
+            while (true)
             {
-                client.BaseAddress = new Uri("http://localhost:5183/api/"); // Cambia la URL según tu API
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            });
+                var loginForm = ServiceProvider.GetRequiredService<LoginForm>();
+                if (loginForm.ShowDialog() != DialogResult.OK)
+                {
+                    break;
+                }
 
-            services.AddHttpClient<IAPIPlanClients, PlanApiClient>(client =>
+                var loggedInUser = UserSession.GetCurrentUser();
+                if (loggedInUser == null)
+                {
+                    MessageBox.Show("Error al recuperar la sesión.", "Error");
+                    break;
+                }
+
+                Form mainForm = null;
+                switch (loggedInUser.Tipo)
+                {
+                    case TipoUsuario.Administrador:
+                        mainForm = ServiceProvider.GetRequiredService<Home>();
+                        break;
+                    case TipoUsuario.Docente:
+                    case TipoUsuario.Alumno:
+                        mainForm = ServiceProvider.GetRequiredService<EnConstruccionForm>();
+                        break;
+                }
+
+                if (mainForm != null)
+                {
+                    Application.Run(mainForm);
+                }
+
+                UserSession.Logout();
+            }
+        }
+
+        private static void ConfigureServices(ServiceCollection services)
+        {
+            string baseAddress = "https://localhost:7111/api/";
+
+            // --- LA SOLUCIÓN DEFINITIVA: Creamos un objeto de opciones de serialización ---
+            var jsonSerializerOptions = new JsonSerializerOptions
             {
-                client.BaseAddress = new Uri("http://localhost:5183/api/"); // Cambia la URL según tu API
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            });
+                // Le dice al serializador que convierta los strings del JSON a enums de C#.
+                Converters = { new JsonStringEnumConverter() },
+                // Ignora si el JSON usa "nombre" y tu DTO usa "Nombre".
+                PropertyNameCaseInsensitive = true
+            };
 
-            // Registrar formularios
-            services.AddTransient<Menu>();
-            services.AddTransient<PlanLista>();
+            // Registramos estas opciones como un Singleton para que todos los clientes las puedan usar.
+            services.AddSingleton(jsonSerializerOptions);
+
+            // --- REGISTRO DE CLIENTES DE API ---
+            // AddHttpClient es la forma correcta de registrar clientes que usan HttpClient.
+            // Gestiona el ciclo de vida de HttpClient de forma eficiente.
+            services.AddHttpClient<IAPIAuthClients, AuthApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAPIEspecialidadClients, EspecialidadApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAPIPlanClients, PlanApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAPIPersonaClients, PersonaApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAPIUsuarioClients, UsuarioApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+
+            // --- REGISTRO DE FORMULARIOS ---
+            // Usamos AddTransient para que se cree una nueva instancia cada vez que se pide.
+            services.AddTransient<LoginForm>();
+            services.AddTransient<EnConstruccionForm>();
+            services.AddTransient<Home>();
             services.AddTransient<EspecialidadLista>();
-
-            // Construir el proveedor de servicios
-            using var provider = services.BuildServiceProvider();
-
-            // Resolver el formulario principal desde el contenedor
-            var mainForm = provider.GetRequiredService<Menu>();
-
-            // Iniciar la aplicación con DI habilitado
-            Application.Run(mainForm);
+            services.AddTransient<EspecialidadDetalle>();
+            services.AddTransient<PlanLista>();
+            services.AddTransient<PlanDetalle>();
+            services.AddTransient<PersonaLista>();
+            services.AddTransient<PersonaDetalle>();
+            services.AddTransient<UsuarioLista>();
+            services.AddTransient<UsuarioDetalle>();
         }
     }
 }

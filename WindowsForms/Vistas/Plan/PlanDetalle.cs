@@ -1,135 +1,135 @@
 ﻿using ApplicationClean.DTOs;
-using ApplicationClean.Interfaces;
-using Infrastructure.ApiClients;
+using ApplicationClean.Interfaces.ApiClients;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsForms.Vistas
+namespace WindowsForms
 {
     public partial class PlanDetalle : Form
     {
         private PlanDTO plan;
         private FormMode mode;
         private readonly IAPIPlanClients _planClient;
+        private readonly IAPIEspecialidadClients _especialidadClient;
 
         public PlanDTO Plan
         {
             get { return plan; }
-            set
-            {
-                plan = value;
-                this.SetPlan();
-            }
+            set { plan = value; SetPlan(); }
         }
+
         public FormMode Mode
         {
-            get
-            {
-                return mode;
-            }
-            set
-            {
-                SetFormMode(value);
-            }
+            get { return mode; }
+            set { mode = value; SetFormMode(value); }
         }
-        public PlanDetalle(IAPIPlanClients planClients)
+
+        public PlanDetalle(IAPIPlanClients planClient, IAPIEspecialidadClients especialidadClient)
         {
             InitializeComponent();
-            _planClient = planClients;
-            Mode = FormMode.Add;
+            _planClient = planClient;
+            _especialidadClient = especialidadClient;
+        }
+
+        private async void PlanDetalle_Load(object sender, EventArgs e)
+        {
+            // Cargamos las especialidades cuando el formulario se abre
+            await LoadEspecialidadesAsync();
+            SetPlan(); // Volvemos a setear por si el plan ya estaba asignado
+        }
+
+        private async Task LoadEspecialidadesAsync()
+        {
+            try
+            {
+                var especialidades = await _especialidadClient.GetAll();
+                especialidadComboBox.DataSource = especialidades;
+                especialidadComboBox.DisplayMember = "Descripcion";
+                especialidadComboBox.ValueMember = "Id";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar especialidades: {ex.Message}", "Error");
+            }
         }
 
         private async void aceptarButton_Click(object sender, EventArgs e)
         {
-            if (this.ValidatePlan())
+            if (!ValidatePlan()) return;
+
+            try
             {
-                try
-                {
-                    if (this.Plan == null)
-                    {
-                        this.Plan = new PlanDTO();
-                    }
-                    this.Plan.Id = int.Parse(IdTextBox.Text);
-                    this.Plan.Descripcion = DescripcionTextBox.Text;
-                    this.Plan.IdEspecialidad = int.Parse(IdEspecialidadTextBox.Text);
+                plan.Descripcion = descripcionTextBox.Text;
+                plan.IdEspecialidad = (int)especialidadComboBox.SelectedValue;
 
-                    //El Detalle se esta llevando la responsabilidad de llamar al servicio
-                    //pero tal vez deberia ser solo una vista y que esta responsabilidad quede
-                    //en la Lista o tal vez en un Presenter o Controler
-
-                    if (this.Mode == FormMode.Update)
-                    {
-                        await _planClient.Update(this.Plan);
-                    }
-                    else
-                    {
-                        await _planClient.Add(this.Plan);
-                    }
-                    this.Close();
-                }
-                catch (Exception ex)
+                if (Mode == FormMode.Update)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    plan.Id = int.Parse(idTextBox.Text);
+                    await _planClient.Update(plan);
                 }
+                else
+                {
+                    await _planClient.Add(plan);
+                }
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
             }
         }
 
         private void cancelarButton_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
         private void SetPlan()
         {
-            this.IdTextBox.Text = this.Plan.Id.ToString();
-            this.DescripcionTextBox.Text = this.Plan.Descripcion;
-            this.IdEspecialidadTextBox.Text = this.Plan.IdEspecialidad.ToString();
+            if (plan == null) return;
+            idTextBox.Text = plan.Id.ToString();
+            descripcionTextBox.Text = plan.Descripcion;
+            if (plan.IdEspecialidad > 0)
+            {
+                especialidadComboBox.SelectedValue = plan.IdEspecialidad;
+            }
         }
 
         private void SetFormMode(FormMode value)
         {
             mode = value;
-
-            if (Mode == FormMode.Add)
+            if (mode == FormMode.Add)
             {
-                IdLabel.Visible = false;
-                IdTextBox.Visible = false;
+                titleLabel.Text = "Nuevo Plan";
+                idLabel.Visible = false;
+                idTextBox.Visible = false;
             }
-
-            if (Mode == FormMode.Update)
+            else if (mode == FormMode.Update)
             {
-                IdLabel.Visible = true;
-                IdTextBox.Visible = true;
+                titleLabel.Text = "Modificar Plan";
+                idLabel.Visible = true;
+                idTextBox.Visible = true;
             }
         }
 
         private bool ValidatePlan()
         {
+            errorProvider.SetError(descripcionTextBox, string.Empty);
+            errorProvider.SetError(especialidadComboBox, string.Empty);
+
             bool isValid = true;
-
-            errorProvider.SetError(IdTextBox, string.Empty);
-            errorProvider.SetError(DescripcionTextBox, string.Empty);
-            errorProvider.SetError(IdEspecialidadTextBox, string.Empty);
-
-            if (this.DescripcionTextBox.Text == string.Empty)
+            if (string.IsNullOrWhiteSpace(descripcionTextBox.Text))
             {
+                errorProvider.SetError(descripcionTextBox, "La descripción es requerida.");
                 isValid = false;
-                errorProvider.SetError(DescripcionTextBox, "La Descripcion es Requerida");
             }
-
-            if (this.IdEspecialidadTextBox.Text == string.Empty)
+            if (especialidadComboBox.SelectedValue == null)
             {
+                errorProvider.SetError(especialidadComboBox, "Debe seleccionar una especialidad.");
                 isValid = false;
-                errorProvider.SetError(IdEspecialidadTextBox, "El Id Especialidad es Requerido");
             }
-
             return isValid;
         }
     }
