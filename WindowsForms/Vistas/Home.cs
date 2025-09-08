@@ -41,7 +41,7 @@ namespace WindowsForms
         {
             if (currentButtonPanel != null)
             {
-                currentButtonPanel.BackColor = Color.FromArgb(17, 25, 37);
+                currentButtonPanel.BackColor = Color.FromArgb(60, 80, 110);
             }
         }
 

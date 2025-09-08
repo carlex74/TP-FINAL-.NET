@@ -91,7 +91,7 @@
             this.txtPassword.Size = new System.Drawing.Size(240, 23);
             this.txtPassword.TabIndex = 1;
             this.txtPassword.Text = "Contraseña";
-            this.txtPassword.UseSystemPasswordChar = true;
+            this.txtPassword.UseSystemPasswordChar = false;
             // 
             // btnLogin
             // 

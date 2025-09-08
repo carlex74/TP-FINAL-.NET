@@ -34,9 +34,9 @@ namespace ApplicationClean.Services
                 personaDto.Apellido,
                 personaDto.Dni,
                 personaDto.FechaNacimiento,
-                personaDto.Email,
                 personaDto.Direccion,
-                personaDto.Telefono
+                personaDto.Telefono,
+                personaDto.Email
 
             );
 

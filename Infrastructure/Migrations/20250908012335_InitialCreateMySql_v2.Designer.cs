@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(TPIContext))]
-    [Migration("20250908011058_InitialCreateMySql_v2")]
+    [Migration("20250908012335_InitialCreateMySql_v2")]
     partial class InitialCreateMySql_v2
     {
         /// <inheritdoc />

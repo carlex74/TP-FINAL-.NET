@@ -54,7 +54,7 @@
             // 
             // sideMenuPanel
             // 
-            this.sideMenuPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(25)))), ((int)(((byte)(37)))));
+            this.sideMenuPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(80)))), ((int)(((byte)(110)))));
             this.sideMenuPanel.Controls.Add(this.cerrarSesionPanel);
             this.sideMenuPanel.Controls.Add(this.usuarioPanel);
             this.sideMenuPanel.Controls.Add(this.personaPanel);

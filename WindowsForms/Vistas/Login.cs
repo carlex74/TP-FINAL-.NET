@@ -15,6 +15,17 @@ namespace WindowsForms
         {
             InitializeComponent();
             _authClient = authClient;
+
+            SetPlaceholder(txtLegajo, "Legajo");
+            SetPlaceholder(txtPassword, "Contraseña", isPassword: true);
+
+            txtLegajo.Enter += (s, e) => RemovePlaceholder(txtLegajo, "Legajo");
+            txtLegajo.Leave += (s, e) => SetPlaceholder(txtLegajo, "Legajo");
+
+            txtPassword.Enter += (s, e) => RemovePlaceholder(txtPassword, "Contraseña", isPassword: true);
+            txtPassword.Leave += (s, e) => SetPlaceholder(txtPassword, "Contraseña", isPassword: true);
+
+            this.ActiveControl = lblTitle;
         }
 
         #region Funcionalidad para mover el formulario sin bordes
@@ -33,6 +44,30 @@ namespace WindowsForms
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
         #endregion
+        private void SetPlaceholder(TextBox textBox, string placeholder, bool isPassword = false)
+        {
+            if (string.IsNullOrWhiteSpace(textBox.Text))
+            {
+                textBox.Text = placeholder;
+                textBox.ForeColor = Color.Gray;
+                if (isPassword)
+                {
+                    textBox.UseSystemPasswordChar = false;
+                }
+            }
+        }
+        private void RemovePlaceholder(TextBox textBox, string placeholder, bool isPassword = false)
+        {
+            if (textBox.Text == placeholder)
+            {
+                textBox.Text = "";
+                textBox.ForeColor = Color.Black;
+                if (isPassword)
+                {
+                    textBox.UseSystemPasswordChar = true;
+                }
+            }
+        }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
@@ -48,8 +83,7 @@ namespace WindowsForms
             string legajo = txtLegajo.Text;
             string clave = txtPassword.Text;
 
-            if (string.IsNullOrWhiteSpace(legajo) || legajo == "Legajo" ||
-                string.IsNullOrWhiteSpace(clave) || clave == "Contraseña")
+            if (string.IsNullOrWhiteSpace(legajo) || string.IsNullOrWhiteSpace(clave))
             {
                 MostrarError("Por favor, ingrese legajo y contraseña.");
                 return;
