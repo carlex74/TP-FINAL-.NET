@@ -8,7 +8,7 @@ using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -18,7 +18,15 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddDbContext<TPIContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+         //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("MySqlConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MySqlConnection")),
+        // ----> AÑADE ESTA LÍNEA <----
+        b => b.MigrationsAssembly("Infrastructure")
+    )
+
+);
 
 builder.Services.AddScoped<IEspecialidadRepository, EspecialidadRepository>();
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
