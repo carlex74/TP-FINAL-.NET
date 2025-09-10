@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class Curso : BusinessEntity
+    public class Curso
     {
         public int AnioCalendario { get; private set; }
         public int Cupo { get; private set; }
@@ -10,7 +10,11 @@ namespace Domain.Entities
         public int IdComision { get; private set; }
         public int IdMateria { get; private set; }
 
-        public Curso(int anioCalendario, int cupo, string descripcion, int idComision, int idMateria) : base()
+        public ICollection<Materia> Materias { get; private set; }
+
+        public ICollection<Comision> Comisiones { get; private set; }
+
+        public Curso(int anioCalendario, int cupo, string descripcion, int idComision, int idMateria) 
         {
             SetAnioCalendario(anioCalendario);
             SetCupo(cupo);

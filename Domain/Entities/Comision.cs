@@ -2,13 +2,17 @@
 
 namespace Domain.Entities
 {
-    public class Comision : BusinessEntity
+    public class Comision
     {
         public int AnioEspecialidad { get; private set; }
         public string Descripcion { get; private set; }
         public int IdPlan { get; private set; }
 
-        public Comision(int anioEspecialidad, string descripcion, int idPlan) : base()
+        public int nro {  get; private set; }
+
+        public ICollection<Plan> Planes { get; private set; }
+
+        public Comision(int anioEspecialidad, string descripcion, int idPlan)
         {
             SetAnioEspecialidad(anioEspecialidad);
             SetDescripcion(descripcion);
