@@ -13,6 +13,9 @@ namespace Domain.Entities
         public Materia Materia { get; private set; }
         public Comision Comision { get; private set; }
 
+        public ICollection<AlumnoInscripcion> Inscripciones { get; private set; }
+        public ICollection<DocenteCurso> Docentes { get; private set; }
+
         public Curso(int id, int anioCalendario, int cupo, string descripcion, int idComision, int idMateria) 
         {
             SetId(id);

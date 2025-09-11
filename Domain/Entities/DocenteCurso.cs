@@ -13,7 +13,13 @@ namespace Domain.Entities
         }
         public TipoCargos Cargo { get; private set; }
         public int IdCurso { get; private set; }
-        public int IdDocente { get; private set; }
+        public string LegajoDocente { get; private set; }
+
+        public Usuario Docente {  get; private set; }
+        public Curso Curso { get; private set; }
+
+        /*public ICollection<Usuario> Docentes { get; private set; }
+        public ICollection<Curso> Cursos { get; private set; }*/
 
         public DocenteCurso(TipoCargos cargo, int idCurso, int idDocente) : base()
         {

@@ -11,6 +11,7 @@ namespace Domain.Entities
         public ICollection<Comision> Comisiones { get; private set; }
         public ICollection<Materia> Materias { get; private set; }
 
+        public ICollection<Usuario> alumnos { get; private set; }
         protected Plan()
         {
             Materias = new HashSet<Materia>();

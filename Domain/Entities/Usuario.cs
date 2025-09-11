@@ -18,6 +18,9 @@ namespace Domain.Entities
         public bool Habilitado { get; private set; }
         public int IdPersona { get; private set; }
 
+        public ICollection<AlumnoInscripcion> AlumnoInscripcions { get; private set; }
+        public ICollection<DocenteCurso> DocenteCursos { get; private set; }
+
         public virtual Persona Persona { get; set; }
         protected Usuario() { }
 

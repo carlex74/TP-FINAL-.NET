@@ -12,6 +12,8 @@ namespace Infrastructure.Context
         public DbSet<Materia> Materias { get; set; }
         public DbSet<Comision> Comisiones { get; set; }
         public DbSet<Curso> Cursos { get; set; }
+        public DbSet<AlumnoInscripcion> Inscripciones { get; set; }
+        public DbSet<DocenteCurso> DocentesCurso { get; set; }
 
         public TPIContext(DbContextOptions<TPIContext> options) : base(options) { }
 
@@ -90,6 +92,40 @@ namespace Infrastructure.Context
                       .WithMany()
                       .HasForeignKey(c => c.IdComision);
             });
+            modelBuilder.Entity<AlumnoInscripcion>(entity =>
+            {
+                entity.HasKey(c => new { c.IdCurso, c.LegajoAlumno });
+
+                entity.Property(c => c.Condicion).HasMaxLength(255);
+                entity.Property(c => c.Nota);
+
+                entity.HasOne(c => c.Alumno)
+                    .WithMany(a=>a.AlumnoInscripcions)
+                    .HasForeignKey(c => c.LegajoAlumno);
+
+                entity.HasOne(c => c.Curso)
+                    .WithMany(a => a.Inscripciones)
+                    .HasForeignKey(c => c.IdCurso);
+
+            });
+
+            modelBuilder.Entity<DocenteCurso>(entity =>
+            {
+                entity.HasKey(c => new { c.IdCurso, c.LegajoDocente });
+
+                entity.Property(c => c.Cargo).HasMaxLength(255);
+  
+
+                entity.HasOne(c => c.Docente)
+                    .WithMany(a => a.DocenteCursos)
+                    .HasForeignKey(c => c.LegajoDocente);
+
+                entity.HasOne(c => c.Curso)
+                    .WithMany(a => a.Docentes)
+                    .HasForeignKey(c => c.IdCurso);
+
+            });
+
         }
     }
 }
