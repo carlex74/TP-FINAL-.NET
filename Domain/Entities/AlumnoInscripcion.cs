@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class AlumnoInscripcion : BusinessEntity
+    public class AlumnoInscripcion
     {
         public string Condicion { get; private set; }
         public int IdAlumno { get; private set; }

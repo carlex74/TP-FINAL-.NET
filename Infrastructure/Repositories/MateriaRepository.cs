@@ -1,52 +1,46 @@
-﻿using ApplicationClean.Interfaces;
-using ApplicationClean.Interfaces.Repositories;
+﻿using ApplicationClean.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    public class PlanRepository : IPlanRepository
+    public class MateriaRepository : IMateriaRepository
     {
         private readonly TPIContext _context;
 
-        public PlanRepository(TPIContext context)
+        public MateriaRepository(TPIContext context)
         {
             _context = context;
         }
 
-        public async Task<Plan> GetByIdAsync(int id)
+        public async Task<Materia> GetByIdAsync(int id)
         {
-            return await _context.Planes
-                                 .Include(p => p.Especialidad)
-                                 .FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Materias.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Plan>> GetAllAsync()
+        public async Task<IEnumerable<Materia>> GetAllAsync()
         {
-            return await _context.Planes
-                                 .Include(p => p.Especialidad)
-                                 .ToListAsync();
+            return await _context.Materias.ToListAsync();
         }
 
-        public async Task AddAsync(Plan plan)
+        public async Task AddAsync(Materia materia)
         {
-            await _context.Planes.AddAsync(plan);
+            await _context.Materias.AddAsync(materia);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Plan plan)
+        public async Task UpdateAsync(Materia materia)
         {
-            _context.Planes.Update(plan);
+            _context.Materias.Update(materia);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Plan plan)
+        public async Task DeleteAsync(Materia materia)
         {
-            _context.Planes.Remove(plan);
+            _context.Materias.Remove(materia);
             await _context.SaveChangesAsync();
         }
     }

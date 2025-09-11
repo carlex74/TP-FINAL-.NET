@@ -10,53 +10,54 @@ namespace ApplicationClean.Services
 {
     public class MateriaService : IMateriaService
     {
-        private readonly IMateriaRepository _materiaRepository;
+        private readonly IMateriaRepository _repository;
 
-        public MateriaService(IMateriaRepository materiaRepository)
+        public MateriaService(IMateriaRepository repository)
         {
-            _materiaRepository = materiaRepository;
+            _repository = repository;
         }
 
-        public async Task<MateriaDTO> AddAsync(MateriaDTO materiaDTO)
+        public async Task<MateriaDTO> AddAsync(MateriaDTO materiaDto)
         {
-            var materia = new Materia(0, materiaDTO.Nombre, materiaDTO.Descripcion, materiaDTO.HsSemanales, materiaDTO.HsTotales);
-            await _materiaRepository.AddAsync(materia);
+            var materia = new Materia(0, materiaDto.Nombre, materiaDto.Descripcion, materiaDto.HsSemanales, materiaDto.HsTotales);
 
-            materiaDTO.Id = materia.Id;
-            return materiaDTO;
+            await _repository.AddAsync(materia);
+
+            materiaDto.Id = materia.Id;
+            return materiaDto;
         }
 
-        public async Task<MateriaDTO> UpdateAsync(MateriaDTO materiaDTO)
+        public async Task<MateriaDTO> UpdateAsync(MateriaDTO materiaDto)
         {
-            var existingMateria = await _materiaRepository.GetByIdAsync(materiaDTO.Id);
+            var existingMateria = await _repository.GetByIdAsync(materiaDto.Id);
             if (existingMateria == null)
             {
-                throw new KeyNotFoundException($"No se encontró un materia con el ID {materiaDTO.Id}.");
+                throw new KeyNotFoundException($"No se encontró una materia con el ID {materiaDto.Id}.");
             }
 
-            existingMateria.SetNombre(materiaDTO.Nombre);
-            existingMateria.SetDescripcion(materiaDTO.Descripcion);
-            existingMateria.SetHsSemanales(materiaDTO.HsSemanales);
-            existingMateria.SetHsTotales(materiaDTO.HsTotales);
+            existingMateria.SetNombre(materiaDto.Nombre);
+            existingMateria.SetDescripcion(materiaDto.Descripcion);
+            existingMateria.SetHsSemanales(materiaDto.HsSemanales);
+            existingMateria.SetHsTotales(materiaDto.HsTotales);
 
-            await _materiaRepository.UpdateAsync(existingMateria);
-            return materiaDTO;
+            await _repository.UpdateAsync(existingMateria);
+            return materiaDto;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var materia = await _materiaRepository.GetByIdAsync(id);
+            var materia = await _repository.GetByIdAsync(id);
             if (materia == null)
             {
                 return false;
             }
-            await _materiaRepository.DeleteAsync(materia);
+            await _repository.DeleteAsync(materia);
             return true;
         }
 
         public async Task<MateriaDTO> GetByIdAsync(int id)
         {
-            var materia = await _materiaRepository.GetByIdAsync(id);
+            var materia = await _repository.GetByIdAsync(id);
             if (materia == null) return null;
 
             return new MateriaDTO
@@ -65,20 +66,20 @@ namespace ApplicationClean.Services
                 Nombre = materia.Nombre,
                 Descripcion = materia.Descripcion,
                 HsSemanales = materia.HsSemanales,
-                HsTotales = materia.HsTotales,
+                HsTotales = materia.HsTotales
             };
         }
 
         public async Task<IEnumerable<MateriaDTO>> GetAllAsync()
         {
-            var materiaes = await _materiaRepository.GetAllAsync();
-            return materiaes.Select(materia => new MateriaDTO
+            var materias = await _repository.GetAllAsync();
+            return materias.Select(m => new MateriaDTO
             {
-                Id = materia.Id,
-                Nombre = materia.Nombre,
-                Descripcion = materia.Descripcion,
-                HsSemanales = materia.HsSemanales,
-                HsTotales = materia.HsTotales,
+                Id = m.Id,
+                Nombre = m.Nombre,
+                Descripcion = m.Descripcion,
+                HsSemanales = m.HsSemanales,
+                HsTotales = m.HsTotales
             });
         }
     }

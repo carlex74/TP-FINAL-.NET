@@ -4,23 +4,29 @@ namespace Domain.Entities
 {
     public class Curso
     {
+        public int Id {  get; private set; }
         public int AnioCalendario { get; private set; }
         public int Cupo { get; private set; }
         public string Descripcion { get; private set; }
         public int IdComision { get; private set; }
         public int IdMateria { get; private set; }
+        public Materia Materia { get; private set; }
+        public Comision Comision { get; private set; }
 
-        public ICollection<Materia> Materias { get; private set; }
-
-        public ICollection<Comision> Comisiones { get; private set; }
-
-        public Curso(int anioCalendario, int cupo, string descripcion, int idComision, int idMateria) 
+        public Curso(int id, int anioCalendario, int cupo, string descripcion, int idComision, int idMateria) 
         {
+            SetId(id);
             SetAnioCalendario(anioCalendario);
             SetCupo(cupo);
             SetDescripcion(descripcion);
             SetIdComision(idComision);
             SetIdMateria(idMateria);
+        }
+        public void SetId(int id)
+        {
+            if (id < 0)
+                throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
+            Id = id;
         }
         public void SetAnioCalendario(int anioCalendario)
         {

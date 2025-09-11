@@ -7,7 +7,7 @@ using Domain.Entities;
 
 namespace ApplicationClean.Interfaces.Repositories
 {
-    internal interface ICursoRepository
+    public interface ICursoRepository
     {
         Task AddAsync(Curso curso);
         Task UpdateAsync(Curso curso);

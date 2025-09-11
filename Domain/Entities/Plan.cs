@@ -7,15 +7,21 @@ namespace Domain.Entities
         public int Id { get; private set; }
         public string Descripcion { get; private set; }
         public int IdEspecialidad { get; private set; }
-        public virtual Especialidad Especialidad { get; private set; }
+        public Especialidad Especialidad { get; private set; }
         public ICollection<Comision> Comisiones { get; private set; }
-        protected Plan() { }
+        public ICollection<Materia> Materias { get; private set; }
+
+        protected Plan()
+        {
+            Materias = new HashSet<Materia>();
+        }
 
         public Plan(int id,string descripcion, int idEspecialidad)
         {
             SetId(id);
             SetDescripcion(descripcion);
             SetIdEspecialidad(idEspecialidad);
+            Materias = new HashSet<Materia>();
         }
         public void SetId(int id)
         {

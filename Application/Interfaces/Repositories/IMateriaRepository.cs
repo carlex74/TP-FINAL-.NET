@@ -15,7 +15,5 @@ namespace ApplicationClean.Interfaces.Repositories
         Task AddAsync(Materia materia);
         Task UpdateAsync(Materia materia);
         Task DeleteAsync(Materia materia);
-        Task<Materia> GetByEmailAsync(string email);
-        Task<Materia> GetByDniAsync(string dni);
     }
 }

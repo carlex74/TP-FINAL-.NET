@@ -3,10 +3,11 @@ namespace ApplicationClean.DTOs
 {
     public class CursoDTO
     {
-        public int AnioCalendario { get; private set; }
-        public int Cupo { get; private set; }
-        public string Descripcion { get; private set; }
-        public int IdComision { get; private set; }
-        public int IdMateria { get; private set; }
+        public int Id { get; set; }
+        public int AnioCalendario { get; set; }
+        public int Cupo { get; set; }
+        public string Descripcion { get; set; }
+        public int IdComision { get; set; }
+        public int IdMateria { get; set; }
     }
 }

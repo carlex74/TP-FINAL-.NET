@@ -13,7 +13,7 @@ namespace Domain.Entities
         public string Email { get; private set; }
         public DateTime FechaNacimiento { get; private set; }
 
-        public virtual ICollection<Usuario> Usuarios { get; set; }
+        public ICollection<Usuario> Usuarios { get; set; }
 
         protected Persona()
         {

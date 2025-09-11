@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class DocenteCurso : BusinessEntity
+    public class DocenteCurso
     {
         public enum TipoCargos //por ahora solo estos tipos de cargos, se pueden agregar más si es necesario
         {

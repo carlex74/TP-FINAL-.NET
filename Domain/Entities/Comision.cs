@@ -4,19 +4,23 @@ namespace Domain.Entities
 {
     public class Comision
     {
+        public int Nro { get; private set; }
         public int AnioEspecialidad { get; private set; }
         public string Descripcion { get; private set; }
-        public int IdPlan { get; private set; }
-
-        public int nro {  get; private set; }
-
         public ICollection<Plan> Planes { get; private set; }
 
-        public Comision(int anioEspecialidad, string descripcion, int idPlan)
+        public Comision(int nro, int anioEspecialidad, string descripcion)
         {
+            SetNro(nro);
             SetAnioEspecialidad(anioEspecialidad);
             SetDescripcion(descripcion);
-            SetIdPlan(idPlan);
+            Planes = new HashSet<Plan>();
+        }
+        public void SetNro(int nro)
+        {
+            if (nro < 0)
+                throw new ArgumentException("El Nro debe ser mayor que 0.", nameof(nro));
+            Nro = nro;
         }
         public void SetAnioEspecialidad(int anioEspecialidad)
         {
@@ -29,12 +33,6 @@ namespace Domain.Entities
             if (string.IsNullOrWhiteSpace(descripcion))
                 throw new ArgumentException("La descripción no puede ser nula o vacía.", nameof(descripcion));
             Descripcion = descripcion;
-        }
-        public void SetIdPlan(int idPlan)
-        {
-            if (idPlan <= 0)
-                throw new ArgumentException("El ID del plan debe ser un número positivo.", nameof(idPlan));
-            IdPlan = idPlan;
         }
     }
 }
