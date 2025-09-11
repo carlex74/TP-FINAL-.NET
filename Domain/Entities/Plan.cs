@@ -15,6 +15,7 @@ namespace Domain.Entities
         protected Plan()
         {
             Materias = new HashSet<Materia>();
+            Comisiones = new HashSet<Comision>();
         }
 
         public Plan(int id,string descripcion, int idEspecialidad)
@@ -23,6 +24,7 @@ namespace Domain.Entities
             SetDescripcion(descripcion);
             SetIdEspecialidad(idEspecialidad);
             Materias = new HashSet<Materia>();
+            Comisiones = new HashSet<Comision>();
         }
         public void SetId(int id)
         {

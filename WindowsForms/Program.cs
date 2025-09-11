@@ -8,6 +8,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Forms;
 using static Domain.Entities.Usuario;
+using WindowsForms.Vistas.Comision;
+using WindowsForms.Vistas.Materia;
+using WindowsForms.Vistas.Curso;
 
 namespace WindowsForms
 {
@@ -87,6 +90,9 @@ namespace WindowsForms
             services.AddHttpClient<IAPIPlanClients, PlanApiClient>(client => client.BaseAddress = new Uri(baseAddress));
             services.AddHttpClient<IAPIPersonaClients, PersonaApiClient>(client => client.BaseAddress = new Uri(baseAddress));
             services.AddHttpClient<IAPIUsuarioClients, UsuarioApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAPIMateriaClient, MateriaApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAPIComisionClient, ComisionApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAPICursoClient, CursoApiClient>(client => client.BaseAddress = new Uri(baseAddress));
 
             // --- REGISTRO DE FORMULARIOS ---
             // Usamos AddTransient para que se cree una nueva instancia cada vez que se pide.
@@ -101,6 +107,12 @@ namespace WindowsForms
             services.AddTransient<PersonaDetalle>();
             services.AddTransient<UsuarioLista>();
             services.AddTransient<UsuarioDetalle>();
+            services.AddTransient<MateriaLista>();
+            services.AddTransient<MateriaDetalle>();
+            services.AddTransient<ComisionLista>();
+            services.AddTransient<ComisionDetalle>();
+            services.AddTransient<CursoLista>();
+            services.AddTransient<CursoDetalle>();
         }
     }
 }

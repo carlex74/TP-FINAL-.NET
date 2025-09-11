@@ -9,5 +9,6 @@ namespace ApplicationClean.Interfaces.Repositories
         Task DeleteAsync(Comision comision);
         Task<Comision> GetByIdAsync(int id);
         Task<IEnumerable<Comision>> GetAllAsync();
+        Task<Comision> GetByIdWithPlanesAsync(int id);
     }
 }

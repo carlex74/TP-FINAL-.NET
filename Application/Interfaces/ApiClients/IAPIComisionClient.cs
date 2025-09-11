@@ -4,15 +4,13 @@ using ApplicationClean.DTOs;
 
 namespace ApplicationClean.Interfaces.ApiClients
 {
-    public interface IAPIComision
+    public interface IAPIComisionClient
     {
         Task<ComisionDTO> GetById(int id);
         Task<IEnumerable<ComisionDTO>> GetAll();
-
-        Task Add(ComisionDTO comision);
-
+        Task<ComisionDTO> Add(ComisionDTO comision);
         Task Delete(int id);
-
         Task Update(ComisionDTO comision);
+        Task AssignPlanes(int comisionId, List<int> planIds);
     }
 }

@@ -67,4 +67,20 @@ public class ComisionesController : ControllerBase
         if (!deleted) return NotFound();
         return NoContent();
     }
+
+    [HttpPut("{id}/planes")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AssignPlanes(int id, [FromBody] List<int> planIds)
+    {
+        try
+        {
+            await _comisionService.AssignPlanesAsync(id, planIds);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
 }

@@ -14,5 +14,6 @@ namespace ApplicationClean.Interfaces.Services
         Task<MateriaDTO> AddAsync(MateriaDTO materiaDto);
         Task<MateriaDTO> UpdateAsync(MateriaDTO materiaDto);
         Task<bool> DeleteAsync(int id);
+        Task AssignPlanesAsync(int materiaId, List<int> planIds);
     }
 }

@@ -9,15 +9,16 @@ namespace WindowsForms
     public partial class PlanLista : Form
     {
         private readonly IAPIPlanClients _planClient;
-        // Necesitamos el cliente de especialidades para pasárselo al formulario de detalle
         private readonly IAPIEspecialidadClients _especialidadClient;
+        private readonly IAPIMateriaClient _materiaClient;
 
-        public PlanLista(IAPIPlanClients planClient, IAPIEspecialidadClients especialidadClient)
+        public PlanLista(IAPIPlanClients planClient, IAPIEspecialidadClients especialidadClient, IAPIMateriaClient materiaClient)
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
             _planClient = planClient;
             _especialidadClient = especialidadClient;
+            _materiaClient = materiaClient;
         }
 
         private void PlanLista_Load(object sender, EventArgs e)
@@ -46,7 +47,12 @@ namespace WindowsForms
             {
                 int id = SelectedItem().Id;
                 PlanDTO plan = await _planClient.GetById(id);
-                if (plan == null) { /* ... manejo de error ... */ return; }
+                if (plan == null)
+                {
+                    MessageBox.Show("No se encontró el plan.", "Error");
+                    GetAllAndLoad();
+                    return;
+                }
 
                 using (var planDetalle = new PlanDetalle(_planClient, _especialidadClient))
                 {
@@ -91,6 +97,10 @@ namespace WindowsForms
             {
                 planDataGridView.DataSource = null;
                 planDataGridView.DataSource = await _planClient.GetAll();
+                if (planDataGridView.Columns.Contains("DescripcionCompleta"))
+                {
+                    planDataGridView.Columns["DescripcionCompleta"].Visible = false;
+                }
                 UpdateButtonsState();
             }
             catch (Exception ex)

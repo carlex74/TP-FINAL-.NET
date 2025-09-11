@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using WindowsForms.Vistas.Comision;
+using WindowsForms.Vistas.Curso;
+using WindowsForms.Vistas.Materia;
 
 namespace WindowsForms
 {
@@ -13,14 +16,20 @@ namespace WindowsForms
         private readonly PlanLista _planLista;
         private readonly PersonaLista _personaLista;
         private readonly UsuarioLista _usuarioLista;
+        private readonly MateriaLista _materiaLista;
+        private readonly ComisionLista _comisionLista;
+        private readonly CursoLista _cursoLista;
 
-        public Home(EspecialidadLista especialidadLista, PlanLista planLista, PersonaLista personaLista, UsuarioLista usuarioLista)
+        public Home(EspecialidadLista especialidadLista, PlanLista planLista, PersonaLista personaLista, UsuarioLista usuarioLista, MateriaLista materiaLista, ComisionLista comisionLista, CursoLista cursoLista)
         {
             InitializeComponent();
             _especialidadLista = especialidadLista;
             _planLista = planLista;
             _personaLista = personaLista;
             _usuarioLista = usuarioLista;
+            _materiaLista = materiaLista;
+            _comisionLista = comisionLista;
+            _cursoLista = cursoLista;
         }
 
         private void ActivateButton(Panel buttonPanel)
@@ -87,6 +96,21 @@ namespace WindowsForms
         private void usuarioButton_Click(object sender, EventArgs e)
         {
             OpenChildForm(_usuarioLista, usuarioPanel);
+        }
+
+        private void materiaButton_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(_materiaLista, materiaPanel);
+        }
+
+        private void comisionButton_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(_comisionLista, comisionPanel);
+        }
+
+        private void cursoButton_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(_cursoLista, cursoPanel);
         }
     }
 }

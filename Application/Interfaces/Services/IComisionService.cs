@@ -14,5 +14,6 @@ namespace ApplicationClean.Interfaces.Services
         Task<bool> DeleteAsync(int id);
         Task<ComisionDTO> GetByIdAsync(int id);
         Task<IEnumerable<ComisionDTO>> GetAllAsync();
+        Task AssignPlanesAsync(int comisionId, List<int> planIds);
     }
 }

@@ -73,9 +73,29 @@ namespace WindowsForms.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icono_comision {
+            get {
+                object obj = ResourceManager.GetObject("icono_comision", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icono_construccion {
             get {
                 object obj = ResourceManager.GetObject("icono_construccion", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icono_curso {
+            get {
+                object obj = ResourceManager.GetObject("icono_curso", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -96,6 +116,16 @@ namespace WindowsForms.Properties {
         internal static System.Drawing.Bitmap icono_logout {
             get {
                 object obj = ResourceManager.GetObject("icono_logout", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icono_materia {
+            get {
+                object obj = ResourceManager.GetObject("icono_materia", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
