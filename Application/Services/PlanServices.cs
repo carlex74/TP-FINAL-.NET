@@ -13,7 +13,7 @@ namespace ApplicationClean.Services
         private readonly IPlanRepository _planRepository;
         private readonly IEspecialidadRepository _especialidadRepository;
 
-        public PlanServices(IPlanRepository planRepository, IEspecialidadRepository especialidadRepository)
+        public PlanServices(IPlanRepository planRepository, IEspecialidadRepository especialidadRepository, IMateriaRepository materiaRepository)
         {
             _planRepository = planRepository;
             _especialidadRepository = especialidadRepository;
@@ -72,25 +72,25 @@ namespace ApplicationClean.Services
         public async Task<PlanDTO> GetByIdAsync(int id)
         {
             var plan = await _planRepository.GetByIdAsync(id);
-            if (plan == null) return null;
-
-            return new PlanDTO
-            {
-                Id = plan.Id,
-                Descripcion = plan.Descripcion,
-                IdEspecialidad = plan.IdEspecialidad
-            };
+            return MapToPlanDTO(plan);
         }
 
         public async Task<IEnumerable<PlanDTO>> GetAllAsync()
         {
             var planes = await _planRepository.GetAllAsync();
-            return planes.Select(plan => new PlanDTO
+            return planes.Select(MapToPlanDTO);
+        }
+
+        private PlanDTO MapToPlanDTO(Plan plan)
+        {
+            if (plan == null) return null;
+            return new PlanDTO
             {
                 Id = plan.Id,
                 Descripcion = plan.Descripcion,
-                IdEspecialidad = plan.IdEspecialidad
-            });
+                IdEspecialidad = plan.IdEspecialidad,
+                EspecialidadDescripcion = plan.Especialidad?.Descripcion ?? "N/A"
+            };
         }
     }
 }

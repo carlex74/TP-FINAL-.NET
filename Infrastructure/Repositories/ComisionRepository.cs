@@ -18,12 +18,18 @@ namespace Infrastructure.Repositories
 
         public async Task<Comision> GetByIdAsync(int id)
         {
-            return await _context.Comisiones.FindAsync(id);
+            return await _context.Comisiones
+                                 .Include(c => c.Planes)
+                                    .ThenInclude(p => p.Especialidad)
+                                 .FirstOrDefaultAsync(c => c.Nro == id);
         }
 
         public async Task<IEnumerable<Comision>> GetAllAsync()
         {
-            return await _context.Comisiones.ToListAsync();
+            return await _context.Comisiones
+                                 .Include(c => c.Planes)
+                                    .ThenInclude(p => p.Especialidad)
+                                 .ToListAsync();
         }
 
         public async Task AddAsync(Comision comision)
@@ -42,6 +48,11 @@ namespace Infrastructure.Repositories
         {
             _context.Comisiones.Remove(comision);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Comision> GetByIdWithPlanesAsync(int id)
+        {
+            return await GetByIdAsync(id);
         }
     }
 }

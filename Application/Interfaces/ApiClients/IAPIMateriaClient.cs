@@ -8,11 +8,9 @@ namespace ApplicationClean.Interfaces.ApiClients
     {
         Task<MateriaDTO> GetById(int id);
         Task<IEnumerable<MateriaDTO>> GetAll();
-
-        Task Add(MateriaDTO materia);
-
+        Task<MateriaDTO> Add(MateriaDTO materia);
         Task Delete(int id);
-
         Task Update(MateriaDTO materia);
+        Task AssignPlanes(int materiaId, List<int> planIds);
     }
 }

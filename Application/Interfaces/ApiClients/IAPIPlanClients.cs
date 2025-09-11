@@ -11,12 +11,8 @@ namespace ApplicationClean.Interfaces.ApiClients
     {
         Task<PlanDTO> GetById(int id);
         Task<IEnumerable<PlanDTO>> GetAll();
-
         Task Add(PlanDTO plan);
-
         Task Delete(int id);
-
         Task Update(PlanDTO plan);
-
     }
 }

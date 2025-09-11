@@ -8,6 +8,10 @@ namespace Domain.Entities
         public int AnioEspecialidad { get; private set; }
         public string Descripcion { get; private set; }
         public ICollection<Plan> Planes { get; private set; }
+        protected Comision()
+        {
+            Planes = new HashSet<Plan>();
+        }
 
         public Comision(int nro, int anioEspecialidad, string descripcion)
         {

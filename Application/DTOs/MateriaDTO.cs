@@ -7,5 +7,6 @@
         public string Descripcion { get; set; }
         public int HsSemanales { get; set; }
         public int HsTotales { get; set; }
+        public List<PlanDTO> Planes { get; set; } = new List<PlanDTO>();
     }
 }

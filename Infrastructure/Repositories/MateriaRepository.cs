@@ -43,5 +43,13 @@ namespace Infrastructure.Repositories
             _context.Materias.Remove(materia);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Materia> GetByIdWithPlanesAsync(int id)
+        {
+            return await _context.Materias
+                                 .Include(m => m.Planes)
+                                    .ThenInclude(p => p.Especialidad)
+                                 .FirstOrDefaultAsync(m => m.Id == id);
+        }
     }
 }

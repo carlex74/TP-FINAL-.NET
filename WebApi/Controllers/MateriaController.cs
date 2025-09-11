@@ -67,4 +67,18 @@ public class MateriasController : ControllerBase
         if (!deleted) return NotFound();
         return NoContent();
     }
+
+    [HttpPut("{id}/planes")]
+    public async Task<IActionResult> AssignPlanes(int id, [FromBody] List<int> planIds)
+    {
+        try
+        {
+            await _materiaService.AssignPlanesAsync(id, planIds);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
 }

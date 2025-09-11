@@ -9,6 +9,5 @@ namespace ApplicationClean.Interfaces.Repositories
         Task DeleteAsync(Plan plan);
         Task<Plan> GetByIdAsync(int id);
         Task<IEnumerable<Plan>> GetAllAsync();
-
     }
 }

@@ -1,5 +1,7 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.ApiClients;
+using System.Collections.Generic;
+using System.Linq;
 using System;
 using System.Windows.Forms;
 
@@ -33,9 +35,8 @@ namespace WindowsForms
 
         private async void PlanDetalle_Load(object sender, EventArgs e)
         {
-            // Cargamos las especialidades cuando el formulario se abre
             await LoadEspecialidadesAsync();
-            SetPlan(); // Volvemos a setear por si el plan ya estaba asignado
+            SetPlan();
         }
 
         private async Task LoadEspecialidadesAsync()
@@ -71,6 +72,7 @@ namespace WindowsForms
                 {
                     await _planClient.Add(plan);
                 }
+
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }

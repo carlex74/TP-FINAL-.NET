@@ -15,5 +15,6 @@ namespace ApplicationClean.Interfaces.Repositories
         Task AddAsync(Materia materia);
         Task UpdateAsync(Materia materia);
         Task DeleteAsync(Materia materia);
+        Task<Materia> GetByIdWithPlanesAsync(int id);
     }
 }
