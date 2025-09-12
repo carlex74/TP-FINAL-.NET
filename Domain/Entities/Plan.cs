@@ -8,12 +8,13 @@ namespace Domain.Entities
         public string Descripcion { get; private set; }
         public int IdEspecialidad { get; private set; }
         public Especialidad Especialidad { get; private set; }
+        public ICollection<Alumno> Alumnos { get; private set; }
         public ICollection<Comision> Comisiones { get; private set; }
         public ICollection<Materia> Materias { get; private set; }
 
-        public ICollection<Usuario> alumnos { get; private set; }
         protected Plan()
         {
+            Alumnos = new HashSet<Alumno>();
             Materias = new HashSet<Materia>();
             Comisiones = new HashSet<Comision>();
         }

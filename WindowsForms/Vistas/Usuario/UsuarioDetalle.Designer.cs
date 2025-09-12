@@ -32,6 +32,8 @@
             this.personaLabel = new System.Windows.Forms.Label();
             this.personaComboBox = new System.Windows.Forms.ComboBox();
             this.habilitadoCheckBox = new System.Windows.Forms.CheckBox();
+            this.planLabel = new System.Windows.Forms.Label();
+            this.planComboBox = new System.Windows.Forms.ComboBox();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
@@ -84,10 +86,10 @@
             this.aceptarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.aceptarButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.aceptarButton.ForeColor = System.Drawing.Color.White;
-            this.aceptarButton.Location = new System.Drawing.Point(194, 380);
+            this.aceptarButton.Location = new System.Drawing.Point(194, 440);
             this.aceptarButton.Name = "aceptarButton";
             this.aceptarButton.Size = new System.Drawing.Size(120, 32);
-            this.aceptarButton.TabIndex = 5;
+            this.aceptarButton.TabIndex = 6;
             this.aceptarButton.Text = "ACEPTAR";
             this.aceptarButton.UseVisualStyleBackColor = false;
             this.aceptarButton.Click += new System.EventHandler(this.aceptarButton_Click);
@@ -101,10 +103,10 @@
             this.cancelarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cancelarButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.cancelarButton.ForeColor = System.Drawing.Color.White;
-            this.cancelarButton.Location = new System.Drawing.Point(320, 380);
+            this.cancelarButton.Location = new System.Drawing.Point(320, 440);
             this.cancelarButton.Name = "cancelarButton";
             this.cancelarButton.Size = new System.Drawing.Size(120, 32);
-            this.cancelarButton.TabIndex = 6;
+            this.cancelarButton.TabIndex = 7;
             this.cancelarButton.Text = "CANCELAR";
             this.cancelarButton.UseVisualStyleBackColor = false;
             this.cancelarButton.Click += new System.EventHandler(this.cancelarButton_Click);
@@ -149,6 +151,7 @@
             this.tipoComboBox.Name = "tipoComboBox";
             this.tipoComboBox.Size = new System.Drawing.Size(360, 28);
             this.tipoComboBox.TabIndex = 2;
+            this.tipoComboBox.SelectedIndexChanged += new System.EventHandler(this.tipoComboBox_SelectedIndexChanged);
             // 
             // personaLabel
             // 
@@ -176,12 +179,35 @@
             this.habilitadoCheckBox.AutoSize = true;
             this.habilitadoCheckBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.habilitadoCheckBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.habilitadoCheckBox.Location = new System.Drawing.Point(44, 330);
+            this.habilitadoCheckBox.Location = new System.Drawing.Point(44, 388);
             this.habilitadoCheckBox.Name = "habilitadoCheckBox";
             this.habilitadoCheckBox.Size = new System.Drawing.Size(99, 24);
-            this.habilitadoCheckBox.TabIndex = 4;
+            this.habilitadoCheckBox.TabIndex = 5;
             this.habilitadoCheckBox.Text = "Habilitado";
             this.habilitadoCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // planLabel
+            // 
+            this.planLabel.AutoSize = true;
+            this.planLabel.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.planLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.planLabel.Location = new System.Drawing.Point(40, 325);
+            this.planLabel.Name = "planLabel";
+            this.planLabel.Size = new System.Drawing.Size(40, 20);
+            this.planLabel.TabIndex = 20;
+            this.planLabel.Text = "Plan:";
+            this.planLabel.Visible = false;
+            // 
+            // planComboBox
+            // 
+            this.planComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.planComboBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.planComboBox.FormattingEnabled = true;
+            this.planComboBox.Location = new System.Drawing.Point(44, 350);
+            this.planComboBox.Name = "planComboBox";
+            this.planComboBox.Size = new System.Drawing.Size(360, 28);
+            this.planComboBox.TabIndex = 4;
+            this.planComboBox.Visible = false;
             // 
             // UsuarioDetalle
             // 
@@ -190,7 +216,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
             this.CancelButton = this.cancelarButton;
-            this.ClientSize = new System.Drawing.Size(450, 430);
+            this.ClientSize = new System.Drawing.Size(450, 500);
+            this.Controls.Add(this.planComboBox);
+            this.Controls.Add(this.planLabel);
             this.Controls.Add(this.habilitadoCheckBox);
             this.Controls.Add(this.personaComboBox);
             this.Controls.Add(this.personaLabel);
@@ -230,5 +258,7 @@
         private System.Windows.Forms.TextBox claveTextBox;
         private System.Windows.Forms.Label claveLabel;
         private System.Windows.Forms.CheckBox habilitadoCheckBox;
+        private System.Windows.Forms.ComboBox planComboBox;
+        private System.Windows.Forms.Label planLabel;
     }
 }

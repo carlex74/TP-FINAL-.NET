@@ -3,6 +3,7 @@ using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.ApiClients;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Domain.Entities.Usuario;
 
@@ -14,31 +15,34 @@ namespace WindowsForms
         private FormMode mode;
         private readonly IAPIUsuarioClients _usuarioClient;
         private readonly IAPIPersonaClients _personaClient;
+        private readonly IAPIPlanClients _planClient;
 
         public UsuarioDTO Usuario
         {
             get { return usuario; }
-            set { usuario = value; SetUsuario(); }
+            set { usuario = value; SetUsuarioUI(); }
         }
 
         public FormMode Mode
         {
             get { return mode; }
-            set { mode = value; SetFormMode(value); }
+            set { mode = value; SetFormModeUI(value); }
         }
 
-        public UsuarioDetalle(IAPIUsuarioClients usuarioClient, IAPIPersonaClients personaClient)
+        public UsuarioDetalle(IAPIUsuarioClients usuarioClient, IAPIPersonaClients personaClient, IAPIPlanClients planClient)
         {
             InitializeComponent();
             _usuarioClient = usuarioClient;
             _personaClient = personaClient;
+            _planClient = planClient;
         }
 
         private async void UsuarioDetalle_Load(object sender, EventArgs e)
         {
             await LoadPersonasAsync();
+            await LoadPlanesAsync();
             LoadTiposUsuario();
-            SetUsuario();
+            SetUsuarioUI();
         }
 
         private async Task LoadPersonasAsync()
@@ -46,22 +50,39 @@ namespace WindowsForms
             try
             {
                 var personas = await _personaClient.GetAll();
-                personaComboBox.DataSource = personas.ToList();
-                personaComboBox.DisplayMember = "NombreCompleto"; // Asumiendo que PersonaDTO tiene esta propiedad
+                var personasDisplay = personas.Select(p => new
+                {
+                    p.Id,
+                    NombreCompleto = $"{p.Apellido}, {p.Nombre} ({p.Dni})"
+                }).ToList();
+                personaComboBox.DataSource = personasDisplay;
+                personaComboBox.DisplayMember = "NombreCompleto";
                 personaComboBox.ValueMember = "Id";
             }
             catch (Exception ex) { MessageBox.Show($"Error al cargar personas: {ex.Message}"); }
         }
 
+        private async Task LoadPlanesAsync()
+        {
+            try
+            {
+                var planes = await _planClient.GetAll();
+                planComboBox.DataSource = planes.ToList();
+                planComboBox.DisplayMember = "DescripcionCompleta";
+                planComboBox.ValueMember = "Id";
+                planComboBox.SelectedItem = null;
+            }
+            catch (Exception ex) { MessageBox.Show($"Error al cargar planes: {ex.Message}"); }
+        }
+
         private void LoadTiposUsuario()
         {
-            // Cargamos el ComboBox con los valores del enum TipoUsuario
             tipoComboBox.DataSource = Enum.GetValues(typeof(TipoUsuario));
         }
 
         private async void aceptarButton_Click(object sender, EventArgs e)
         {
-            if (!ValidateUsuario()) return;
+            if (!ValidateForm()) return;
 
             try
             {
@@ -72,7 +93,10 @@ namespace WindowsForms
                         Legajo = legajoTextBox.Text,
                         Clave = claveTextBox.Text,
                         Tipo = (TipoUsuario)tipoComboBox.SelectedValue,
-                        IdPersona = (int)personaComboBox.SelectedValue
+                        IdPersona = (int)personaComboBox.SelectedValue,
+                        IdPlan = (TipoUsuario)tipoComboBox.SelectedValue == TipoUsuario.Alumno
+                                 ? (int?)planComboBox.SelectedValue
+                                 : null
                     };
                     await _usuarioClient.Add(dto);
                 }
@@ -81,7 +105,10 @@ namespace WindowsForms
                     var dto = new ActualizarUsuarioDTO
                     {
                         Tipo = (TipoUsuario)tipoComboBox.SelectedValue,
-                        Habilitado = habilitadoCheckBox.Checked
+                        Habilitado = habilitadoCheckBox.Checked,
+                        IdPlan = (TipoUsuario)tipoComboBox.SelectedValue == TipoUsuario.Alumno
+                                 ? (int?)planComboBox.SelectedValue
+                                 : null
                     };
                     await _usuarioClient.Update(legajoTextBox.Text, dto);
                 }
@@ -101,44 +128,51 @@ namespace WindowsForms
             this.Close();
         }
 
-        private void SetUsuario()
+        private void SetUsuarioUI()
         {
             if (usuario == null) return;
             legajoTextBox.Text = usuario.Legajo;
             tipoComboBox.SelectedItem = usuario.Tipo;
-            personaComboBox.SelectedValue = usuario.IdPersona;
+            if (usuario.IdPersona > 0)
+            {
+                personaComboBox.SelectedValue = usuario.IdPersona;
+            }
             habilitadoCheckBox.Checked = usuario.Habilitado;
+
+            tipoComboBox_SelectedIndexChanged(null, null);
+
+            if (usuario.Tipo == TipoUsuario.Alumno && usuario.IdPlan.HasValue)
+            {
+                planComboBox.SelectedValue = usuario.IdPlan.Value;
+            }
         }
 
-        private void SetFormMode(FormMode value)
+        private void SetFormModeUI(FormMode value)
         {
             mode = value;
             if (mode == FormMode.Add)
             {
                 titleLabel.Text = "Nuevo Usuario";
-                habilitadoCheckBox.Visible = false; // No se puede setear al crear
+                habilitadoCheckBox.Visible = false;
                 legajoTextBox.ReadOnly = false;
                 personaComboBox.Enabled = true;
+                tipoComboBox.Enabled = true;
             }
             else if (mode == FormMode.Update)
             {
                 titleLabel.Text = "Modificar Usuario";
-                legajoTextBox.ReadOnly = true; // El legajo (PK) no se puede modificar
-                claveLabel.Visible = false; // No se modifica la clave desde este form
+                legajoTextBox.ReadOnly = true;
+                claveLabel.Visible = false;
                 claveTextBox.Visible = false;
-                personaComboBox.Enabled = false; // La persona asociada no se cambia
+                personaComboBox.Enabled = false;
+                tipoComboBox.Enabled = false; // El tipo no se puede cambiar
                 habilitadoCheckBox.Visible = true;
             }
         }
 
-        private bool ValidateUsuario()
+        private bool ValidateForm()
         {
-            // Resetear errores
-            errorProvider.SetError(legajoTextBox, "");
-            errorProvider.SetError(claveTextBox, "");
-            errorProvider.SetError(tipoComboBox, "");
-            errorProvider.SetError(personaComboBox, "");
-
+            errorProvider.Clear();
             bool isValid = true;
             if (string.IsNullOrWhiteSpace(legajoTextBox.Text))
             {
@@ -160,7 +194,22 @@ namespace WindowsForms
                 errorProvider.SetError(personaComboBox, "Debe seleccionar una persona.");
                 isValid = false;
             }
+            if ((TipoUsuario)tipoComboBox.SelectedValue == TipoUsuario.Alumno && planComboBox.SelectedValue == null)
+            {
+                errorProvider.SetError(planComboBox, "Debe seleccionar un plan para el alumno.");
+                isValid = false;
+            }
             return isValid;
+        }
+
+        private void tipoComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tipoComboBox.SelectedItem is TipoUsuario tipoSeleccionado)
+            {
+                bool esAlumno = tipoSeleccionado == TipoUsuario.Alumno;
+                planLabel.Visible = esAlumno;
+                planComboBox.Visible = esAlumno;
+            }
         }
     }
 }

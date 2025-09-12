@@ -7,6 +7,9 @@ namespace Infrastructure.Context
     {
         public DbSet<Persona> Personas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Alumno> Alumnos { get; set; }
+        public DbSet<Docente> Docentes { get; set; }
+        public DbSet<Administrador> Administradores { get; set; }
         public DbSet<Plan> Planes { get; set; }
         public DbSet<Especialidad> Especialidades { get; set; }
         public DbSet<Materia> Materias { get; set; }
@@ -34,14 +37,28 @@ namespace Infrastructure.Context
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(u => u.Legajo);
-                entity.Property(u => u.ClaveHash).IsRequired();
+
                 entity.Property(u => u.Tipo)
                       .HasConversion<string>()
                       .HasMaxLength(50);
 
+                entity.HasDiscriminator(u => u.Tipo)
+                      .HasValue<Alumno>(Usuario.TipoUsuario.Alumno)
+                      .HasValue<Docente>(Usuario.TipoUsuario.Docente)
+                      .HasValue<Administrador>(Usuario.TipoUsuario.Administrador);
+
+                entity.Property(u => u.ClaveHash).IsRequired();
+
                 entity.HasOne(u => u.Persona)
                       .WithMany(p => p.Usuarios)
                       .HasForeignKey(u => u.IdPersona);
+            });
+
+            modelBuilder.Entity<Alumno>(entity =>
+            {
+                entity.HasOne(a => a.Plan)
+                      .WithMany(p => p.Alumnos)
+                      .HasForeignKey(a => a.IdPlan);
             });
 
             modelBuilder.Entity<Especialidad>(entity =>

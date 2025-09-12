@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
+using static Domain.Entities.Usuario;
 
 namespace ApplicationClean.Services
 {
@@ -20,25 +21,9 @@ namespace ApplicationClean.Services
         public async Task<UsuarioDTO> LoginAsync(LoginRequestDTO loginRequest)
         {
             var usuario = await _usuarioRepository.GetByLegajoAsync(loginRequest.Legajo);
-
-            if (usuario == null || !usuario.Habilitado)
-            {
-                return null;
-            }
-
-            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Clave, usuario.ClaveHash))
-            {
-                return null;
-            }
-
-            return new UsuarioDTO
-            {
-                Legajo = usuario.Legajo,
-                Tipo = usuario.Tipo,
-                Habilitado = usuario.Habilitado,
-                IdPersona = usuario.IdPersona,
-                ClaveHash = usuario.ClaveHash
-            };
+            if (usuario == null || !usuario.Habilitado) return null;
+            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Clave, usuario.ClaveHash)) return null;
+            return MapToUsuarioDTO(usuario);
         }
 
         public async Task<UsuarioDTO> CreateUsuarioAsync(CrearUsuarioDTO crearUsuarioDto)
@@ -54,30 +39,31 @@ namespace ApplicationClean.Services
             }
 
             string claveHash = BCrypt.Net.BCrypt.HashPassword(crearUsuarioDto.Clave);
+            Usuario nuevoUsuario;
 
-            var nuevoUsuario = new Usuario(
-                crearUsuarioDto.Legajo,
-                claveHash,
-                crearUsuarioDto.Tipo,
-                crearUsuarioDto.IdPersona
-            );
+            switch (crearUsuarioDto.Tipo)
+            {
+                case TipoUsuario.Alumno:
+                    nuevoUsuario = new Alumno(crearUsuarioDto.Legajo, claveHash, crearUsuarioDto.IdPersona, crearUsuarioDto.IdPlan);
+                    break;
+                case TipoUsuario.Docente:
+                    nuevoUsuario = new Docente(crearUsuarioDto.Legajo, claveHash, crearUsuarioDto.IdPersona);
+                    break;
+                case TipoUsuario.Administrador:
+                    nuevoUsuario = new Administrador(crearUsuarioDto.Legajo, claveHash, crearUsuarioDto.IdPersona);
+                    break;
+                default:
+                    throw new ArgumentException("Tipo de usuario no válido.");
+            }
 
             await _usuarioRepository.AddAsync(nuevoUsuario);
-
-            return new UsuarioDTO
-            {
-                Legajo = nuevoUsuario.Legajo,
-                Tipo = nuevoUsuario.Tipo,
-                Habilitado = nuevoUsuario.Habilitado,
-                IdPersona = nuevoUsuario.IdPersona,
-            };
+            var usuarioParaMapear = await _usuarioRepository.GetByLegajoAsync(nuevoUsuario.Legajo);
+            return MapToUsuarioDTO(usuarioParaMapear);
         }
 
         public async Task<UsuarioDTO> GetByLegajoAsync(string legajo)
         {
             var usuario = await _usuarioRepository.GetByLegajoAsync(legajo);
-            if (usuario == null) return null;
-
             return MapToUsuarioDTO(usuario);
         }
 
@@ -95,22 +81,27 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró un usuario con el legajo {legajo}.");
             }
 
-            usuario.SetTipo(actualizarUsuarioDto.Tipo);
+            if (usuario.Tipo != actualizarUsuarioDto.Tipo)
+            {
+                throw new InvalidOperationException("No se puede cambiar el tipo de un usuario existente.");
+            }
+
             usuario.SetHabilitado(actualizarUsuarioDto.Habilitado);
 
-            await _usuarioRepository.UpdateAsync(usuario);
+            // Si es un Alumno, actualizamos su plan.
+            if (usuario is Alumno alumno)
+            {
+                alumno.SetIdPlan(actualizarUsuarioDto.IdPlan);
+            }
 
+            await _usuarioRepository.UpdateAsync(usuario);
             return MapToUsuarioDTO(usuario);
         }
 
         public async Task<bool> DeleteAsync(string legajo)
         {
             var usuario = await _usuarioRepository.GetByLegajoAsync(legajo);
-            if (usuario == null)
-            {
-                return false;
-            }
-
+            if (usuario == null) return false;
             await _usuarioRepository.DeleteAsync(usuario);
             return true;
         }
@@ -119,14 +110,25 @@ namespace ApplicationClean.Services
         {
             if (usuario == null) return null;
 
-            return new UsuarioDTO
+            var dto = new UsuarioDTO
             {
                 Legajo = usuario.Legajo,
                 Tipo = usuario.Tipo,
                 Habilitado = usuario.Habilitado,
                 IdPersona = usuario.IdPersona,
-                ClaveHash = usuario.ClaveHash
+                ClaveHash = usuario.ClaveHash,
+                PersonaNombreCompleto = usuario.Persona?.Nombre + " " + usuario.Persona?.Apellido
             };
+
+            if (usuario is Alumno alumno)
+            {
+                dto.IdPlan = alumno.IdPlan;
+                dto.PlanDescripcion = alumno.Plan?.Especialidad?.Descripcion != null ?
+                                      $"{alumno.Plan.Descripcion} ({alumno.Plan.Especialidad.Descripcion})" :
+                                      alumno.Plan?.Descripcion;
+            }
+
+            return dto;
         }
     }
 }

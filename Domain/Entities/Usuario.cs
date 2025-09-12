@@ -1,9 +1,10 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 using static Domain.Entities.Persona;
 
 namespace Domain.Entities
 {
-    public class Usuario
+    public abstract class Usuario
     {
         public enum TipoUsuario
         {
@@ -14,14 +15,14 @@ namespace Domain.Entities
 
         public string Legajo { get; private set; }
         public string ClaveHash { get; private set; }
-        public TipoUsuario Tipo { get; private set; }
+        public TipoUsuario Tipo { get; protected set; }
         public bool Habilitado { get; private set; }
         public int IdPersona { get; private set; }
 
         public ICollection<AlumnoInscripcion> AlumnoInscripcions { get; private set; }
         public ICollection<DocenteCurso> DocenteCursos { get; private set; }
+        public Persona Persona { get; set; }
 
-        public virtual Persona Persona { get; set; }
         protected Usuario() { }
 
         public Usuario(string legajo, string claveHash, TipoUsuario tipo, int idPersona)

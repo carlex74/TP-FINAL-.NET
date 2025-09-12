@@ -4,6 +4,7 @@ using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(TPIContext))]
-    partial class TPIContextModelSnapshot : ModelSnapshot
+    [Migration("20250912125529_MigracionPorLasDudas")]
+    partial class MigracionPorLasDudas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,6 +271,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("IdPersona")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PlanId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Tipo")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -277,11 +283,9 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("IdPersona");
 
+                    b.HasIndex("PlanId");
+
                     b.ToTable("Usuarios");
-
-                    b.HasDiscriminator<string>("Tipo");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("MateriaPlan", b =>
@@ -297,32 +301,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PlanesId");
 
                     b.ToTable("MateriaPlan");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Administrador", b =>
-                {
-                    b.HasBaseType("Domain.Entities.Usuario");
-
-                    b.HasDiscriminator().HasValue("Administrador");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Alumno", b =>
-                {
-                    b.HasBaseType("Domain.Entities.Usuario");
-
-                    b.Property<int?>("IdPlan")
-                        .HasColumnType("int");
-
-                    b.HasIndex("IdPlan");
-
-                    b.HasDiscriminator().HasValue("Alumno");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Docente", b =>
-                {
-                    b.HasBaseType("Domain.Entities.Usuario");
-
-                    b.HasDiscriminator().HasValue("Docente");
                 });
 
             modelBuilder.Entity("ComisionPlan", b =>
@@ -416,6 +394,10 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Plan", null)
+                        .WithMany("alumnos")
+                        .HasForeignKey("PlanId");
+
                     b.Navigation("Persona");
                 });
 
@@ -432,15 +414,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("PlanesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.Alumno", b =>
-                {
-                    b.HasOne("Domain.Entities.Plan", "Plan")
-                        .WithMany("Alumnos")
-                        .HasForeignKey("IdPlan");
-
-                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("Domain.Entities.Curso", b =>
@@ -462,7 +435,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Plan", b =>
                 {
-                    b.Navigation("Alumnos");
+                    b.Navigation("alumnos");
                 });
 
             modelBuilder.Entity("Domain.Entities.Usuario", b =>

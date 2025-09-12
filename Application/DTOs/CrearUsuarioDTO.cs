@@ -8,5 +8,6 @@ namespace ApplicationClean.DTOs
         public string Clave { get; set; }
         public TipoUsuario Tipo { get; set; }
         public int IdPersona { get; set; }
+        public int? IdPlan { get; set; }
     }
 }

@@ -29,7 +29,6 @@ namespace WindowsForms
             ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider();
 
-            // Bucle principal de la aplicación para Login/Logout
             while (true)
             {
                 var loginForm = ServiceProvider.GetRequiredService<LoginForm>();
@@ -41,7 +40,7 @@ namespace WindowsForms
                 var loggedInUser = UserSession.GetCurrentUser();
                 if (loggedInUser == null)
                 {
-                    MessageBox.Show("Error al recuperar la sesión.", "Error");
+                    MessageBox.Show("Error al recuperar la sesin.", "Error");
                     break;
                 }
 
@@ -70,21 +69,14 @@ namespace WindowsForms
         {
             string baseAddress = "https://localhost:7111/api/";
 
-            // --- LA SOLUCIÓN DEFINITIVA: Creamos un objeto de opciones de serialización ---
             var jsonSerializerOptions = new JsonSerializerOptions
             {
-                // Le dice al serializador que convierta los strings del JSON a enums de C#.
                 Converters = { new JsonStringEnumConverter() },
-                // Ignora si el JSON usa "nombre" y tu DTO usa "Nombre".
                 PropertyNameCaseInsensitive = true
             };
 
-            // Registramos estas opciones como un Singleton para que todos los clientes las puedan usar.
             services.AddSingleton(jsonSerializerOptions);
 
-            // --- REGISTRO DE CLIENTES DE API ---
-            // AddHttpClient es la forma correcta de registrar clientes que usan HttpClient.
-            // Gestiona el ciclo de vida de HttpClient de forma eficiente.
             services.AddHttpClient<IAPIAuthClients, AuthApiClient>(client => client.BaseAddress = new Uri(baseAddress));
             services.AddHttpClient<IAPIEspecialidadClients, EspecialidadApiClient>(client => client.BaseAddress = new Uri(baseAddress));
             services.AddHttpClient<IAPIPlanClients, PlanApiClient>(client => client.BaseAddress = new Uri(baseAddress));
@@ -94,8 +86,6 @@ namespace WindowsForms
             services.AddHttpClient<IAPIComisionClient, ComisionApiClient>(client => client.BaseAddress = new Uri(baseAddress));
             services.AddHttpClient<IAPICursoClient, CursoApiClient>(client => client.BaseAddress = new Uri(baseAddress));
 
-            // --- REGISTRO DE FORMULARIOS ---
-            // Usamos AddTransient para que se cree una nueva instancia cada vez que se pide.
             services.AddTransient<LoginForm>();
             services.AddTransient<EnConstruccionForm>();
             services.AddTransient<Home>();

@@ -1,5 +1,4 @@
-﻿
-
+﻿/*
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
 
@@ -18,4 +17,4 @@ namespace ApplicationClean.Services
 
 
     }
-}
+}*/

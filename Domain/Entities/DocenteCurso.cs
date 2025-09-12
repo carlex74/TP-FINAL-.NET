@@ -11,27 +11,20 @@ namespace Domain.Entities
             JefeDeTrabajosPracticos,
             AyudanteDeCatedra
         }
-        public TipoCargos Cargo { get; private set; }
         public int IdCurso { get; private set; }
         public string LegajoDocente { get; private set; }
-
+        public TipoCargos Cargo { get; private set; }
         public Usuario Docente {  get; private set; }
         public Curso Curso { get; private set; }
 
         /*public ICollection<Usuario> Docentes { get; private set; }
         public ICollection<Curso> Cursos { get; private set; }*/
 
-        public DocenteCurso(TipoCargos cargo, int idCurso, int idDocente) : base()
+        public DocenteCurso(int idCurso, string legajoDocente, TipoCargos cargo)
         {
-            SetCargo(cargo);
             SetIdCurso(idCurso);
-            SetIdDocente(idDocente);
-        }
-        public void SetCargo(TipoCargos cargo)
-        {
-            if (!Enum.IsDefined(typeof(TipoCargos), cargo))
-                throw new ArgumentException("El tipo de cargo no es válido.", nameof(cargo));
-            Cargo = cargo;
+            SetLegajoDocente(legajoDocente);
+            SetCargo(cargo);
         }
         public void SetIdCurso(int idCurso)
         {
@@ -39,11 +32,17 @@ namespace Domain.Entities
                 throw new ArgumentException("El ID del curso debe ser un número positivo.", nameof(idCurso));
             IdCurso = idCurso;
         }
-        public void SetIdDocente(int idDocente)
+        public void SetLegajoDocente(string legajoDocente)
         {
-            if (idDocente <= 0)
-                throw new ArgumentException("El ID del docente debe ser un número positivo.", nameof(idDocente));
-            IdDocente = idDocente;
+            if (string.IsNullOrWhiteSpace(legajoDocente))
+                throw new ArgumentException("El legajo no puede ser nulo o vacío.", nameof(legajoDocente));
+            LegajoDocente = legajoDocente;
+        }
+        public void SetCargo(TipoCargos cargo)
+        {
+            if (!Enum.IsDefined(typeof(TipoCargos), cargo))
+                throw new ArgumentException("El tipo de cargo no es válido.", nameof(cargo));
+            Cargo = cargo;
         }
     }
 }

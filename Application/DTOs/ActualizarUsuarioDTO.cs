@@ -6,5 +6,6 @@ namespace ApplicationClean.DTOs
     {
         public TipoUsuario Tipo { get; set; }
         public bool Habilitado { get; set; }
+        public int? IdPlan { get; set; }
     }
 }

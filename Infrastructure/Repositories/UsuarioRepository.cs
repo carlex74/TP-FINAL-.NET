@@ -2,6 +2,8 @@
 using Domain.Entities;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
@@ -15,7 +17,18 @@ namespace Infrastructure.Repositories
         {
             return await _context.Usuarios
                                  .Include(u => u.Persona)
+                                 .Include(u => (u as Alumno).Plan)
+                                    .ThenInclude(p => p.Especialidad)
                                  .FirstOrDefaultAsync(u => u.Legajo == legajo);
+        }
+
+        public async Task<IEnumerable<Usuario>> GetAllAsync()
+        {
+            return await _context.Usuarios
+                                 .Include(u => u.Persona)
+                                 .Include(u => (u as Alumno).Plan)
+                                    .ThenInclude(p => p.Especialidad)
+                                 .ToListAsync();
         }
 
         public async Task AddAsync(Usuario usuario)
@@ -34,13 +47,6 @@ namespace Infrastructure.Repositories
         {
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<Usuario>> GetAllAsync()
-        {
-            return await _context.Usuarios
-                                 .Include(u => u.Persona)
-                                 .ToListAsync();
         }
     }
 }
