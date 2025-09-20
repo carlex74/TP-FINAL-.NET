@@ -1,0 +1,101 @@
+﻿using ApplicationClean.DTOs;
+using ApplicationClean.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+// Asumo que tienes estos DTOs y Servicios definidos.
+// using Application.DTOs;
+// using Application.Interfaces;
+
+[ApiController]
+[Route("api/docentes-cursos")] // Ruta más explícita y RESTful
+public class DocenteCursoController : ControllerBase
+{
+    private readonly IDocenteCursoService _docenteCursoService;
+
+    public DocenteCursoController(IDocenteCursoService docenteCursoService)
+    {
+        _docenteCursoService = docenteCursoService;
+    }
+
+    /// <summary>
+    /// Obtiene todas las asignaciones de docentes a cursos.
+    /// </summary>
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<DocenteCursoDTO>), 200)]
+    public async Task<IActionResult> GetAll()
+    {
+        var asignaciones = await _docenteCursoService.GetAllAsync();
+        return Ok(asignaciones);
+    }
+
+    /// <summary>
+    /// Obtiene una asignación específica por ID del curso y legajo del docente.
+    /// </summary>
+    [HttpGet("{idCurso}/{legajoDocente}", Name = "GetDocenteCursoById")]
+    [ProducesResponseType(typeof(DocenteCursoDTO), 200)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetById(int idCurso, string legajoDocente)
+    {
+        var asignacion = await _docenteCursoService.GetByIdAsync(idCurso, legajoDocente);
+        if (asignacion == null)
+        {
+            return NotFound("La asignación especificada no fue encontrada.");
+        }
+        return Ok(asignacion);
+    }
+
+    /// <summary>
+    /// Asigna un docente a un curso.
+    /// </summary>
+    [HttpPost]
+    [ProducesResponseType(typeof(DocenteCursoDTO), 201)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> Create(DocenteCursoDTO docenteCursoDto)
+    {
+        try
+        {
+            var nuevaAsignacion = await _docenteCursoService.AddAsync(docenteCursoDto);
+
+            // CORREGIDO: Debemos pasar AMBOS parámetros de la ruta para que se genere la URL correctamente.
+            return CreatedAtRoute(
+                "GetDocenteCursoById",
+                new { idCurso = nuevaAsignacion.IdCurso, legajoDocente = nuevaAsignacion.LegajoDocente },
+                nuevaAsignacion);
+        }
+        catch (System.Exception ex)
+        {
+            // En un caso real, aquí podrías capturar excepciones más específicas,
+            // como una 'DuplicateEntryException' si la asignación ya existe.
+            return BadRequest(ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Actualiza los detalles de una asignación existente (ej. la condición del docente).
+    /// </summary>
+    [HttpPut("{idCurso}/{legajoDocente}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> Update(int idCurso, string legajoDocente, DocenteCursoDTO docenteCursoDto)
+    {
+        // CORREGIDO: La validación debe comprobar AMBAS partes de la clave compuesta.
+        if (idCurso != docenteCursoDto.IdCurso || legajoDocente != docenteCursoDto.LegajoDocente)
+        {
+            return BadRequest("Los identificadores de la ruta no coinciden con los del cuerpo de la solicitud.");
+        }
+
+        try
+        {
+            await _docenteCursoService.UpdateAsync(docenteCursoDto);
+            return NoContent(); // Respuesta estándar para un PUT/PATCH exitoso.
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+}

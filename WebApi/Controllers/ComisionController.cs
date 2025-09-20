@@ -1,8 +1,7 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 
 [ApiController]
 [Route("api/[controller]")]

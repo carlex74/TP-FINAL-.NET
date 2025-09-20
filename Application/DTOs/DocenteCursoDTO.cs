@@ -9,8 +9,8 @@ namespace ApplicationClean.DTOs
 {
     public class DocenteCursoDTO
     {
-        public TipoCargos Cargo { get; private set; }
-        public int IdCurso { get; private set; }
-        public string LegajoDocente { get; private set; }
+        public TipoCargos Cargo { get; set; }
+        public int IdCurso { get; set; }
+        public string LegajoDocente { get; set; }
     }
 }
