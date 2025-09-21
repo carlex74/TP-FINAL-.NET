@@ -9,21 +9,21 @@
         public Usuario Alumno { get; private set; }
         public Curso Curso { get; private set; }
 
-        public AlumnoInscripcion(string condicion, int LegajoAlumno, int idCurso, int nota) : base()
+        public AlumnoInscripcion(string condicion, string LegajoAlumno, int idCurso, int nota) : base()
         {
             SetCondicion(condicion);
-            SetIdAlumno(LegajoAlumno);
+            SetLegajoAlumno(LegajoAlumno);
             SetIdCurso(idCurso);
             SetNota(nota);
         }
 
-        public AlumnoInscripcion(string condicion, string legajoAlumno, int idCurso, int nota)
+        /*public AlumnoInscripcion(string condicion, string legajoAlumno, int idCurso, int nota)
         {
             Condicion = condicion;
             LegajoAlumno = legajoAlumno;
             IdCurso = idCurso;
             Nota = nota;
-        }
+        }*/
 
         public void SetCondicion(string condicion)
         {
@@ -31,11 +31,12 @@
                 throw new ArgumentException("La condición no puede ser nula o vacía.", nameof(condicion));
             Condicion = condicion;
         }
-        public void SetIdAlumno(int legajoAlumno)
+        public void SetLegajoAlumno(string legajoAlumno)
         {
-            if (legajoAlumno <= 0)
-                throw new ArgumentException("El ID del alumno debe ser un número positivo.", nameof(legajoAlumno));
-            LegajoAlumno = LegajoAlumno;
+            if (string.IsNullOrWhiteSpace(legajoAlumno))
+                throw new ArgumentException("El legajo del alumno no puede ser nulo o vacío.", nameof(legajoAlumno));
+
+            this.LegajoAlumno = legajoAlumno;
         }
         public void SetIdCurso(int idCurso)
         {

@@ -28,6 +28,7 @@ builder.Services.AddDbContext<TPIContext>(options =>
     )
 
 );
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IEspecialidadRepository, EspecialidadRepository>();
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
@@ -36,6 +37,8 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IMateriaRepository, MateriaRepository>();
 builder.Services.AddScoped<IComisionRepository, ComisionRepository>();
 builder.Services.AddScoped<ICursoRepository, CursoRepository>();
+builder.Services.AddScoped<IAlumnoInscripcionRepository, AlumnoInscripcionRepository>();
+builder.Services.AddScoped<IDocenteCursoRepository,DocenteCursoRepository>();
 
 builder.Services.AddScoped<IEspecialidadService, EspecialidadServices>();
 builder.Services.AddScoped<IPlanService, PlanServices>();
@@ -44,6 +47,8 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IMateriaService, MateriaService>();
 builder.Services.AddScoped<IComisionService, ComisionService>();
 builder.Services.AddScoped<ICursoService, CursoService>();
+builder.Services.AddScoped<IAlumnoInscripcionService,AlumnoInscripcionService>();
+builder.Services.AddScoped<IDocenteCursoService,DocenteCursoService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

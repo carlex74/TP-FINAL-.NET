@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    internal class DocenteCursoRepository:IDocenteCursoRepository
+    public class DocenteCursoRepository:IDocenteCursoRepository
     {
         private readonly TPIContext _context;
 

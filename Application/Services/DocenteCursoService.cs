@@ -1,69 +1,94 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
+using AutoMapper;
 using Domain.Entities;
 
 namespace ApplicationClean.Services
 {
-    public class DocenteCursoService: IDocenteCursoService
+    public class DocenteCursoService : IDocenteCursoService
     {
         private readonly IDocenteCursoRepository _repository;
         private readonly ICursoRepository _cursoRepository;
+        private readonly IUsuarioRepository _usuarioRepository; 
+        private readonly IMapper _mapper; 
 
-        public DocenteCursoService(IDocenteCursoRepository repository, ICursoRepository cursoRepository)
+        public DocenteCursoService(
+            IDocenteCursoRepository repository,
+            ICursoRepository cursoRepository,
+            IUsuarioRepository usuarioRepository,
+            IMapper mapper) // Inyectar AutoMapper
         {
             _repository = repository;
             _cursoRepository = cursoRepository;
+            _usuarioRepository = usuarioRepository;
+            _mapper = mapper;
         }
 
-
-        public async Task<DocenteCursoDTO> AddAsync(DocenteCursoDTO docenteCurso)
+        public async Task<DocenteCursoDTO> AddAsync(DocenteCursoDTO docenteCursoDto)
         {
-            var curso = await _cursoRepository.GetByIdAsync(docenteCurso.IdCurso);
-            var newDocenteCurso = new DocenteCurso(curso.Id, docenteCurso.LegajoDocente, docenteCurso.Cargo);
+            // --- 1. VALIDACIÓN ROBUSTA (REGLAS DE NEGOCIO) ---
+            var curso = await _cursoRepository.GetByIdAsync(docenteCursoDto.IdCurso);
+            if (curso == null)
+                throw new KeyNotFoundException($"El curso con ID {docenteCursoDto.IdCurso} no existe.");
 
-            await _repository.AddAsync(newDocenteCurso);
+            var docente = await _usuarioRepository.GetByLegajoAsync(docenteCursoDto.LegajoDocente);
+            if (docente == null) // Asumiendo que los docentes son usuarios
+                throw new KeyNotFoundException($"El docente con legajo {docenteCursoDto.LegajoDocente} no existe.");
 
-            return docenteCurso;
+            var asignacionExistente = await _repository.GetByIdAsync(docenteCursoDto.IdCurso, docenteCursoDto.LegajoDocente);
+            if (asignacionExistente != null)
+                throw new BusinessRuleException("El docente ya se encuentra asignado a este curso.");
+
+            // --- 2. CREACIÓN DE LA ENTIDAD Y PERSISTENCIA ---
+            var nuevaAsignacion = _mapper.Map<DocenteCurso>(docenteCursoDto);
+
+            await _repository.AddAsync(nuevaAsignacion);
+
+            // --- 3. RETORNO COHERENTE ---
+            // Devolvemos un DTO basado en la entidad recién creada.
+            return _mapper.Map<DocenteCursoDTO>(nuevaAsignacion);
         }
 
-        public async Task<DocenteCursoDTO> UpdateAsync(DocenteCursoDTO docenteCursoDTO)
+        public async Task UpdateAsync(DocenteCursoDTO docenteCursoDto)
         {
-            var existingDocenteCurso = await _repository.GetByIdAsync(docenteCursoDTO.IdCurso, docenteCursoDTO.LegajoDocente);
-            if (existingDocenteCurso == null)
+            var existingAsignacion = await _repository.GetByIdAsync(docenteCursoDto.IdCurso, docenteCursoDto.LegajoDocente);
+            if (existingAsignacion == null)
             {
-                throw new KeyNotFoundException($"No se encontró una doncenteCurso para ese curso");
+                throw new KeyNotFoundException($"No se encontró una asignación para el docente {docenteCursoDto.LegajoDocente} en el curso {docenteCursoDto.IdCurso}.");
             }
 
-            existingDocenteCurso.SetCargo(docenteCursoDTO.Cargo);
-      
+            // La entidad de dominio se encarga de su propia actualización de estado.
+            existingAsignacion.SetCargo(docenteCursoDto.Cargo);
 
-            await _repository.UpdateAsync(existingDocenteCurso);
-            return docenteCursoDTO;
+            await _repository.UpdateAsync(existingAsignacion);
+            // No se devuelve nada, el controlador retornará 204 No Content.
         }
 
         public async Task<DocenteCursoDTO> GetByIdAsync(int idCurso, string legajo)
         {
-            var docenteCurso = await _repository.GetByIdAsync(idCurso,legajo);
-            if (docenteCurso == null) return null;
+            var asignacion = await _repository.GetByIdAsync(idCurso, legajo);
+            if (asignacion == null) return null;
 
-            return new DocenteCursoDTO
-            {
-                IdCurso = idCurso,
-                LegajoDocente = legajo,
-                Cargo = docenteCurso.Cargo
-            };
+        
+            return _mapper.Map<DocenteCursoDTO>(asignacion);
         }
 
         public async Task<IEnumerable<DocenteCursoDTO>> GetAllAsync()
         {
-            var doncenteCurso = await _repository.GetAllAsync();
-            return doncenteCurso.Select(m => new DocenteCursoDTO
+            var asignaciones = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<DocenteCursoDTO>>(asignaciones);
+        }
+
+ 
+        public async Task DeleteAsync(int idCurso, string legajoDocente)
+        {
+            var asignacion = await _repository.GetByIdAsync(idCurso, legajoDocente);
+            if (asignacion == null)
             {
-                IdCurso = m.IdCurso,
-                LegajoDocente = m.LegajoDocente,
-                Cargo = m.Cargo
-            });
+                throw new KeyNotFoundException($"No se encontró la asignación a eliminar.");
+            }
+            await _repository.DeleteAsync(asignacion);
         }
 
     }
