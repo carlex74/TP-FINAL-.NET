@@ -4,7 +4,6 @@ using ApplicationClean.Interfaces.Services;
 using ApplicationClean.Services;
 using Infrastructure.Context;
 using Infrastructure.Repositories;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
