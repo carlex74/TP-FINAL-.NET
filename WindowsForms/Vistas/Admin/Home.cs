@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using WindowsForms.Vistas.Comision;
 using WindowsForms.Vistas.Curso;
+using WindowsForms.Vistas.Docente_curso;
 using WindowsForms.Vistas.Materia;
 
 namespace WindowsForms
@@ -10,7 +11,7 @@ namespace WindowsForms
     public partial class Home : Form
     {
         private Form activeForm = null;
-        private Panel currentButtonPanel; 
+        private Panel currentButtonPanel;
 
         private readonly EspecialidadLista _especialidadLista;
         private readonly PlanLista _planLista;
@@ -19,8 +20,17 @@ namespace WindowsForms
         private readonly MateriaLista _materiaLista;
         private readonly ComisionLista _comisionLista;
         private readonly CursoLista _cursoLista;
+        private readonly DocenteCursoLista _docenteCursoLista;
 
-        public Home(EspecialidadLista especialidadLista, PlanLista planLista, PersonaLista personaLista, UsuarioLista usuarioLista, MateriaLista materiaLista, ComisionLista comisionLista, CursoLista cursoLista)
+        public Home(
+            EspecialidadLista especialidadLista,
+            PlanLista planLista,
+            PersonaLista personaLista,
+            UsuarioLista usuarioLista,
+            MateriaLista materiaLista,
+            ComisionLista comisionLista,
+            CursoLista cursoLista,
+            DocenteCursoLista docenteCursoLista)
         {
             InitializeComponent();
             _especialidadLista = especialidadLista;
@@ -30,6 +40,13 @@ namespace WindowsForms
             _materiaLista = materiaLista;
             _comisionLista = comisionLista;
             _cursoLista = cursoLista;
+            _docenteCursoLista = docenteCursoLista;
+
+            var currentUser = UserSession.GetCurrentUser();
+            if (currentUser != null)
+            {
+                userInfoLabel.Text = $"Usuario: {currentUser.Legajo}";
+            }
         }
 
         private void ActivateButton(Panel buttonPanel)
@@ -111,6 +128,11 @@ namespace WindowsForms
         private void cursoButton_Click(object sender, EventArgs e)
         {
             OpenChildForm(_cursoLista, cursoPanel);
+        }
+
+        private void asignacionesButton_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(_docenteCursoLista, asignacionesPanel);
         }
     }
 }

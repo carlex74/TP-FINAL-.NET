@@ -88,7 +88,6 @@ namespace ApplicationClean.Services
 
             usuario.SetHabilitado(actualizarUsuarioDto.Habilitado);
 
-            // Si es un Alumno, actualizamos su plan.
             if (usuario is Alumno alumno)
             {
                 alumno.SetIdPlan(actualizarUsuarioDto.IdPlan);

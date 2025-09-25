@@ -1,16 +1,19 @@
 using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.ApiClients;
+using Infrastructure.ApiClient;
 using Infrastructure.ApiClients;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Forms;
-using static Domain.Entities.Usuario;
 using WindowsForms.Vistas.Comision;
-using WindowsForms.Vistas.Materia;
 using WindowsForms.Vistas.Curso;
+using WindowsForms.Vistas.Materia;
+using WindowsForms.Vistas.Docente_curso;
+using WindowsForms.Vistas.Alumno;
+using static Domain.Entities.Usuario;
 
 namespace WindowsForms
 {
@@ -51,8 +54,10 @@ namespace WindowsForms
                         mainForm = ServiceProvider.GetRequiredService<Home>();
                         break;
                     case TipoUsuario.Docente:
-                    case TipoUsuario.Alumno:
                         mainForm = ServiceProvider.GetRequiredService<EnConstruccionForm>();
+                        break;
+                    case TipoUsuario.Alumno:
+                        mainForm = ServiceProvider.GetRequiredService<PortalAlumno>();
                         break;
                 }
 
@@ -85,6 +90,8 @@ namespace WindowsForms
             services.AddHttpClient<IAPIMateriaClient, MateriaApiClient>(client => client.BaseAddress = new Uri(baseAddress));
             services.AddHttpClient<IAPIComisionClient, ComisionApiClient>(client => client.BaseAddress = new Uri(baseAddress));
             services.AddHttpClient<IAPICursoClient, CursoApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAPIDocenteCursoClient, DocenteCursoApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAlumnoInscripcionClients, AlumnoInscripcionApiClient>(client => client.BaseAddress = new Uri(baseAddress));
 
             services.AddTransient<LoginForm>();
             services.AddTransient<EnConstruccionForm>();
@@ -103,6 +110,9 @@ namespace WindowsForms
             services.AddTransient<ComisionDetalle>();
             services.AddTransient<CursoLista>();
             services.AddTransient<CursoDetalle>();
+            services.AddTransient<DocenteCursoLista>();
+            services.AddTransient<DocenteCursoDetalle>();
+            services.AddTransient<PortalAlumno>();
         }
     }
 }

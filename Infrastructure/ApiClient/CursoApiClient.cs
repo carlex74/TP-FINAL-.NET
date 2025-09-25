@@ -34,7 +34,6 @@ namespace Infrastructure.ApiClients
 
         public async Task Update(CursoDTO curso)
         {
-            // Asumiendo que CursoDTO tendrá una propiedad Id
             var response = await _client.PutAsJsonAsync($"cursos/{curso.Id}", curso);
             response.EnsureSuccessStatusCode();
         }

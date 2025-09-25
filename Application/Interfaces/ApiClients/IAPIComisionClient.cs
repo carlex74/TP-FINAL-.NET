@@ -1,6 +1,4 @@
-﻿
-
-using ApplicationClean.DTOs;
+﻿using ApplicationClean.DTOs;
 
 namespace ApplicationClean.Interfaces.ApiClients
 {

@@ -17,14 +17,6 @@
             SetNota(nota);
         }
 
-        /*public AlumnoInscripcion(string condicion, string legajoAlumno, int idCurso, int nota)
-        {
-            Condicion = condicion;
-            LegajoAlumno = legajoAlumno;
-            IdCurso = idCurso;
-            Nota = nota;
-        }*/
-
         public void SetCondicion(string condicion)
         {
             if (string.IsNullOrWhiteSpace(condicion))

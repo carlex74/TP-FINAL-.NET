@@ -1,5 +1,4 @@
-﻿// Ubicación: WindowsForms/PlanLista.Designer.cs
-namespace WindowsForms
+﻿namespace WindowsForms
 {
     partial class PlanLista
     {

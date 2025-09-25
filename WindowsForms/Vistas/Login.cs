@@ -71,7 +71,6 @@ namespace WindowsForms
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            // El botón de cancelar ahora es el botón 'X' personalizado
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
@@ -91,43 +90,30 @@ namespace WindowsForms
 
             try
             {
-                // Bloqueamos la UI para dar feedback
                 btnLogin.Enabled = false;
                 this.Cursor = Cursors.WaitCursor;
 
-                // --- LLAMADA ASÍNCRONA CORRECTA ---
-                // 'await' pausa la ejecución de ESTE MÉTODO hasta que la API responda.
                 var usuarioLogueado = await _authClient.LoginAsync(legajo, clave);
 
                 if (usuarioLogueado != null)
                 {
-                    // ¡LOGIN EXITOSO!
-                    // Guardamos el usuario en la sesión para que el resto de la app lo use.
                     UserSession.Login(usuarioLogueado);
 
-                    // Establecemos el resultado en OK.
                     this.DialogResult = DialogResult.OK;
 
-                    // Cerramos el formulario para que Program.cs continúe.
                     this.Close();
                 }
                 else
                 {
-                    // LOGIN FALLIDO
                     MostrarError("Legajo o contraseña incorrectos.");
-                    // --- LA LÓGICA CLAVE ---
-                    // NO cerramos el formulario. Simplemente mostramos el error
-                    // y el usuario puede intentarlo de nuevo.
                 }
             }
             catch (Exception ex)
             {
-                // Error de conexión u otro problema
                 MostrarError($"Error de conexión: {ex.Message}");
             }
             finally
             {
-                // Siempre volvemos a habilitar la UI
                 btnLogin.Enabled = true;
                 this.Cursor = Cursors.Default;
             }

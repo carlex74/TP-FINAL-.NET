@@ -17,9 +17,6 @@ namespace Domain.Entities
         public Usuario Docente {  get; private set; }
         public Curso Curso { get; private set; }
 
-        /*public ICollection<Usuario> Docentes { get; private set; }
-        public ICollection<Curso> Cursos { get; private set; }*/
-
         public DocenteCurso(int idCurso, string legajoDocente, TipoCargos cargo)
         {
             SetIdCurso(idCurso);

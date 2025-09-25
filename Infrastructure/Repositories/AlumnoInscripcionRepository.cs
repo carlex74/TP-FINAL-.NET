@@ -37,6 +37,10 @@ namespace Infrastructure.Repositories
                                  .ToListAsync();
         }
 
-
+        public async Task DeleteAsync(AlumnoInscripcion inscripcion)
+        {
+            _context.Inscripciones.Remove(inscripcion);
+            await _context.SaveChangesAsync();
+        }
     }
 }
