@@ -29,7 +29,6 @@ namespace Infrastructure.Context
             optionsBuilder.UseMySql(
                 connectionString,
                 ServerVersion.AutoDetect(connectionString),
-                // ----> AÑADE ESTA LÍNEA TAMBIÉN AQUÍ <----
                 b => b.MigrationsAssembly("Infrastructure")
             );
 

@@ -1,5 +1,4 @@
-﻿
-namespace ApplicationClean.DTOs
+﻿namespace ApplicationClean.DTOs
 {
     public class ComisionDTO
     {

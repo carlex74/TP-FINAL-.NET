@@ -21,6 +21,18 @@
             this.cerrarSesionPanel = new System.Windows.Forms.Panel();
             this.cerrarSesionPictureBox = new System.Windows.Forms.PictureBox();
             this.cerrarSesionLabel = new System.Windows.Forms.Label();
+            this.asignacionesPanel = new System.Windows.Forms.Panel();
+            this.asignacionesPictureBox = new System.Windows.Forms.PictureBox();
+            this.asignacionesLabel = new System.Windows.Forms.Label();
+            this.cursoPanel = new System.Windows.Forms.Panel();
+            this.cursoPictureBox = new System.Windows.Forms.PictureBox();
+            this.cursoLabel = new System.Windows.Forms.Label();
+            this.comisionPanel = new System.Windows.Forms.Panel();
+            this.comisionPictureBox = new System.Windows.Forms.PictureBox();
+            this.comisionLabel = new System.Windows.Forms.Label();
+            this.materiaPanel = new System.Windows.Forms.Panel();
+            this.materiaPictureBox = new System.Windows.Forms.PictureBox();
+            this.materiaLabel = new System.Windows.Forms.Label();
             this.usuarioPanel = new System.Windows.Forms.Panel();
             this.usuarioPictureBox = new System.Windows.Forms.PictureBox();
             this.usuarioLabel = new System.Windows.Forms.Label();
@@ -33,22 +45,22 @@
             this.especialidadPanel = new System.Windows.Forms.Panel();
             this.especialidadPictureBox = new System.Windows.Forms.PictureBox();
             this.especialidadLabel = new System.Windows.Forms.Label();
-            this.materiaPanel = new System.Windows.Forms.Panel();
-            this.materiaPictureBox = new System.Windows.Forms.PictureBox();
-            this.materiaLabel = new System.Windows.Forms.Label();
-            this.comisionPanel = new System.Windows.Forms.Panel();
-            this.comisionPictureBox = new System.Windows.Forms.PictureBox();
-            this.comisionLabel = new System.Windows.Forms.Label();
-            this.cursoPanel = new System.Windows.Forms.Panel();
-            this.cursoPictureBox = new System.Windows.Forms.PictureBox();
-            this.cursoLabel = new System.Windows.Forms.Label();
             this.logoPanel = new System.Windows.Forms.Panel();
+            this.userInfoLabel = new System.Windows.Forms.Label();
             this.logoLabel = new System.Windows.Forms.Label();
             this.mainPanel = new System.Windows.Forms.Panel();
             this.welcomeLabel = new System.Windows.Forms.Label();
             this.sideMenuPanel.SuspendLayout();
             this.cerrarSesionPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cerrarSesionPictureBox)).BeginInit();
+            this.asignacionesPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.asignacionesPictureBox)).BeginInit();
+            this.cursoPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cursoPictureBox)).BeginInit();
+            this.comisionPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comisionPictureBox)).BeginInit();
+            this.materiaPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.materiaPictureBox)).BeginInit();
             this.usuarioPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.usuarioPictureBox)).BeginInit();
             this.personaPanel.SuspendLayout();
@@ -57,12 +69,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.planPictureBox)).BeginInit();
             this.especialidadPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.especialidadPictureBox)).BeginInit();
-            this.materiaPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.materiaPictureBox)).BeginInit();
-            this.comisionPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.comisionPictureBox)).BeginInit();
-            this.cursoPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cursoPictureBox)).BeginInit();
             this.logoPanel.SuspendLayout();
             this.mainPanel.SuspendLayout();
             this.SuspendLayout();
@@ -71,6 +77,7 @@
             // 
             this.sideMenuPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(80)))), ((int)(((byte)(110)))));
             this.sideMenuPanel.Controls.Add(this.cerrarSesionPanel);
+            this.sideMenuPanel.Controls.Add(this.asignacionesPanel);
             this.sideMenuPanel.Controls.Add(this.cursoPanel);
             this.sideMenuPanel.Controls.Add(this.comisionPanel);
             this.sideMenuPanel.Controls.Add(this.materiaPanel);
@@ -94,7 +101,7 @@
             this.cerrarSesionPanel.Location = new System.Drawing.Point(0, 540);
             this.cerrarSesionPanel.Name = "cerrarSesionPanel";
             this.cerrarSesionPanel.Size = new System.Drawing.Size(250, 60);
-            this.cerrarSesionPanel.TabIndex = 5;
+            this.cerrarSesionPanel.TabIndex = 9;
             this.cerrarSesionPanel.Click += new System.EventHandler(this.cerrarSesionButton_Click);
             // 
             // cerrarSesionPictureBox
@@ -119,6 +126,146 @@
             this.cerrarSesionLabel.TabIndex = 0;
             this.cerrarSesionLabel.Text = "Cerrar Sesión";
             this.cerrarSesionLabel.Click += new System.EventHandler(this.cerrarSesionButton_Click);
+            // 
+            // asignacionesPanel
+            // 
+            this.asignacionesPanel.Controls.Add(this.asignacionesPictureBox);
+            this.asignacionesPanel.Controls.Add(this.asignacionesLabel);
+            this.asignacionesPanel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.asignacionesPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.asignacionesPanel.Location = new System.Drawing.Point(0, 520);
+            this.asignacionesPanel.Name = "asignacionesPanel";
+            this.asignacionesPanel.Size = new System.Drawing.Size(250, 60);
+            this.asignacionesPanel.TabIndex = 8;
+            this.asignacionesPanel.Click += new System.EventHandler(this.asignacionesButton_Click);
+            // 
+            // asignacionesPictureBox
+            // 
+            this.asignacionesPictureBox.Image = global::WindowsForms.Properties.Resources.icono_docente_curso;
+            this.asignacionesPictureBox.Location = new System.Drawing.Point(20, 18);
+            this.asignacionesPictureBox.Name = "asignacionesPictureBox";
+            this.asignacionesPictureBox.Size = new System.Drawing.Size(24, 24);
+            this.asignacionesPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.asignacionesPictureBox.TabIndex = 1;
+            this.asignacionesPictureBox.TabStop = false;
+            this.asignacionesPictureBox.Click += new System.EventHandler(this.asignacionesButton_Click);
+            // 
+            // asignacionesLabel
+            // 
+            this.asignacionesLabel.AutoSize = true;
+            this.asignacionesLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold);
+            this.asignacionesLabel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.asignacionesLabel.Location = new System.Drawing.Point(60, 19);
+            this.asignacionesLabel.Name = "asignacionesLabel";
+            this.asignacionesLabel.Size = new System.Drawing.Size(110, 23);
+            this.asignacionesLabel.TabIndex = 0;
+            this.asignacionesLabel.Text = "Asignaciones";
+            this.asignacionesLabel.Click += new System.EventHandler(this.asignacionesButton_Click);
+            // 
+            // cursoPanel
+            // 
+            this.cursoPanel.Controls.Add(this.cursoPictureBox);
+            this.cursoPanel.Controls.Add(this.cursoLabel);
+            this.cursoPanel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cursoPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cursoPanel.Location = new System.Drawing.Point(0, 460);
+            this.cursoPanel.Name = "cursoPanel";
+            this.cursoPanel.Size = new System.Drawing.Size(250, 60);
+            this.cursoPanel.TabIndex = 7;
+            this.cursoPanel.Click += new System.EventHandler(this.cursoButton_Click);
+            // 
+            // cursoPictureBox
+            // 
+            this.cursoPictureBox.Image = global::WindowsForms.Properties.Resources.icono_curso;
+            this.cursoPictureBox.Location = new System.Drawing.Point(20, 18);
+            this.cursoPictureBox.Name = "cursoPictureBox";
+            this.cursoPictureBox.Size = new System.Drawing.Size(24, 24);
+            this.cursoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.cursoPictureBox.TabIndex = 1;
+            this.cursoPictureBox.TabStop = false;
+            this.cursoPictureBox.Click += new System.EventHandler(this.cursoButton_Click);
+            // 
+            // cursoLabel
+            // 
+            this.cursoLabel.AutoSize = true;
+            this.cursoLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold);
+            this.cursoLabel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cursoLabel.Location = new System.Drawing.Point(60, 19);
+            this.cursoLabel.Name = "cursoLabel";
+            this.cursoLabel.Size = new System.Drawing.Size(63, 23);
+            this.cursoLabel.TabIndex = 0;
+            this.cursoLabel.Text = "Cursos";
+            this.cursoLabel.Click += new System.EventHandler(this.cursoButton_Click);
+            // 
+            // comisionPanel
+            // 
+            this.comisionPanel.Controls.Add(this.comisionPictureBox);
+            this.comisionPanel.Controls.Add(this.comisionLabel);
+            this.comisionPanel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.comisionPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.comisionPanel.Location = new System.Drawing.Point(0, 400);
+            this.comisionPanel.Name = "comisionPanel";
+            this.comisionPanel.Size = new System.Drawing.Size(250, 60);
+            this.comisionPanel.TabIndex = 6;
+            this.comisionPanel.Click += new System.EventHandler(this.comisionButton_Click);
+            // 
+            // comisionPictureBox
+            // 
+            this.comisionPictureBox.Image = global::WindowsForms.Properties.Resources.icono_comision;
+            this.comisionPictureBox.Location = new System.Drawing.Point(20, 18);
+            this.comisionPictureBox.Name = "comisionPictureBox";
+            this.comisionPictureBox.Size = new System.Drawing.Size(24, 24);
+            this.comisionPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.comisionPictureBox.TabIndex = 1;
+            this.comisionPictureBox.TabStop = false;
+            this.comisionPictureBox.Click += new System.EventHandler(this.comisionButton_Click);
+            // 
+            // comisionLabel
+            // 
+            this.comisionLabel.AutoSize = true;
+            this.comisionLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold);
+            this.comisionLabel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.comisionLabel.Location = new System.Drawing.Point(60, 19);
+            this.comisionLabel.Name = "comisionLabel";
+            this.comisionLabel.Size = new System.Drawing.Size(98, 23);
+            this.comisionLabel.TabIndex = 0;
+            this.comisionLabel.Text = "Comisiones";
+            this.comisionLabel.Click += new System.EventHandler(this.comisionButton_Click);
+            // 
+            // materiaPanel
+            // 
+            this.materiaPanel.Controls.Add(this.materiaPictureBox);
+            this.materiaPanel.Controls.Add(this.materiaLabel);
+            this.materiaPanel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.materiaPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.materiaPanel.Location = new System.Drawing.Point(0, 340);
+            this.materiaPanel.Name = "materiaPanel";
+            this.materiaPanel.Size = new System.Drawing.Size(250, 60);
+            this.materiaPanel.TabIndex = 5;
+            this.materiaPanel.Click += new System.EventHandler(this.materiaButton_Click);
+            // 
+            // materiaPictureBox
+            // 
+            this.materiaPictureBox.Image = global::WindowsForms.Properties.Resources.icono_materia;
+            this.materiaPictureBox.Location = new System.Drawing.Point(20, 18);
+            this.materiaPictureBox.Name = "materiaPictureBox";
+            this.materiaPictureBox.Size = new System.Drawing.Size(24, 24);
+            this.materiaPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.materiaPictureBox.TabIndex = 1;
+            this.materiaPictureBox.TabStop = false;
+            this.materiaPictureBox.Click += new System.EventHandler(this.materiaButton_Click);
+            // 
+            // materiaLabel
+            // 
+            this.materiaLabel.AutoSize = true;
+            this.materiaLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold);
+            this.materiaLabel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.materiaLabel.Location = new System.Drawing.Point(60, 19);
+            this.materiaLabel.Name = "materiaLabel";
+            this.materiaLabel.Size = new System.Drawing.Size(76, 23);
+            this.materiaLabel.TabIndex = 0;
+            this.materiaLabel.Text = "Materias";
+            this.materiaLabel.Click += new System.EventHandler(this.materiaButton_Click);
             // 
             // usuarioPanel
             // 
@@ -259,114 +406,10 @@
             this.especialidadLabel.TabIndex = 0;
             this.especialidadLabel.Text = "Especialidades";
             this.especialidadLabel.Click += new System.EventHandler(this.especialidadButton_Click);
-            //
-            // materiaPanel
-            //
-            this.materiaPanel.Controls.Add(this.materiaPictureBox);
-            this.materiaPanel.Controls.Add(this.materiaLabel);
-            this.materiaPanel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.materiaPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.materiaPanel.Location = new System.Drawing.Point(0, 340);
-            this.materiaPanel.Name = "materiaPanel";
-            this.materiaPanel.Size = new System.Drawing.Size(250, 60);
-            this.materiaPanel.TabIndex = 6;
-            this.materiaPanel.Click += new System.EventHandler(this.materiaButton_Click);
-            //
-            // materiaPictureBox
-            //
-            this.materiaPictureBox.Image = global::WindowsForms.Properties.Resources.icono_materia;
-            this.materiaPictureBox.Location = new System.Drawing.Point(20, 18);
-            this.materiaPictureBox.Name = "materiaPictureBox";
-            this.materiaPictureBox.Size = new System.Drawing.Size(24, 24);
-            this.materiaPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.materiaPictureBox.TabIndex = 1;
-            this.materiaPictureBox.TabStop = false;
-            this.materiaPictureBox.Click += new System.EventHandler(this.materiaButton_Click);
-            //
-            // materiaLabel
-            //
-            this.materiaLabel.AutoSize = true;
-            this.materiaLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold);
-            this.materiaLabel.ForeColor = System.Drawing.Color.Gainsboro;
-            this.materiaLabel.Location = new System.Drawing.Point(60, 19);
-            this.materiaLabel.Name = "materiaLabel";
-            this.materiaLabel.Size = new System.Drawing.Size(76, 23);
-            this.materiaLabel.TabIndex = 0;
-            this.materiaLabel.Text = "Materias";
-            this.materiaLabel.Click += new System.EventHandler(this.materiaButton_Click);
-            //
-            // comisionPanel
-            //
-            this.comisionPanel.Controls.Add(this.comisionPictureBox);
-            this.comisionPanel.Controls.Add(this.comisionLabel);
-            this.comisionPanel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.comisionPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.comisionPanel.Location = new System.Drawing.Point(0, 400); // Ajusta la posición
-            this.comisionPanel.Name = "comisionPanel";
-            this.comisionPanel.Size = new System.Drawing.Size(250, 60);
-            this.comisionPanel.TabIndex = 7;
-            this.comisionPanel.Click += new System.EventHandler(this.comisionButton_Click);
-            //
-            // comisionPictureBox
-            //
-            this.comisionPictureBox.Image = global::WindowsForms.Properties.Resources.icono_comision;
-            this.comisionPictureBox.Location = new System.Drawing.Point(20, 18);
-            this.comisionPictureBox.Name = "comisionPictureBox";
-            this.comisionPictureBox.Size = new System.Drawing.Size(24, 24);
-            this.comisionPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.comisionPictureBox.TabIndex = 1;
-            this.comisionPictureBox.TabStop = false;
-            this.comisionPictureBox.Click += new System.EventHandler(this.comisionButton_Click);
-            //
-            // comisionLabel
-            //
-            this.comisionLabel.AutoSize = true;
-            this.comisionLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold);
-            this.comisionLabel.ForeColor = System.Drawing.Color.Gainsboro;
-            this.comisionLabel.Location = new System.Drawing.Point(60, 19);
-            this.comisionLabel.Name = "comisionLabel";
-            this.comisionLabel.Size = new System.Drawing.Size(98, 23);
-            this.comisionLabel.TabIndex = 0;
-            this.comisionLabel.Text = "Comisiones";
-            this.comisionLabel.Click += new System.EventHandler(this.comisionButton_Click);
-            //
-            // cursoPanel
-            //
-            this.cursoPanel.Controls.Add(this.cursoPictureBox);
-            this.cursoPanel.Controls.Add(this.cursoLabel);
-            this.cursoPanel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cursoPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cursoPanel.Location = new System.Drawing.Point(0, 460);
-            this.cursoPanel.Name = "cursoPanel";
-            this.cursoPanel.Size = new System.Drawing.Size(250, 60);
-            this.cursoPanel.TabIndex = 8;
-            this.cursoPanel.Click += new System.EventHandler(this.cursoButton_Click);
-            //
-            // cursoPictureBox
-            //
-            this.cursoPictureBox.Image = global::WindowsForms.Properties.Resources.icono_curso;
-            this.cursoPictureBox.Location = new System.Drawing.Point(20, 18);
-            this.cursoPictureBox.Name = "cursoPictureBox";
-            this.cursoPictureBox.Size = new System.Drawing.Size(24, 24);
-            this.cursoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.cursoPictureBox.TabIndex = 1;
-            this.cursoPictureBox.TabStop = false;
-            this.cursoPictureBox.Click += new System.EventHandler(this.cursoButton_Click);
-            //
-            // cursoLabel
-            //
-            this.cursoLabel.AutoSize = true;
-            this.cursoLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold);
-            this.cursoLabel.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cursoLabel.Location = new System.Drawing.Point(60, 19);
-            this.cursoLabel.Name = "cursoLabel";
-            this.cursoLabel.Size = new System.Drawing.Size(63, 23);
-            this.cursoLabel.TabIndex = 0;
-            this.cursoLabel.Text = "Cursos";
-            this.cursoLabel.Click += new System.EventHandler(this.cursoButton_Click);
             // 
             // logoPanel
             // 
+            this.logoPanel.Controls.Add(this.userInfoLabel);
             this.logoPanel.Controls.Add(this.logoLabel);
             this.logoPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.logoPanel.Location = new System.Drawing.Point(0, 0);
@@ -374,14 +417,25 @@
             this.logoPanel.Size = new System.Drawing.Size(250, 100);
             this.logoPanel.TabIndex = 0;
             // 
+            // userInfoLabel
+            // 
+            this.userInfoLabel.AutoSize = true;
+            this.userInfoLabel.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.userInfoLabel.ForeColor = System.Drawing.Color.LightGray;
+            this.userInfoLabel.Location = new System.Drawing.Point(12, 65);
+            this.userInfoLabel.Name = "userInfoLabel";
+            this.userInfoLabel.Size = new System.Drawing.Size(66, 20);
+            this.userInfoLabel.TabIndex = 1;
+            this.userInfoLabel.Text = "Usuario: ";
+            // 
             // logoLabel
             // 
-            this.logoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logoLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.logoLabel.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.logoLabel.ForeColor = System.Drawing.Color.White;
             this.logoLabel.Location = new System.Drawing.Point(0, 0);
             this.logoLabel.Name = "logoLabel";
-            this.logoLabel.Size = new System.Drawing.Size(250, 100);
+            this.logoLabel.Size = new System.Drawing.Size(250, 60);
             this.logoLabel.TabIndex = 0;
             this.logoLabel.Text = "Academia NET";
             this.logoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -423,6 +477,18 @@
             this.cerrarSesionPanel.ResumeLayout(false);
             this.cerrarSesionPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cerrarSesionPictureBox)).EndInit();
+            this.asignacionesPanel.ResumeLayout(false);
+            this.asignacionesPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.asignacionesPictureBox)).EndInit();
+            this.cursoPanel.ResumeLayout(false);
+            this.cursoPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cursoPictureBox)).EndInit();
+            this.comisionPanel.ResumeLayout(false);
+            this.comisionPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comisionPictureBox)).EndInit();
+            this.materiaPanel.ResumeLayout(false);
+            this.materiaPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.materiaPictureBox)).EndInit();
             this.usuarioPanel.ResumeLayout(false);
             this.usuarioPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.usuarioPictureBox)).EndInit();
@@ -436,11 +502,12 @@
             this.especialidadPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.especialidadPictureBox)).EndInit();
             this.logoPanel.ResumeLayout(false);
+            this.logoPanel.PerformLayout();
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
             this.ResumeLayout(false);
-        }
 
+        }
         #endregion
 
         private System.Windows.Forms.Panel sideMenuPanel;
@@ -472,5 +539,9 @@
         private System.Windows.Forms.Panel cursoPanel;
         private System.Windows.Forms.PictureBox cursoPictureBox;
         private System.Windows.Forms.Label cursoLabel;
+        private System.Windows.Forms.Panel asignacionesPanel;
+        private System.Windows.Forms.PictureBox asignacionesPictureBox;
+        private System.Windows.Forms.Label asignacionesLabel;
+        private System.Windows.Forms.Label userInfoLabel;
     }
 }

@@ -4,17 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-// Asumo que tienes estos DTOs y Servicios definidos en otros lugares.
-// using Application.DTOs;
-// using Application.Interfaces;
-
 [ApiController]
 [Route("api/[controller]")]
 public class AlumnoInscripcionController : ControllerBase
 {
     private readonly IAlumnoInscripcionService _inscripcionService;
 
-    // Inyectamos el servicio correspondiente para la lógica de inscripciones.
     public AlumnoInscripcionController(IAlumnoInscripcionService inscripcionService)
     {
         _inscripcionService = inscripcionService;
@@ -59,8 +54,6 @@ public class AlumnoInscripcionController : ControllerBase
         {
             var nuevaInscripcion = await _inscripcionService.AddAsync(inscripcionDto);
 
-            // Usamos CreatedAtRoute para devolver un 201 y la URL del nuevo recurso.
-            // Los parámetros de la ruta deben coincidir con los de GetById.
             return CreatedAtRoute(
                 "GetInscripcionById",
                 new { legajoAlumno = nuevaInscripcion.LegajoAlumno, idCurso = nuevaInscripcion.IdCurso },
@@ -68,7 +61,6 @@ public class AlumnoInscripcionController : ControllerBase
         }
         catch (System.Exception ex)
         {
-            // Capturamos excepciones específicas (ej. alumno ya inscrito) si es necesario.
             return BadRequest(ex.Message);
         }
     }
@@ -82,7 +74,6 @@ public class AlumnoInscripcionController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> Update(string legajoAlumno, int idCurso, AlumnoInscripcionDTO inscripcionDto)
     {
-        // Validamos que los identificadores de la ruta coincidan con los del cuerpo del request.
         if (legajoAlumno != inscripcionDto.LegajoAlumno || idCurso != inscripcionDto.IdCurso)
         {
             return BadRequest("Los identificadores de la ruta no coinciden con los del objeto.");
@@ -91,13 +82,36 @@ public class AlumnoInscripcionController : ControllerBase
         try
         {
             await _inscripcionService.UpdateAsync(inscripcionDto);
-            return NoContent(); // 204 No Content es la respuesta estándar para un PUT exitoso.
+            return NoContent();
         }
         catch (KeyNotFoundException ex)
         {
             return NotFound(ex.Message);
         }
         catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Elimina (anula) una inscripción existente.
+    /// </summary>
+    [HttpDelete("{legajoAlumno}/{idCurso}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> Delete(string legajoAlumno, int idCurso)
+    {
+        try
+        {
+            var success = await _inscripcionService.DeleteAsync(legajoAlumno, idCurso);
+            if (!success)
+            {
+                return NotFound("No se encontró la inscripción para anular.");
+            }
+            return NoContent();
+        }
+        catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }

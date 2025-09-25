@@ -19,11 +19,9 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddDbContext<TPIContext>(options =>
-         //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
     options.UseMySql(
         builder.Configuration.GetConnectionString("MySqlConnection"),
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MySqlConnection")),
-        // ----> AÑADE ESTA LÍNEA <----
         b => b.MigrationsAssembly("Infrastructure")
     )
 

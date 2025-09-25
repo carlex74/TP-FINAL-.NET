@@ -22,7 +22,6 @@ namespace Infrastructure.ApiClients
 
         public async Task<IEnumerable<PersonaDTO>> GetAll()
         {
-            // Pasamos las opciones al método de deserialización
             return await _httpClient.GetFromJsonAsync<IEnumerable<PersonaDTO>>("personas", _jsonOptions);
         }
 

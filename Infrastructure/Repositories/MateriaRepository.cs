@@ -23,7 +23,9 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<Materia>> GetAllAsync()
         {
-            return await _context.Materias.ToListAsync();
+            return await _context.Materias
+                                 .Include(m => m.Planes)
+                                 .ToListAsync();
         }
 
         public async Task AddAsync(Materia materia)

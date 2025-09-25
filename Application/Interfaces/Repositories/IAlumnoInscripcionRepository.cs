@@ -13,5 +13,6 @@ namespace ApplicationClean.Interfaces.Repositories
         Task<IEnumerable<AlumnoInscripcion>> GetAllAsync();
         Task AddAsync(AlumnoInscripcion inscripcion);
         Task UpdateAsync(AlumnoInscripcion inscripcion);
+        Task DeleteAsync(AlumnoInscripcion inscripcion);
     }
 }

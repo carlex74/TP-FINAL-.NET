@@ -15,5 +15,7 @@ namespace ApplicationClean.Interfaces.ApiClients
         Task Add(AlumnoInscripcionDTO inscripcion);
 
         Task Update(AlumnoInscripcionDTO inscripcion);
+
+        Task Delete(string legajo, int idCurso);
     }
 }

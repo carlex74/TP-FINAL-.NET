@@ -13,5 +13,6 @@ namespace ApplicationClean.Interfaces.Services
         Task UpdateAsync(AlumnoInscripcionDTO inscripcion);
         Task<AlumnoInscripcionDTO> GetByIdAsync(string legajo, int idCurso);
         Task<IEnumerable<AlumnoInscripcionDTO>> GetAllAsync();
+        Task<bool> DeleteAsync(string legajo, int idCurso);
     }
 }

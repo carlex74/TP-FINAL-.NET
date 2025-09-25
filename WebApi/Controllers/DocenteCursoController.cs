@@ -4,12 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-// Asumo que tienes estos DTOs y Servicios definidos.
-// using Application.DTOs;
-// using Application.Interfaces;
-
 [ApiController]
-[Route("api/docentes-cursos")] // Ruta más explícita y RESTful
+[Route("api/docentecursos")]
 public class DocenteCursoController : ControllerBase
 {
     private readonly IDocenteCursoService _docenteCursoService;
@@ -58,7 +54,6 @@ public class DocenteCursoController : ControllerBase
         {
             var nuevaAsignacion = await _docenteCursoService.AddAsync(docenteCursoDto);
 
-            // CORREGIDO: Debemos pasar AMBOS parámetros de la ruta para que se genere la URL correctamente.
             return CreatedAtRoute(
                 "GetDocenteCursoById",
                 new { idCurso = nuevaAsignacion.IdCurso, legajoDocente = nuevaAsignacion.LegajoDocente },
@@ -66,14 +61,12 @@ public class DocenteCursoController : ControllerBase
         }
         catch (System.Exception ex)
         {
-            // En un caso real, aquí podrías capturar excepciones más específicas,
-            // como una 'DuplicateEntryException' si la asignación ya existe.
             return BadRequest(ex.Message);
         }
     }
 
     /// <summary>
-    /// Actualiza los detalles de una asignación existente (ej. la condición del docente).
+    /// Actualiza los detalles de una asignación existente (ej. el cargo del docente).
     /// </summary>
     [HttpPut("{idCurso}/{legajoDocente}")]
     [ProducesResponseType(204)]
@@ -81,7 +74,6 @@ public class DocenteCursoController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> Update(int idCurso, string legajoDocente, DocenteCursoDTO docenteCursoDto)
     {
-        // CORREGIDO: La validación debe comprobar AMBAS partes de la clave compuesta.
         if (idCurso != docenteCursoDto.IdCurso || legajoDocente != docenteCursoDto.LegajoDocente)
         {
             return BadRequest("Los identificadores de la ruta no coinciden con los del cuerpo de la solicitud.");
@@ -90,12 +82,15 @@ public class DocenteCursoController : ControllerBase
         try
         {
             await _docenteCursoService.UpdateAsync(docenteCursoDto);
-            return NoContent(); // Respuesta estándar para un PUT/PATCH exitoso.
+            return NoContent();
         }
         catch (KeyNotFoundException ex)
         {
             return NotFound(ex.Message);
         }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
-
 }

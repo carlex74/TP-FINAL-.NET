@@ -41,7 +41,6 @@ namespace WindowsForms.Vistas.Comision
             try
             {
                 int id = SelectedItem().Nro;
-                // --- MEJORA: GetById ahora trae los planes ---
                 ComisionDTO comision = await _comisionClient.GetById(id);
                 if (comision == null)
                 {

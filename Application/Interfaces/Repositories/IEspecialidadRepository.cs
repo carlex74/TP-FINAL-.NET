@@ -7,7 +7,6 @@ namespace ApplicationClean.Interfaces.Repositories
         Task AddAsync(Especialidad especialidad);
         Task UpdateAsync(Especialidad especialidad);
         Task DeleteAsync(Especialidad especialidad);
-
         Task<Especialidad> GetByIdAsync(int id);
         Task<IEnumerable<Especialidad>> GetAllAsync();
     }

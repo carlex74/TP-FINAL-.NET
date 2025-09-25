@@ -138,7 +138,7 @@
             // 
             // picPassword
             // 
-            this.picPassword.Image = global::WindowsForms.Properties.Resources.icono_candado; // <-- Esto usa tu recurso
+            this.picPassword.Image = global::WindowsForms.Properties.Resources.icono_candado;
             this.picPassword.Location = new System.Drawing.Point(40, 175);
             this.picPassword.Name = "picPassword";
             this.picPassword.Size = new System.Drawing.Size(25, 25);
@@ -148,7 +148,7 @@
             // 
             // picUser
             // 
-            this.picUser.Image = global::WindowsForms.Properties.Resources.icono_persona; // <-- Esto usa tu recurso
+            this.picUser.Image = global::WindowsForms.Properties.Resources.icono_persona;
             this.picUser.Location = new System.Drawing.Point(40, 105);
             this.picUser.Name = "picUser";
             this.picUser.Size = new System.Drawing.Size(25, 25);

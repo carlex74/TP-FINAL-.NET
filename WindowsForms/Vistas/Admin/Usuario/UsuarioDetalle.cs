@@ -100,7 +100,7 @@ namespace WindowsForms
                     };
                     await _usuarioClient.Add(dto);
                 }
-                else // Mode == Update
+                else
                 {
                     var dto = new ActualizarUsuarioDTO
                     {
@@ -165,7 +165,7 @@ namespace WindowsForms
                 claveLabel.Visible = false;
                 claveTextBox.Visible = false;
                 personaComboBox.Enabled = false;
-                tipoComboBox.Enabled = false; // El tipo no se puede cambiar
+                tipoComboBox.Enabled = false;
                 habilitadoCheckBox.Visible = true;
             }
         }
