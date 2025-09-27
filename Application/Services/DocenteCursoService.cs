@@ -47,7 +47,7 @@ namespace ApplicationClean.Services
             return _mapper.Map<DocenteCursoDTO>(nuevaAsignacion);
         }
 
-        public async Task UpdateAsync(DocenteCursoDTO docenteCursoDto)
+        public async Task<DocenteCursoDTO> UpdateAsync(DocenteCursoDTO docenteCursoDto)
         {
             var existingAsignacion = await _repository.GetByIdAsync(docenteCursoDto.IdCurso, docenteCursoDto.LegajoDocente);
             if (existingAsignacion == null)
@@ -58,6 +58,8 @@ namespace ApplicationClean.Services
             existingAsignacion.SetCargo(docenteCursoDto.Cargo);
 
             await _repository.UpdateAsync(existingAsignacion);
+
+            return docenteCursoDto;
         }
 
         public async Task<DocenteCursoDTO> GetByIdAsync(int idCurso, string legajo)

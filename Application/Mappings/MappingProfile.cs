@@ -9,8 +9,18 @@ public class MappingProfile : Profile
         // Mapeo de Entidad a DTO
         CreateMap<AlumnoInscripcion, AlumnoInscripcionDTO>();
         CreateMap<DocenteCurso,DocenteCursoDTO>();
+        CreateMap<Comision, ComisionDTO>();
+        CreateMap<Curso, CursoDTO>();
+        CreateMap<Especialidad,EspecialidadDTO>();
         // Mapeo de DTO a Entidad (para el AddAsync)
         CreateMap<AlumnoInscripcionDTO, AlumnoInscripcion>();
         CreateMap<DocenteCursoDTO, DocenteCurso>();
+        CreateMap<ComisionDTO, Comision>();
+        CreateMap<CursoDTO, Curso>();
+        CreateMap<EspecialidadDTO, Especialidad>();
+        CreateMap<Plan, PlanDTO>()
+            .ForMember(dest => dest.EspecialidadDescripcion,
+                       opt => opt.MapFrom(src => src.Especialidad.Descripcion));
+        CreateMap<PlanDTO, Plan>();
     }
 }

@@ -44,7 +44,7 @@ namespace ApplicationClean.Services
             return _mapper.Map<AlumnoInscripcionDTO>(nuevaInscripcion);
         }
 
-        public async Task UpdateAsync(AlumnoInscripcionDTO inscripcionDto)
+        public async Task<AlumnoInscripcionDTO> UpdateAsync(AlumnoInscripcionDTO inscripcionDto)
         {
             var existingInscripcion = await _repository.GetByIdAsync(inscripcionDto.LegajoAlumno, inscripcionDto.IdCurso);
             if (existingInscripcion == null)
@@ -56,6 +56,8 @@ namespace ApplicationClean.Services
             existingInscripcion.SetNota(inscripcionDto.Nota);
 
             await _repository.UpdateAsync(existingInscripcion);
+
+            return inscripcionDto;
         }
 
         public async Task<AlumnoInscripcionDTO> GetByIdAsync(string legajo, int idCurso)
