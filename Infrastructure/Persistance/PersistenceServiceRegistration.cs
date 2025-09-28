@@ -6,7 +6,7 @@ using Infrastructure.Context;
 
 namespace Infrastructure.Persistence
 {
-    // Una clase estática para contener nuestro método de extensión
+ 
     public static class PersistenceServiceRegistration
     {
         public static IServiceCollection AddPersistenceInfrastructure(this IServiceCollection services, IConfiguration configuration)
