@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace WindowsForms.Vistas.Materia
+namespace WindowsForms
 {
     public partial class PlanAsignacion : Form
     {

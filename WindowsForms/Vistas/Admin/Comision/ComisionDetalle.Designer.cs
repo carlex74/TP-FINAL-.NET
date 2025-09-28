@@ -1,4 +1,4 @@
-﻿namespace WindowsForms.Vistas.Comision
+﻿namespace WindowsForms
 {
     partial class ComisionDetalle
     {

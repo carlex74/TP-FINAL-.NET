@@ -19,7 +19,7 @@ namespace ApplicationClean.Services
             _especialidadRepository = especialidadRepository;
         }
 
-        public async Task<PlanDTO> AddAsync(PlanDTO planDTO)
+        public async Task<PlanDTO> AddAsync(CrearPlanDTO planDTO)
         {
             var especialidad = await _especialidadRepository.GetByIdAsync(planDTO.IdEspecialidad);
             if (especialidad == null)
@@ -30,8 +30,7 @@ namespace ApplicationClean.Services
             var plan = new Plan(0, planDTO.Descripcion, planDTO.IdEspecialidad);
             await _planRepository.AddAsync(plan);
 
-            planDTO.Id = plan.Id;
-            return planDTO;
+            return MapToPlanDTO(plan);
         }
 
         public async Task<PlanDTO> UpdateAsync(PlanDTO planDTO)

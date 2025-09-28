@@ -19,34 +19,22 @@ namespace Infrastructure.ApiClient
             _jsonOptions = jsonOptions;
         }
 
-        /// <summary>
-        /// Obtiene todas las inscripciones de alumnos a cursos.
-        /// </summary>
         public async Task<IEnumerable<AlumnoInscripcionDTO>> GetAll()
         {
             return await _client.GetFromJsonAsync<IEnumerable<AlumnoInscripcionDTO>>("AlumnoInscripcion", _jsonOptions);
         }
 
-        /// <summary>
-        /// Obtiene una inscripción específica por el legajo del alumno y el ID del curso.
-        /// </summary>
         public async Task<AlumnoInscripcionDTO> GetById(string legajo, int idCurso)
         {
             return await _client.GetFromJsonAsync<AlumnoInscripcionDTO>($"AlumnoInscripcion/{legajo}/{idCurso}", _jsonOptions);
         }
 
-        /// <summary>
-        /// Crea una nueva inscripción.
-        /// </summary>
         public async Task Add(AlumnoInscripcionDTO inscripcion)
         {
             var response = await _client.PostAsJsonAsync("AlumnoInscripcion", inscripcion, _jsonOptions);
             response.EnsureSuccessStatusCode();
         }
 
-        /// <summary>
-        /// Actualiza una inscripción existente.
-        /// </summary>
         public async Task Update(AlumnoInscripcionDTO inscripcion)
         {
             var response = await _client.PutAsJsonAsync(

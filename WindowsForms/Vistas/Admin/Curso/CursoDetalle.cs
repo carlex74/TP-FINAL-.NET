@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace WindowsForms.Vistas.Curso
+namespace WindowsForms
 {
     public partial class CursoDetalle : Form
     {

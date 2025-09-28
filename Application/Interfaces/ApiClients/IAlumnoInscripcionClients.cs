@@ -10,6 +10,7 @@ namespace ApplicationClean.Interfaces.ApiClients
     public interface IAlumnoInscripcionClients
     {
         Task<AlumnoInscripcionDTO> GetById(string legajo, int idCurso);
+
         Task<IEnumerable<AlumnoInscripcionDTO>> GetAll();
 
         Task Add(AlumnoInscripcionDTO inscripcion);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Domain.Entities.Usuario;
 
-namespace WindowsForms.Vistas.Docente_curso
+namespace WindowsForms
 {
     public partial class DocenteCursoLista : Form
     {

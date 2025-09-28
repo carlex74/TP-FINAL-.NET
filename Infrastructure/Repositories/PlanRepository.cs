@@ -27,7 +27,6 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Plan>> GetByIdsAsync(IEnumerable<int> ids)
         {
-            // Esta consulta es miles de veces más eficiente que GetAllAsync().
             return await _context.Planes
                                  .Where(p => ids.Contains(p.Id))
                                  .ToListAsync();

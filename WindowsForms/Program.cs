@@ -8,11 +8,6 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Forms;
-using WindowsForms.Vistas.Comision;
-using WindowsForms.Vistas.Curso;
-using WindowsForms.Vistas.Materia;
-using WindowsForms.Vistas.Docente_curso;
-using WindowsForms.Vistas.Alumno;
 using static Domain.Entities.Usuario;
 
 namespace WindowsForms
@@ -43,7 +38,7 @@ namespace WindowsForms
                 var loggedInUser = UserSession.GetCurrentUser();
                 if (loggedInUser == null)
                 {
-                    MessageBox.Show("Error al recuperar la sesin.", "Error");
+                    MessageBox.Show("Error al recuperar la sesión.", "Error");
                     break;
                 }
 
@@ -53,11 +48,11 @@ namespace WindowsForms
                     case TipoUsuario.Administrador:
                         mainForm = ServiceProvider.GetRequiredService<Home>();
                         break;
-                    case TipoUsuario.Docente:
-                        mainForm = ServiceProvider.GetRequiredService<EnConstruccionForm>();
-                        break;
                     case TipoUsuario.Alumno:
                         mainForm = ServiceProvider.GetRequiredService<PortalAlumno>();
+                        break;
+                    case TipoUsuario.Docente:
+                        mainForm = ServiceProvider.GetRequiredService<EnConstruccionForm>();
                         break;
                 }
 
@@ -72,26 +67,55 @@ namespace WindowsForms
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            string baseAddress = "https://localhost:7111/api/";
+            string baseAddress = "https://localhost:7111/"; 
 
             var jsonSerializerOptions = new JsonSerializerOptions
             {
                 Converters = { new JsonStringEnumConverter() },
                 PropertyNameCaseInsensitive = true
             };
-
             services.AddSingleton(jsonSerializerOptions);
 
-            services.AddHttpClient<IAPIAuthClients, AuthApiClient>(client => client.BaseAddress = new Uri(baseAddress));
-            services.AddHttpClient<IAPIEspecialidadClients, EspecialidadApiClient>(client => client.BaseAddress = new Uri(baseAddress));
-            services.AddHttpClient<IAPIPlanClients, PlanApiClient>(client => client.BaseAddress = new Uri(baseAddress));
-            services.AddHttpClient<IAPIPersonaClients, PersonaApiClient>(client => client.BaseAddress = new Uri(baseAddress));
-            services.AddHttpClient<IAPIUsuarioClients, UsuarioApiClient>(client => client.BaseAddress = new Uri(baseAddress));
-            services.AddHttpClient<IAPIMateriaClient, MateriaApiClient>(client => client.BaseAddress = new Uri(baseAddress));
-            services.AddHttpClient<IAPIComisionClient, ComisionApiClient>(client => client.BaseAddress = new Uri(baseAddress));
-            services.AddHttpClient<IAPICursoClient, CursoApiClient>(client => client.BaseAddress = new Uri(baseAddress));
-            services.AddHttpClient<IAPIDocenteCursoClient, DocenteCursoApiClient>(client => client.BaseAddress = new Uri(baseAddress));
-            services.AddHttpClient<IAlumnoInscripcionClients, AlumnoInscripcionApiClient>(client => client.BaseAddress = new Uri(baseAddress));
+            services.AddHttpClient<IAPIAuthClients, AuthApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
+            services.AddHttpClient<IAPIEspecialidadClients, EspecialidadApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
+            services.AddHttpClient<IAPIPlanClients, PlanApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
+            services.AddHttpClient<IAPIPersonaClients, PersonaApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
+            services.AddHttpClient<IAPIUsuarioClients, UsuarioApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
+            services.AddHttpClient<IAPIMateriaClient, MateriaApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
+            services.AddHttpClient<IAPIComisionClient, ComisionApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
+            services.AddHttpClient<IAPICursoClient, CursoApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
+            services.AddHttpClient<IAPIDocenteCursoClient, DocenteCursoApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
+            services.AddHttpClient<IAlumnoInscripcionClients, AlumnoInscripcionApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            });
 
             services.AddTransient<LoginForm>();
             services.AddTransient<EnConstruccionForm>();

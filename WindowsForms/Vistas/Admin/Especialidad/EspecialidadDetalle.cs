@@ -5,7 +5,6 @@ using System.Windows.Forms;
 
 namespace WindowsForms
 {
-    // El enum FormMode se puede mantener, es muy útil
     public enum FormMode { Add, Update }
 
     public partial class EspecialidadDetalle : Form
@@ -48,7 +47,7 @@ namespace WindowsForms
                 {
                     await _especialidadClient.Add(especialidad);
                 }
-                this.DialogResult = DialogResult.OK; // Indicamos que la operación fue exitosa
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)

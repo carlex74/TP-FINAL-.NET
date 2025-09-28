@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using WindowsForms.Vistas.Comision;
-using WindowsForms.Vistas.Curso;
-using WindowsForms.Vistas.Docente_curso;
-using WindowsForms.Vistas.Materia;
 
 namespace WindowsForms
 {

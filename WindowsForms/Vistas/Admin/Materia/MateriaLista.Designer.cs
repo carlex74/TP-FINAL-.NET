@@ -1,4 +1,4 @@
-﻿namespace WindowsForms.Vistas.Materia
+﻿namespace WindowsForms
 {
     partial class MateriaLista
     {

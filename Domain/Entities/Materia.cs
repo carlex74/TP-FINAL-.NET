@@ -10,7 +10,6 @@ namespace Domain.Entities
         public int HsSemanales { get; private set; }
         public int HsTotales { get; private set; }
 
-        // Many to one
         public ICollection<Plan> Planes { get; private set; }
 
         public Materia(int id, string nombre, string descripcion, int hsSemanales, int hsTotales)

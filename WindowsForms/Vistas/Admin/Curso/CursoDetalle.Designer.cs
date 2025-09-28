@@ -1,4 +1,4 @@
-﻿namespace WindowsForms.Vistas.Curso
+﻿namespace WindowsForms
 {
     partial class CursoDetalle
     {

@@ -78,7 +78,7 @@ namespace WindowsForms
             emailTextBox.Text = persona.Email;
             telefonoTextBox.Text = persona.Telefono;
             direccionTextBox.Text = persona.Direccion;
-            // Asegurarnos de que la fecha sea válida para el control
+
             if (persona.FechaNacimiento > fechaNacimientoPicker.MinDate && persona.FechaNacimiento < fechaNacimientoPicker.MaxDate)
             {
                 fechaNacimientoPicker.Value = persona.FechaNacimiento;
@@ -104,7 +104,6 @@ namespace WindowsForms
 
         private bool ValidatePersona()
         {
-            // Resetear errores
             errorProvider.SetError(nombreTextBox, string.Empty);
             errorProvider.SetError(apellidoTextBox, string.Empty);
             errorProvider.SetError(dniTextBox, string.Empty);

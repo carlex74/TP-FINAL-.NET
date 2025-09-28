@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsForms.Vistas.Alumno
+namespace WindowsForms
 {
     public partial class PortalAlumno : Form
     {
@@ -170,8 +170,16 @@ namespace WindowsForms.Vistas.Alumno
 
             var filaSeleccionada = misInscripcionesDataGridView.SelectedRows[0];
 
-            int idCursoAnular = (int)filaSeleccionada.Cells["CursoIdColumn"].Value;
-            string nombreMateria = filaSeleccionada.Cells["MateriaColumn"].Value.ToString();
+            dynamic dataItem = filaSeleccionada.DataBoundItem;
+
+            if (dataItem == null)
+            {
+                MessageBox.Show("No se pudo obtener la información de la fila seleccionada.", "Error");
+                return;
+            }
+
+            int idCursoAnular = dataItem.CursoId;
+            string nombreMateria = dataItem.Materia;
 
             var confirmacion = MessageBox.Show($"¿Está seguro de que desea ANULAR su inscripción a la materia '{nombreMateria}'?", "Anular Inscripción", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WindowsForms.Vistas.Materia;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace WindowsForms.Vistas.Comision
+namespace WindowsForms
 {
     public partial class ComisionDetalle : Form
     {
@@ -62,32 +62,31 @@ namespace WindowsForms.Vistas.Comision
 
             try
             {
-                comision.Descripcion = descripcionTextBox.Text;
-                comision.AnioEspecialidad = int.Parse(anioTextBox.Text);
+                var comisionParaGuardar = new ComisionDTO
+                {
+                    Nro = this.Comision.Nro,
+                    Descripcion = descripcionTextBox.Text,
+                    AnioEspecialidad = int.Parse(anioTextBox.Text)
+                };
 
                 if (Mode == FormMode.Update)
                 {
-                    await _comisionClient.Update(comision);
-                    await _comisionClient.AssignPlanes(comision.Nro, _planesSeleccionadosIds);
+                    await _comisionClient.Update(comisionParaGuardar);
+                    await _comisionClient.AssignPlanes(comisionParaGuardar.Nro, _planesSeleccionadosIds);
+
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
-                else 
+                else
                 {
-                    var comisionCreada = await _comisionClient.Add(comision);
+                    var comisionCreada = await _comisionClient.Add(comisionParaGuardar);
                     if (_planesSeleccionadosIds.Any())
                     {
                         await _comisionClient.AssignPlanes(comisionCreada.Nro, _planesSeleccionadosIds);
                     }
 
-                    MessageBox.Show("Comisión creada con éxito. Ahora puede seguir editando.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    this.Comision = await _comisionClient.GetById(comisionCreada.Nro);
-                    this.Mode = FormMode.Update;
-                    _planesSeleccionadosIds = this.Comision.Planes?.Select(p => p.Id).ToList() ?? new List<int>();
-
-                    SetFormMode();
-                    SetComisionUI();
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
             }
             catch (Exception ex)
@@ -132,13 +131,13 @@ namespace WindowsForms.Vistas.Comision
 
         private void SetComisionUI()
         {
-            idTextBox.Text = comision.Nro.ToString();
-            descripcionTextBox.Text = comision.Descripcion;
-            anioTextBox.Text = comision.AnioEspecialidad.ToString();
+            idTextBox.Text = Comision.Nro.ToString();
+            descripcionTextBox.Text = Comision.Descripcion;
+            anioTextBox.Text = Comision.AnioEspecialidad.ToString();
 
-            if (comision.Planes != null && comision.Planes.Any())
+            if (Comision.Planes != null && Comision.Planes.Any())
             {
-                planesAsignadosTextBox.Text = string.Join(Environment.NewLine, comision.Planes.Select(p => p.DescripcionCompleta));
+                planesAsignadosTextBox.Text = string.Join(Environment.NewLine, Comision.Planes.Select(p => p.DescripcionCompleta));
             }
             else
             {
@@ -154,15 +153,14 @@ namespace WindowsForms.Vistas.Comision
                 idLabel.Visible = false;
                 idTextBox.Visible = false;
                 if (anioTextBox.Text == "0") anioTextBox.Text = "";
-                btnAsignarPlanes.Enabled = true;
             }
             else if (mode == FormMode.Update)
             {
                 titleLabel.Text = "Modificar Comisión";
                 idLabel.Visible = true;
                 idTextBox.Visible = true;
-                btnAsignarPlanes.Enabled = true;
             }
+            btnAsignarPlanes.Enabled = true;
         }
 
         private bool ValidateForm()

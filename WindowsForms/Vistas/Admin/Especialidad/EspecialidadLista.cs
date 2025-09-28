@@ -12,8 +12,6 @@ namespace WindowsForms
         public EspecialidadLista(IAPIEspecialidadClients especialidadClient)
         {
             InitializeComponent();
-            // Esto es necesario para que el formulario se muestre sin bordes
-            // cuando se carga dentro del panel del Home.
             this.FormBorderStyle = FormBorderStyle.None;
             _especialidadClient = especialidadClient;
         }
@@ -29,7 +27,7 @@ namespace WindowsForms
             {
                 especialidadDetalle.Mode = FormMode.Add;
                 especialidadDetalle.Especialidad = new EspecialidadDTO();
-                // Usamos DialogResult para saber si debemos recargar la grilla
+
                 if (especialidadDetalle.ShowDialog() == DialogResult.OK)
                 {
                     GetAllAndLoad();
@@ -52,7 +50,7 @@ namespace WindowsForms
                 if (especialidad == null)
                 {
                     MessageBox.Show("No se encontró la especialidad seleccionada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    GetAllAndLoad(); // Recargamos por si se eliminó
+                    GetAllAndLoad(); 
                     return;
                 }
 

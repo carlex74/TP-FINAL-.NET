@@ -39,7 +39,7 @@ public class PlanesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(PlanDTO), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateAsync(PlanDTO dto)
+    public async Task<IActionResult> CreateAsync([FromBody] CrearPlanDTO dto)
     {
         try
         {

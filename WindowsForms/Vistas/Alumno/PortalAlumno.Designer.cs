@@ -1,4 +1,4 @@
-﻿namespace WindowsForms.Vistas.Alumno
+﻿namespace WindowsForms
 {
     partial class PortalAlumno
     {

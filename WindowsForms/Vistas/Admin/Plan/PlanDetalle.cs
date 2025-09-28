@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace WindowsForms
 {
@@ -44,7 +45,7 @@ namespace WindowsForms
             try
             {
                 var especialidades = await _especialidadClient.GetAll();
-                especialidadComboBox.DataSource = especialidades;
+                especialidadComboBox.DataSource = especialidades.ToList();
                 especialidadComboBox.DisplayMember = "Descripcion";
                 especialidadComboBox.ValueMember = "Id";
             }
@@ -60,17 +61,20 @@ namespace WindowsForms
 
             try
             {
-                plan.Descripcion = descripcionTextBox.Text;
-                plan.IdEspecialidad = (int)especialidadComboBox.SelectedValue;
-
                 if (Mode == FormMode.Update)
                 {
-                    plan.Id = int.Parse(idTextBox.Text);
+                    plan.Descripcion = descripcionTextBox.Text;
+                    plan.IdEspecialidad = (int)especialidadComboBox.SelectedValue;
                     await _planClient.Update(plan);
                 }
                 else
                 {
-                    await _planClient.Add(plan);
+                    var crearPlanDto = new CrearPlanDTO
+                    {
+                        Descripcion = descripcionTextBox.Text,
+                        IdEspecialidad = (int)especialidadComboBox.SelectedValue
+                    };
+                    await _planClient.Add(crearPlanDto);
                 }
 
                 this.DialogResult = DialogResult.OK;

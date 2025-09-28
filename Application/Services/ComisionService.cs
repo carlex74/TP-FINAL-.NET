@@ -25,17 +25,13 @@ namespace ApplicationClean.Services
 
         public async Task<ComisionDTO> AddAsync(ComisionDTO comisionDto)
         {
-            // Podríamos añadir validación aquí, por ejemplo, para asegurar que la descripción no exista ya.
-
             var comision = _mapper.Map<Comision>(comisionDto);
             await _comisionRepository.AddAsync(comision);
 
-            // ¡SIN llamada extra a la DB! EF Core actualiza el objeto 'comision' con el ID generado.
-            // Simplemente mapeamos ese objeto de vuelta a un DTO.
             return _mapper.Map<ComisionDTO>(comision);
         }
 
-        public async Task<ComisionDTO> UpdateAsync(ComisionDTO comisionDto) // Cambiado a Task
+        public async Task<ComisionDTO> UpdateAsync(ComisionDTO comisionDto)
         {
             var comisionExistente = await _comisionRepository.GetByIdAsync(comisionDto.Nro);
             if (comisionExistente == null)
@@ -43,7 +39,6 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró una Comisión con el ID {comisionDto.Nro}.");
             }
 
-            // AutoMapper puede manejar la actualización de un objeto existente desde un DTO.
             _mapper.Map(comisionDto, comisionExistente);
 
             await _comisionRepository.UpdateAsync(comisionExistente);
@@ -51,14 +46,12 @@ namespace ApplicationClean.Services
             return comisionDto;
         }
 
-        public async Task<bool> DeleteAsync(int id) // Cambiado a Task
+        public async Task<bool> DeleteAsync(int id)
         {
             var comision = await _comisionRepository.GetByIdAsync(id);
             if (comision == null)
             {
                 return false;
-                // Lanzamos una excepción en lugar de devolver false. Es más explícito.
-                /*throw new KeyNotFoundException($"No se encontró una Comisión con el ID {id} para eliminar.");*/
             }
             await _comisionRepository.DeleteAsync(comision);
             return true;
@@ -86,10 +79,7 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró la comisión con el ID {comisionId}.");
             }
 
-            
-            // En lugar de traer TODOS los planes, solo traemos los que necesitamos.
             var planesAAsignar = await _planRepository.GetByIdsAsync(planIds ?? new List<int>());
-
             
             comision.Planes.Clear();
             foreach (var plan in planesAAsignar)

@@ -3,7 +3,7 @@ using ApplicationClean.Interfaces.ApiClients;
 using System;
 using System.Windows.Forms;
 
-namespace WindowsForms.Vistas.Materia
+namespace WindowsForms
 {
     public partial class MateriaLista : Form
     {

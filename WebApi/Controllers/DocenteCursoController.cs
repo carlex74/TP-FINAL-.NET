@@ -93,4 +93,27 @@ public class DocenteCursoController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    /// <summary>
+    /// Elimina una asignación de docente a un curso.
+    /// </summary>
+    [HttpDelete("{idCurso}/{legajoDocente}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(int idCurso, string legajoDocente)
+    {
+        try
+        {
+            await _docenteCursoService.DeleteAsync(idCurso, legajoDocente);
+            return NoContent(); 
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

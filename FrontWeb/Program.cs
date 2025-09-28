@@ -17,13 +17,10 @@ builder.RootComponents.Add<App>("#app");
 // { "ApiBaseAddress": "https://localhost:7111/" }
 string baseAddress = builder.Configuration.GetValue<string>("ApiBaseAddress");
 
-//Configuracion de servicios 
 ConfigureServices(builder.Services, baseAddress);
 
 await builder.Build().RunAsync();
 
-
-// método separado para la organización
 static void ConfigureServices(IServiceCollection services, string baseAddress)
 {
 
@@ -34,8 +31,6 @@ static void ConfigureServices(IServiceCollection services, string baseAddress)
     };
     services.AddSingleton(jsonSerializerOptions); 
 
-  
-    // El 'AddHttpClient' ya registra el cliente (AuthApiClient) y la interfaz.
     services.AddHttpClient<IAPIAuthClients, AuthApiClient>(client => client.BaseAddress = new Uri(baseAddress + "api/"));
     services.AddHttpClient<IAPIEspecialidadClients, EspecialidadApiClient>(client => client.BaseAddress = new Uri(baseAddress + "api/"));
     services.AddHttpClient<IAPIPlanClients, PlanApiClient>(client => client.BaseAddress = new Uri(baseAddress + "api/"));

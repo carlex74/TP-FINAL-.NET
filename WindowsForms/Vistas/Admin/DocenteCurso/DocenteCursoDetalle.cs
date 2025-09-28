@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using static Domain.Entities.DocenteCurso;
 using static Domain.Entities.Usuario;
 
-namespace WindowsForms.Vistas.Docente_curso
+namespace WindowsForms
 {
     public partial class DocenteCursoDetalle : Form
     {
@@ -51,20 +51,17 @@ namespace WindowsForms.Vistas.Docente_curso
         {
             try
             {
-                // Cargar Docentes
                 var usuarios = await _usuarioClient.GetAll();
                 var docentes = usuarios.Where(u => u.Tipo == TipoUsuario.Docente).ToList();
                 docenteComboBox.DataSource = docentes;
                 docenteComboBox.DisplayMember = "PersonaNombreCompleto";
                 docenteComboBox.ValueMember = "Legajo";
 
-                // Cargar Cursos
                 var cursos = await _cursoClient.GetAll();
                 cursoComboBox.DataSource = cursos.ToList();
                 cursoComboBox.DisplayMember = "Descripcion";
                 cursoComboBox.ValueMember = "Id";
 
-                // Cargar Cargos
                 cargoComboBox.DataSource = Enum.GetValues(typeof(TipoCargos));
             }
             catch (Exception ex)

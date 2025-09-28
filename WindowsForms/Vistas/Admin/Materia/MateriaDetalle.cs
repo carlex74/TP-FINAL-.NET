@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace WindowsForms.Vistas.Materia
+namespace WindowsForms
 {
     public partial class MateriaDetalle : Form
     {
@@ -27,7 +28,6 @@ namespace WindowsForms.Vistas.Materia
 
         private async void MateriaDetalle_Load(object sender, EventArgs e)
         {
-            // Si estamos en modo Update, cargamos la materia con sus planes
             if (Mode == FormMode.Update && Materia != null && Materia.Id > 0)
             {
                 try
@@ -55,7 +55,6 @@ namespace WindowsForms.Vistas.Materia
             SetMateriaUI();
         }
 
-
         private async void aceptarButton_Click(object sender, EventArgs e)
         {
             if (!ValidateForm()) return;
@@ -78,11 +77,9 @@ namespace WindowsForms.Vistas.Materia
                     {
                         await _materiaClient.AssignPlanes(materiaCreada.Id, _planesSeleccionadosIds);
                     }
-                    MessageBox.Show("Materia creada con éxito. Ahora puede seguir editando.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Materia = await _materiaClient.GetById(materiaCreada.Id);
-                    this.Mode = FormMode.Update;
-                    SetFormMode();
-                    SetMateriaUI();
+
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
                 else
                 {
@@ -155,17 +152,15 @@ namespace WindowsForms.Vistas.Materia
                 titleLabel.Text = "Nueva Materia";
                 idLabel.Visible = false;
                 idTextBox.Visible = false;
-                btnAsignarPlanes.Enabled = true;
             }
             else
             {
                 titleLabel.Text = "Modificar Materia";
                 idLabel.Visible = true;
                 idTextBox.Visible = true;
-                btnAsignarPlanes.Enabled = true;
             }
+            btnAsignarPlanes.Enabled = true;
         }
-
 
         private bool ValidateForm()
         {
