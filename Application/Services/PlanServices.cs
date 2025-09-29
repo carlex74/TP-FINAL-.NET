@@ -1,6 +1,7 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
+using AutoMapper;
 using Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,13 @@ namespace ApplicationClean.Services
     {
         private readonly IPlanRepository _planRepository;
         private readonly IEspecialidadRepository _especialidadRepository;
+        private readonly IMapper _mapper;
 
-        public PlanServices(IPlanRepository planRepository, IEspecialidadRepository especialidadRepository, IMateriaRepository materiaRepository)
+        public PlanServices(IPlanRepository planRepository, IEspecialidadRepository especialidadRepository, IMateriaRepository materiaRepository, IMapper mapper)
         {
             _planRepository = planRepository;
             _especialidadRepository = especialidadRepository;
+            _mapper = mapper;
         }
 
         public async Task<PlanDTO> AddAsync(CrearPlanDTO planDTO)
@@ -27,10 +30,11 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No existe una especialidad con el ID {planDTO.IdEspecialidad}. No se puede crear el plan.");
             }
 
-            var plan = new Plan(0, planDTO.Descripcion, planDTO.IdEspecialidad);
-            await _planRepository.AddAsync(plan);
+            var newPlan = _mapper.Map<Plan>(planDTO);
 
-            return MapToPlanDTO(plan);
+            await _planRepository.AddAsync(newPlan);
+
+            return _mapper.Map<PlanDTO>(newPlan);
         }
 
         public async Task<PlanDTO> UpdateAsync(PlanDTO planDTO)
@@ -71,25 +75,13 @@ namespace ApplicationClean.Services
         public async Task<PlanDTO> GetByIdAsync(int id)
         {
             var plan = await _planRepository.GetByIdAsync(id);
-            return MapToPlanDTO(plan);
+            return _mapper.Map<PlanDTO>(plan);
         }
 
         public async Task<IEnumerable<PlanDTO>> GetAllAsync()
         {
             var planes = await _planRepository.GetAllAsync();
-            return planes.Select(MapToPlanDTO);
-        }
-
-        private PlanDTO MapToPlanDTO(Plan plan)
-        {
-            if (plan == null) return null;
-            return new PlanDTO
-            {
-                Id = plan.Id,
-                Descripcion = plan.Descripcion,
-                IdEspecialidad = plan.IdEspecialidad,
-                EspecialidadDescripcion = plan.Especialidad?.Descripcion ?? "N/A"
-            };
+            return _mapper.Map<IEnumerable<PlanDTO>>(planes);
         }
     }
 }

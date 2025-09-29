@@ -1,6 +1,7 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
+using AutoMapper;
 using Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,22 @@ namespace ApplicationClean.Services
     {
         private readonly IMateriaRepository _materiaRepository;
         private readonly IPlanRepository _planRepository;
+        private readonly IMapper _mapper;
 
-        public MateriaService(IMateriaRepository materiaRepository, IPlanRepository planRepository)
+        public MateriaService(IMateriaRepository materiaRepository, IPlanRepository planRepository, IMapper mapper)
         {
             _materiaRepository = materiaRepository;
             _planRepository = planRepository;
+            _mapper = mapper;
         }
 
         public async Task<MateriaDTO> AddAsync(MateriaDTO materiaDto)
         {
-            var materia = new Materia(0, materiaDto.Nombre, materiaDto.Descripcion, materiaDto.HsSemanales, materiaDto.HsTotales);
+            var nuevaMateria = _mapper.Map<Materia>(materiaDto);
 
-            await _materiaRepository.AddAsync(materia);
+            await _materiaRepository.AddAsync(nuevaMateria);
 
-            return MapToMateriaDTO(materia);
+            return _mapper.Map<MateriaDTO>(nuevaMateria);
         }
 
         public async Task<MateriaDTO> UpdateAsync(MateriaDTO materiaDto)
@@ -59,13 +62,15 @@ namespace ApplicationClean.Services
         public async Task<MateriaDTO> GetByIdAsync(int id)
         {
             var materia = await _materiaRepository.GetByIdWithPlanesAsync(id);
-            return MapToMateriaDTO(materia);
+            if (materia == null) return null;
+
+            return _mapper.Map<MateriaDTO>(materia);
         }
 
         public async Task<IEnumerable<MateriaDTO>> GetAllAsync()
         {
             var materias = await _materiaRepository.GetAllAsync();
-            return materias.Select(MapToMateriaDTO);
+            return _mapper.Map<IEnumerable<MateriaDTO>>(materias);
         }
 
         public async Task AssignPlanesAsync(int materiaId, List<int> planIds)
@@ -86,26 +91,6 @@ namespace ApplicationClean.Services
             }
 
             await _materiaRepository.UpdateAsync(materia);
-        }
-
-        private MateriaDTO MapToMateriaDTO(Materia materia)
-        {
-            if (materia == null) return null;
-            return new MateriaDTO
-            {
-                Id = materia.Id,
-                Nombre = materia.Nombre,
-                Descripcion = materia.Descripcion,
-                HsSemanales = materia.HsSemanales,
-                HsTotales = materia.HsTotales,
-                Planes = materia.Planes?.Select(p => new PlanDTO
-                {
-                    Id = p.Id,
-                    Descripcion = p.Descripcion,
-                    IdEspecialidad = p.IdEspecialidad,
-                    EspecialidadDescripcion = p.Especialidad?.Descripcion ?? "N/A"
-                }).ToList() ?? new List<PlanDTO>()
-            };
         }
     }
 }

@@ -2,6 +2,7 @@
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
 using Domain.Entities;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,20 +12,21 @@ namespace ApplicationClean.Services
     public class EspecialidadServices : IEspecialidadService
     {
         private readonly IEspecialidadRepository _repository;
+        private readonly IMapper _mapper;
 
-        public EspecialidadServices(IEspecialidadRepository repository)
+        public EspecialidadServices(IEspecialidadRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<EspecialidadDTO> AddAsync(EspecialidadDTO especialidadDTO)
         {
-            var especialidad = new Especialidad(0, especialidadDTO.Descripcion);
+            var nuevaEspecialidad = _mapper.Map<Especialidad>(especialidadDTO);
 
-            await _repository.AddAsync(especialidad);
+            await _repository.AddAsync(nuevaEspecialidad);
 
-            especialidadDTO.Id = especialidad.Id;
-            return especialidadDTO;
+            return _mapper.Map<EspecialidadDTO>(nuevaEspecialidad);
         }
 
         public async Task<EspecialidadDTO> UpdateAsync(EspecialidadDTO especialidadDTO)
@@ -57,25 +59,16 @@ namespace ApplicationClean.Services
         public async Task<EspecialidadDTO> GetByIdAsync(int id)
         {
             var especialidad = await _repository.GetByIdAsync(id);
-
             if (especialidad == null) return null;
 
-            return new EspecialidadDTO
-            {
-                Id = especialidad.Id,
-                Descripcion = especialidad.Descripcion
-            };
+            return _mapper.Map<EspecialidadDTO>(especialidad);
         }
 
         public async Task<IEnumerable<EspecialidadDTO>> GetAllAsync()
         {
             var especialidades = await _repository.GetAllAsync();
 
-            return especialidades.Select(e => new EspecialidadDTO
-            {
-                Id = e.Id,
-                Descripcion = e.Descripcion
-            });
+            return _mapper.Map<IEnumerable<EspecialidadDTO>>(especialidades);
         }
     }
 }

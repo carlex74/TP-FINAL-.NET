@@ -2,6 +2,7 @@
 using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.Repositories;
 using Domain.Entities;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,10 +12,12 @@ namespace ApplicationClean.Services
     public class PersonaService : IPersonaService
     {
         private readonly IPersonaRepository _personaRepository;
+        private readonly IMapper _mapper;
 
-        public PersonaService(IPersonaRepository personaRepository)
+        public PersonaService(IPersonaRepository personaRepository, IMapper mapper)
         {
             _personaRepository = personaRepository;
+            _mapper = mapper;
         }
 
         public async Task<PersonaDTO> AddAsync(PersonaDTO personaDto)
@@ -28,22 +31,11 @@ namespace ApplicationClean.Services
                 throw new ArgumentException("Ya existe una persona con el mismo Email.");
             }
 
-            var persona = new Persona(
-                0,
-                personaDto.Nombre,
-                personaDto.Apellido,
-                personaDto.Dni,
-                personaDto.FechaNacimiento,
-                personaDto.Direccion,
-                personaDto.Telefono,
-                personaDto.Email
+            var nuevaPersona = _mapper.Map<Persona>(personaDto);
 
-            );
+            await _personaRepository.AddAsync(nuevaPersona);
 
-            await _personaRepository.AddAsync(persona);
-
-            personaDto.Id = persona.Id;
-            return personaDto;
+            return _mapper.Map<PersonaDTO>(nuevaPersona);
         }
 
         public async Task<PersonaDTO> UpdateAsync(PersonaDTO personaDto)
@@ -81,33 +73,13 @@ namespace ApplicationClean.Services
             var persona = await _personaRepository.GetByIdAsync(id);
             if (persona == null) return null;
 
-            return new PersonaDTO
-            {
-                Id = persona.Id,
-                Nombre = persona.Nombre,
-                Apellido = persona.Apellido,
-                Dni = persona.Dni,
-                Email = persona.Email,
-                FechaNacimiento = persona.FechaNacimiento,
-                Direccion = persona.Direccion,
-                Telefono = persona.Telefono
-            };
+            return _mapper.Map<PersonaDTO>(persona);
         }
 
         public async Task<IEnumerable<PersonaDTO>> GetAllAsync()
         {
             var personas = await _personaRepository.GetAllAsync();
-            return personas.Select(p => new PersonaDTO
-            {
-                Id = p.Id,
-                Nombre = p.Nombre,
-                Apellido = p.Apellido,
-                Dni = p.Dni,
-                Email = p.Email,
-                FechaNacimiento = p.FechaNacimiento,
-                Direccion = p.Direccion,
-                Telefono = p.Telefono
-            });
+            return _mapper.Map<IEnumerable<PersonaDTO>>(personas);
         }
     }
 }

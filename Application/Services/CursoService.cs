@@ -2,6 +2,7 @@
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
 using Domain.Entities;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,11 +14,13 @@ namespace ApplicationClean.Services
         private readonly ICursoRepository _cursoRepository;
         private readonly IMateriaRepository _materiaRepository;
         private readonly IComisionRepository _comisionRepository;
+        private readonly IMapper _mapper;
 
-        public CursoService(ICursoRepository cursoRepository, IMateriaRepository materiaRepository, IComisionRepository comisionRepository)
+        public CursoService(ICursoRepository cursoRepository, IMateriaRepository materiaRepository, IMapper mapper, IComisionRepository comisionRepository)
         {
             _cursoRepository = cursoRepository;
             _materiaRepository = materiaRepository;
+            _mapper = mapper;
             _comisionRepository = comisionRepository;
         }
 
@@ -28,11 +31,11 @@ namespace ApplicationClean.Services
             if (await _comisionRepository.GetByIdAsync(cursoDto.IdComision) == null)
                 throw new KeyNotFoundException($"La comisión con ID {cursoDto.IdComision} no existe.");
 
-            var curso = new Curso(0, cursoDto.AnioCalendario, cursoDto.Cupo, cursoDto.Descripcion, cursoDto.IdComision, cursoDto.IdMateria);
+            var nuevoCurso = _mapper.Map<Curso>(cursoDto);
 
-            await _cursoRepository.AddAsync(curso);
+            await _cursoRepository.AddAsync(nuevoCurso);
 
-            return cursoDto;
+            return _mapper.Map<CursoDTO>(nuevoCurso);
         }
 
         public async Task<CursoDTO> UpdateAsync(CursoDTO cursoDto)
@@ -65,27 +68,15 @@ namespace ApplicationClean.Services
         public async Task<CursoDTO> GetByIdAsync(int id)
         {
             var curso = await _cursoRepository.GetByIdAsync(id);
-            return MapToCursoDTO(curso);
+            if (curso == null) return null;
+
+            return _mapper.Map<CursoDTO>(curso);
         }
 
         public async Task<IEnumerable<CursoDTO>> GetAllAsync()
         {
             var cursos = await _cursoRepository.GetAllAsync();
-            return cursos.Select(MapToCursoDTO);
-        }
-
-        private CursoDTO MapToCursoDTO(Curso curso)
-        {
-            if (curso == null) return null;
-            return new CursoDTO
-            {
-                Id = curso.Id,
-                AnioCalendario = curso.AnioCalendario,
-                Cupo = curso.Cupo,
-                Descripcion = curso.Descripcion,
-                IdComision = curso.IdComision,
-                IdMateria = curso.IdMateria
-            };
+            return _mapper.Map<IEnumerable<CursoDTO>>(cursos);
         }
     }
 }
