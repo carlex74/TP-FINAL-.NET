@@ -52,7 +52,7 @@ namespace WindowsForms
                         mainForm = ServiceProvider.GetRequiredService<PortalAlumno>();
                         break;
                     case TipoUsuario.Docente:
-                        mainForm = ServiceProvider.GetRequiredService<EnConstruccionForm>();
+                        mainForm = ServiceProvider.GetRequiredService<PortalDocente>();
                         break;
                 }
 
@@ -137,6 +137,7 @@ namespace WindowsForms
             services.AddTransient<DocenteCursoLista>();
             services.AddTransient<DocenteCursoDetalle>();
             services.AddTransient<PortalAlumno>();
+            services.AddTransient<PortalDocente>();
         }
     }
 }
