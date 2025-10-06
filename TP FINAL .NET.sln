@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{17CADB15-88C8-4900-AE5D-2D1E669ACD90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{17CADB15-88C8-4900-AE5D-2D1E669ACD90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsForms", "WindowsForms\WindowsForms.csproj", "{71FC0225-C81D-452B-897B-94624689F2FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsForms", "WindowsForms\WindowsForms.csproj", "{71FC0225-C81D-452B-897B-94624689F2FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{FFD4FBE8-DFA6-4D9A-9196-E3590CC3FB61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{FFD4FBE8-DFA6-4D9A-9196-E3590CC3FB61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationClean", "Application\ApplicationClean.csproj", "{BDF22468-F321-4570-9022-7EA29D606F33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationClean", "Application\ApplicationClean.csproj", "{BDF22468-F321-4570-9022-7EA29D606F33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{65C5D162-E611-4F6E-90EA-3BD2CA92E6CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{65C5D162-E611-4F6E-90EA-3BD2CA92E6CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontWeb", "FrontWeb\FrontWeb.csproj", "{FFCEECA1-F75A-45CF-A098-2FB9DA1E2FF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontWeb", "FrontWeb\FrontWeb.csproj", "{FFCEECA1-F75A-45CF-A098-2FB9DA1E2FF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

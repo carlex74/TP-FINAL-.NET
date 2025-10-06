@@ -1,0 +1,86 @@
+﻿@page "/login"
+
+@using ApplicationClean.DTOs
+@using ApplicationClean.Interfaces
+
+@inject IAPIAuthClients AuthClient
+@inject NavigationManager NavigationManager
+
+<h3>Iniciar Sesión</h3>
+
+<EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
+
+    <DataAnnotationsValidator />
+
+    <div>
+        <label>Legajo:</label>
+        <div>
+            <InputText @bind-Value="loginModel.Legajo" />
+            <ValidationMessage For="@(() => loginModel.Legajo)" />
+        </div>
+    </div>
+
+    <div>
+        <label>Contraseña:</label>
+        <div>
+            <InputText type="password" @bind-Value="loginModel.Clave" />
+            <ValidationMessage For="@(() => loginModel.Clave)" />
+        </div>
+    </div>
+
+    <br />
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p style="color: red;">@errorMessage</p>
+    }
+
+    <button type="submit">Ingresar</button>
+
+</EditForm>
+
+
+@code {
+    // El DTO sigue siendo perfecto para manejar el estado del formulario
+    private LoginRequestDTO loginModel = new();
+
+    private string? errorMessage;
+
+    // --- ESTE MÉTODO HA SIDO ACTUALIZADO ---
+    private async Task HandleLogin()
+    {
+        errorMessage = null;
+
+        try
+        {
+            // 1. Llamamos al cliente pasando las propiedades del modelo por separado,
+            //    tal como lo espera tu método LoginAsync.
+            UsuarioDTO? loggedInUser = await AuthClient.LoginAsync(loginModel.Legajo, loginModel.Clave);
+
+            // 2. Comprobamos si el resultado es null. Si no lo es, el login fue exitoso.
+            if (loggedInUser != null)
+            {
+                // ¡ÉXITO!
+                Console.WriteLine($"Login exitoso para: {loggedInUser.Legajo}"); // Útil para depurar
+
+                // Lógica futura: Aquí es donde guardarías la información del usuario
+                // o el token JWT para mantener la sesión activa.
+
+                // Redirigimos al usuario a la página principal.
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                // ¡FALLO! El cliente devolvió null, lo que significa que
+                // la API respondió con un código de error (ej. 401 Unauthorized).
+                errorMessage = "Legajo o contraseña incorrectos.";
+            }
+        }
+        catch (Exception ex)
+        {
+            // Este bloque captura errores de red (ej. la API está caída o no responde).
+            errorMessage = "Error de conexión. No se pudo contactar al servidor.";
+            Console.WriteLine($"Error en el login: {ex.Message}"); // Log para el desarrollador
+        }
+    }
+}
