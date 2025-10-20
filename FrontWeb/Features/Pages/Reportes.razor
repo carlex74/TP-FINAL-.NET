@@ -1,0 +1,28 @@
+﻿@page "/reportes"
+@attribute [Authorize(Roles = "Administrador")]
+
+<PageTitle>Reportes Académicos</PageTitle>
+
+<div class="container-fluid mt-4">
+    <h3 class="mb-4">Reportes Académicos</h3>
+
+    <!-- REPORTE DE HISTORIAL ACADÉMICO -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Historial Académico por Alumno</h5>
+        </div>
+        <div class="card-body">
+            <ReporteHistorial />
+        </div>
+    </div>
+
+    <!-- REPORTE DE RENDIMIENTO POR CURSO -->
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Rendimiento por Curso</h5>
+        </div>
+        <div class="card-body">
+            <ReporteRendimiento />
+        </div>
+    </div>
+</div>

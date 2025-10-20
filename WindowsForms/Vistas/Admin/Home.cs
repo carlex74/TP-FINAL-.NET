@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -8,35 +9,12 @@ namespace WindowsForms
     {
         private Form activeForm = null;
         private Panel currentButtonPanel;
+        private readonly IServiceProvider _serviceProvider;
 
-        private readonly EspecialidadLista _especialidadLista;
-        private readonly PlanLista _planLista;
-        private readonly PersonaLista _personaLista;
-        private readonly UsuarioLista _usuarioLista;
-        private readonly MateriaLista _materiaLista;
-        private readonly ComisionLista _comisionLista;
-        private readonly CursoLista _cursoLista;
-        private readonly DocenteCursoLista _docenteCursoLista;
-
-        public Home(
-            EspecialidadLista especialidadLista,
-            PlanLista planLista,
-            PersonaLista personaLista,
-            UsuarioLista usuarioLista,
-            MateriaLista materiaLista,
-            ComisionLista comisionLista,
-            CursoLista cursoLista,
-            DocenteCursoLista docenteCursoLista)
+        public Home(IServiceProvider serviceProvider)
         {
             InitializeComponent();
-            _especialidadLista = especialidadLista;
-            _planLista = planLista;
-            _personaLista = personaLista;
-            _usuarioLista = usuarioLista;
-            _materiaLista = materiaLista;
-            _comisionLista = comisionLista;
-            _cursoLista = cursoLista;
-            _docenteCursoLista = docenteCursoLista;
+            _serviceProvider = serviceProvider;
 
             var currentUser = UserSession.GetCurrentUser();
             if (currentUser != null)
@@ -52,7 +30,6 @@ namespace WindowsForms
                 if (currentButtonPanel != buttonPanel)
                 {
                     DisableButton();
-
                     currentButtonPanel = buttonPanel;
                     currentButtonPanel.BackColor = Color.FromArgb(0, 122, 204);
                 }
@@ -74,11 +51,12 @@ namespace WindowsForms
 
         private void OpenChildForm(Form childForm, Panel buttonPanel)
         {
-            ActivateButton(buttonPanel);
+            if (buttonPanel != null) ActivateButton(buttonPanel);
+            else DisableButton();
 
             if (activeForm != null)
             {
-                activeForm.Hide();
+                activeForm.Close();
             }
             activeForm = childForm;
             childForm.TopLevel = false;
@@ -91,44 +69,27 @@ namespace WindowsForms
             welcomeLabel.Visible = false;
         }
 
-        private void especialidadButton_Click(object sender, EventArgs e)
+        private void especialidadButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<EspecialidadLista>(), especialidadPanel);
+        private void planButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<PlanLista>(), planPanel);
+        private void personaButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<PersonaLista>(), personaPanel);
+        private void usuarioButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<UsuarioLista>(), usuarioPanel);
+        private void materiaButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<MateriaLista>(), materiaPanel);
+        private void comisionButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<ComisionLista>(), comisionPanel);
+        private void cursoButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<CursoLista>(), cursoPanel);
+        private void asignacionesButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<DocenteCursoLista>(), asignacionesPanel);
+
+        // --- EVENTOS DEL MENÚ DE REPORTES ---
+        private void rendimientoPorCursoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(_especialidadLista, especialidadPanel);
+            var reporteForm = _serviceProvider.GetRequiredService<ReporteRendimientoForm>();
+            OpenChildForm(reporteForm, null);
         }
 
-        private void planButton_Click(object sender, EventArgs e)
+        // --- MÉTODO NUEVO PARA EL REPORTE HISTORIAL ---
+        private void historialAcadémicoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(_planLista, planPanel);
-        }
-
-        private void personaButton_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(_personaLista, personaPanel);
-        }
-
-        private void usuarioButton_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(_usuarioLista, usuarioPanel);
-        }
-
-        private void materiaButton_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(_materiaLista, materiaPanel);
-        }
-
-        private void comisionButton_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(_comisionLista, comisionPanel);
-        }
-
-        private void cursoButton_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(_cursoLista, cursoPanel);
-        }
-
-        private void asignacionesButton_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(_docenteCursoLista, asignacionesPanel);
+            var reporteForm = _serviceProvider.GetRequiredService<ReporteHistorialForm>();
+            OpenChildForm(reporteForm, null);
         }
     }
 }

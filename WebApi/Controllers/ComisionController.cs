@@ -1,8 +1,9 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
-
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ComisionesController : ControllerBase

@@ -79,7 +79,7 @@ namespace WindowsForms
         {
             lblError.Visible = false;
 
-            string legajo = txtLegajo.Text;
+            string legajo = txtLegajo.Text.Trim();
             string clave = txtPassword.Text;
 
             if (string.IsNullOrWhiteSpace(legajo) || string.IsNullOrWhiteSpace(clave))
@@ -93,14 +93,15 @@ namespace WindowsForms
                 btnLogin.Enabled = false;
                 this.Cursor = Cursors.WaitCursor;
 
-                var usuarioLogueado = await _authClient.LoginAsync(legajo, clave);
+                var loginResponse = await _authClient.LoginAsync(legajo, clave);
 
-                if (usuarioLogueado != null)
+                if (loginResponse != null && loginResponse.Usuario != null)
                 {
-                    UserSession.Login(usuarioLogueado);
+                    var usuarioLogueado = loginResponse.Usuario;
+
+                    UserSession.Login(usuarioLogueado, loginResponse.Token);
 
                     this.DialogResult = DialogResult.OK;
-
                     this.Close();
                 }
                 else
@@ -110,7 +111,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MostrarError($"Error de conexión: {ex.Message}");
+                MostrarError($"Error de conexión o inesperado: {ex.Message}");
             }
             finally
             {

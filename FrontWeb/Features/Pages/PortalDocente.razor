@@ -1,0 +1,254 @@
+﻿@page "/portal-docente"
+@attribute [Authorize(Roles = "Docente")]
+
+@inject IAPIDocenteCursoClient DocenteCursoClient
+@inject IAlumnoInscripcionClients InscripcionClient
+@inject IAPIUsuarioClients UsuarioClient
+@inject IAPICursoClient CursoClient
+@inject IAPIMateriaClient MateriaClient
+@inject IAPIComisionClient ComisionClient
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Portal del Docente</PageTitle>
+
+<div class="container mt-4">
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Mis Cursos Asignados</h5>
+                </div>
+                @if (misCursos == null)
+                {
+                    <div class="card-body">
+                        <p><em>Cargando cursos...</em></p>
+                    </div>
+                }
+                else if (!misCursos.Any())
+                {
+                    <div class="card-body">
+                        <p class="text-muted">No tienes cursos asignados.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var curso in misCursos)
+                        {
+                            <a href="javascript:void(0)" @onclick="() => SeleccionarCurso(curso.IdCurso)"
+                               class="list-group-item list-group-item-action @(curso.IdCurso == cursoSeleccionadoId ? "active" : "")">
+                                <strong>@curso.MateriaNombre</strong> - @curso.ComisionDescripcion (@curso.Anio)
+                                <br />
+                                <small class="text-muted">Cargo: @curso.Cargo</small>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            @if (cursoSeleccionadoId.HasValue)
+            {
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Alumnos Inscriptos</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (alumnosDelCurso == null)
+                        {
+                            <div class="d-flex justify-content-center p-4">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Cargando alumnos...</span>
+                                </div>
+                            </div>
+                        }
+                        else if (!alumnosDelCurso.Any())
+                        {
+                            <p>No hay alumnos inscriptos en este curso.</p>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Legajo</th>
+                                            <th>Nombre Completo</th>
+                                            <th style="width: 150px;">Condición</th>
+                                            <th style="width: 100px;">Nota</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var alumno in alumnosDelCurso)
+                                        {
+                                            <tr>
+                                                <td>@alumno.LegajoAlumno</td>
+                                                <td>@alumno.NombreCompleto</td>
+                                                <td><InputText class="form-control form-control-sm" @bind-Value="alumno.Condicion" /></td>
+                                                <td><InputNumber class="form-control form-control-sm" @bind-Value="alumno.Nota" /></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn btn-primary mt-3" @onclick="GuardarCambios" disabled="@isSaving">
+                                @if (isSaving)
+                                {
+                                    <span class="spinner-border spinner-border-sm"></span>
+                                    <span> Guardando...</span>
+                                }
+                                else
+                                {
+                                    <span>Guardar Cambios</span>
+                                }
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-5 border rounded bg-light">
+                    <p class="text-muted">Seleccione un curso de la lista para ver los alumnos inscriptos.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private string docenteLegajo;
+    private int? cursoSeleccionadoId;
+    private bool isSaving = false;
+    private string errorMessage;
+
+    private List<CursoViewModel> misCursos;
+    private List<AlumnoViewModel> alumnosDelCurso;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        docenteLegajo = authState.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+        if (string.IsNullOrEmpty(docenteLegajo))
+        {
+            errorMessage = "No se pudo obtener la información del docente.";
+            return;
+        }
+        await CargarMisCursos();
+    }
+
+    private async Task CargarMisCursos()
+    {
+        try
+        {
+            errorMessage = null;
+            var todasLasAsignaciones = (await DocenteCursoClient.GetAllAsync()).Where(a => a.LegajoDocente == docenteLegajo).ToList();
+            var todosLosCursos = await CursoClient.GetAll();
+            var todasLasMaterias = await MateriaClient.GetAll();
+            var todasLasComisiones = await ComisionClient.GetAll();
+
+            misCursos = (from asig in todasLasAsignaciones
+                         join curso in todosLosCursos on asig.IdCurso equals curso.Id
+                         join materia in todasLasMaterias on curso.IdMateria equals materia.Id
+                         join comision in todasLasComisiones on curso.IdComision equals comision.Nro
+                         select new CursoViewModel
+                         {
+                             IdCurso = curso.Id,
+                             MateriaNombre = materia.Nombre,
+                             ComisionDescripcion = comision.Descripcion,
+                             Anio = curso.AnioCalendario,
+                             Cargo = asig.Cargo.ToString()
+                         }).ToList();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los cursos: {ex.Message}";
+        }
+    }
+
+    private async Task SeleccionarCurso(int idCurso)
+    {
+        cursoSeleccionadoId = idCurso;
+        alumnosDelCurso = null; 
+        StateHasChanged();
+
+        try
+        {
+            errorMessage = null;
+            var inscripcionesDelCurso = (await InscripcionClient.GetAll()).Where(i => i.IdCurso == idCurso).ToList();
+            var todosLosUsuarios = await UsuarioClient.GetAll();
+
+            alumnosDelCurso = (from insc in inscripcionesDelCurso
+                               join usuario in todosLosUsuarios on insc.LegajoAlumno equals usuario.Legajo
+                               select new AlumnoViewModel
+                               {
+                                   LegajoAlumno = insc.LegajoAlumno,
+                                   NombreCompleto = usuario.PersonaNombreCompleto,
+                                   Condicion = insc.Condicion,
+                                   Nota = insc.Nota
+                               }).ToList();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los alumnos: {ex.Message}";
+        }
+    }
+
+    private async Task GuardarCambios()
+    {
+        if (alumnosDelCurso == null || !cursoSeleccionadoId.HasValue) return;
+        isSaving = true;
+        errorMessage = null;
+
+        try
+        {
+            var tasks = new List<Task>();
+            foreach (var alumno in alumnosDelCurso)
+            {
+                var inscripcionActualizada = new AlumnoInscripcionDTO
+                {
+                    LegajoAlumno = alumno.LegajoAlumno,
+                    IdCurso = cursoSeleccionadoId.Value,
+                    Condicion = alumno.Condicion,
+                    Nota = alumno.Nota
+                };
+                tasks.Add(InscripcionClient.Update(inscripcionActualizada));
+            }
+            await Task.WhenAll(tasks);
+            await JSRuntime.InvokeVoidAsync("alert", "Cambios guardados con éxito.");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al guardar los cambios: {ex.Message}";
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+
+    public class CursoViewModel
+    {
+        public int IdCurso { get; set; }
+        public string MateriaNombre { get; set; }
+        public string ComisionDescripcion { get; set; }
+        public int Anio { get; set; }
+        public string Cargo { get; set; }
+    }
+    public class AlumnoViewModel
+    {
+        public string LegajoAlumno { get; set; }
+        public string NombreCompleto { get; set; }
+        public string Condicion { get; set; }
+        public int Nota { get; set; }
+    }
+}

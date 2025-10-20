@@ -1,0 +1,176 @@
+﻿@inject IAPICursoClient CursoClient
+@inject IAlumnoInscripcionClients InscripcionClient
+@inject IAPIUsuarioClients UsuarioClient
+@using ChartJs.Blazor.PieChart
+@using ChartJs.Blazor.Common.Options.Title
+
+@if (cursos == null)
+{
+    <p><em>Cargando cursos...</em></p>
+}
+else
+{
+    <div class="row g-3 align-items-end">
+        <div class="col-md-6">
+            <label for="cursoSelect" class="form-label">Seleccione un Curso:</label>
+            <InputSelect id="cursoSelect" class="form-select" @bind-Value="selectedCursoId">
+                <option value="0">-- Seleccione --</option>
+                @foreach (var curso in cursos)
+                {
+                    <option value="@curso.Id">@curso.Descripcion</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-primary" @onclick="GenerarReporteRendimiento" disabled="@(selectedCursoId == 0 || isReportLoading)">
+                @if (isReportLoading)
+                {
+                    <span class="spinner-border spinner-border-sm"></span>
+                    <span> Generando...</span>
+                }
+                else
+                {
+                    <span>Generar Reporte</span>
+                }
+            </button>
+        </div>
+    </div>
+}
+
+@if (reporteData != null)
+{
+    <hr class="my-4" />
+    <div class="row">
+        <div class="col-lg-7">
+            <h5>Alumnos Inscriptos</h5>
+            @if (reporteData.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Legajo</th>
+                                <th>Nombre Completo</th>
+                                <th>Condición</th>
+                                <th>Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in reporteData)
+                            {
+                                <tr>
+                                    <td>@item.LegajoAlumno</td>
+                                    <td>@item.NombreCompleto</td>
+                                    <td>@item.Condicion</td>
+                                    <td>@item.Nota</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p>No hay alumnos inscriptos para este curso.</p>
+            }
+        </div>
+        <div class="col-lg-5">
+            <h5>Distribución por Condición</h5>
+            <Chart @ref="_chart" Config="_pieConfig"></Chart>
+        </div>
+    </div>
+}
+
+@code {
+    private bool isReportLoading = false;
+    private List<CursoDTO> cursos;
+    private int selectedCursoId;
+
+    private List<RendimientoViewModel> reporteData;
+    private PieConfig _pieConfig;
+    private Chart _chart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // --- CORRECCIÓN 1: SINTAXIS DE CONFIGURACIÓN CORRECTA ---
+        _pieConfig = new PieConfig
+        {
+            Options = new PieOptions
+            {
+                Responsive = true,
+                Title = new Title
+                {
+                    Display = false
+                }
+            }
+        };
+        try
+        {
+            cursos = (await CursoClient.GetAll()).OrderBy(c => c.Descripcion).ToList();
+        }
+        catch { /* Manejar error */ }
+    }
+
+    private async Task GenerarReporteRendimiento()
+    {
+        if (selectedCursoId == 0) return;
+        isReportLoading = true;
+
+        try
+        {
+            var inscripciones = (await InscripcionClient.GetAll()).Where(i => i.IdCurso == selectedCursoId).ToList();
+            var usuarios = await UsuarioClient.GetAll();
+            reporteData = (from insc in inscripciones
+                           join user in usuarios on insc.LegajoAlumno equals user.Legajo
+                           select new RendimientoViewModel
+                           {
+                               LegajoAlumno = user.Legajo,
+                               NombreCompleto = user.PersonaNombreCompleto,
+                               Condicion = insc.Condicion,
+                               Nota = insc.Nota
+                           }).ToList();
+
+            var chartData = reporteData.GroupBy(r => r.Condicion)
+                                       .Select(g => new { Condicion = g.Key, Cantidad = g.Count() })
+                                       .ToList();
+
+            _pieConfig.Data.Labels.Clear();
+            _pieConfig.Data.Datasets.Clear();
+
+            var pieDataset = new PieDataset<int>(false);
+
+            // --- CORRECCIÓN 2: USAR BUCLE PARA AÑADIR DATOS EN LUGAR DE 'AddRange' ---
+            foreach (var dataPoint in chartData)
+            {
+                _pieConfig.Data.Labels.Add(dataPoint.Condicion);
+                pieDataset.Data.Add(dataPoint.Cantidad);
+            }
+
+            pieDataset.BackgroundColor = GenerateRandomColors(chartData.Count);
+            _pieConfig.Data.Datasets.Add(pieDataset);
+
+            await _chart.Update();
+        }
+        catch { /* Manejar error */ }
+        finally { isReportLoading = false; }
+    }
+
+    private string[] GenerateRandomColors(int count)
+    {
+        var random = new Random();
+        var colors = new string[count];
+        for (int i = 0; i < count; i++)
+        {
+            colors[i] = $"rgba({random.Next(256)}, {random.Next(256)}, {random.Next(256)}, 0.7)";
+        }
+        return colors;
+    }
+
+    public class RendimientoViewModel
+    {
+        public string LegajoAlumno { get; set; }
+        public string NombreCompleto { get; set; }
+        public string Condicion { get; set; }
+        public int Nota { get; set; }
+    }
+}

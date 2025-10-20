@@ -1,0 +1,292 @@
+﻿@page "/portal-alumno"
+@attribute [Authorize(Roles = "Alumno")]
+
+@inject IAPICursoClient CursoClient
+@inject IAPIMateriaClient MateriaClient
+@inject IAPIComisionClient ComisionClient
+@inject IAlumnoInscripcionClients InscripcionClient
+@inject IAPIUsuarioClients UsuarioClient
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Portal del Alumno</PageTitle>
+
+<div class="container mt-4">
+
+    @if (isLoading)
+    {
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+    else
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Mis Inscripciones</h5>
+            </div>
+            <div class="card-body">
+                @if (!misInscripciones.Any())
+                {
+                    <p class="text-muted">Aún no te has inscripto a ningún curso.</p>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Materia</th>
+                                    <th>Comisión</th>
+                                    <th>Condición</th>
+                                    <th>Nota</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var insc in misInscripciones)
+                                {
+                                    <tr>
+                                        <td>@insc.MateriaNombre</td>
+                                        <td>@insc.ComisionDescripcion</td>
+                                        <td><span class="badge bg-info text-dark">@insc.Condicion</span></td>
+                                        <td>@(insc.Condicion == "Inscripto" ? "-" : insc.Nota.ToString())</td>
+                                        <td class="text-center"><button class="btn btn-danger btn-sm" @onclick="() => AnularInscripcion(insc.CursoId, insc.MateriaNombre)"><span class="bi bi-trash-fill"></span> Anular</button></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Inscribirse a Cursos</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">1. Seleccione una materia de su plan:</label>
+                        <select class="form-select" @onchange="OnMateriaSeleccionada" disabled="@isSubmitting">
+                            <option value="0">-- Seleccione una materia --</option>
+                            @if (materiasDisponibles != null)
+                            {
+                                @foreach (var materia in materiasDisponibles)
+                                {
+                                    <option value="@materia.Id">@materia.Nombre</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">2. Seleccione una comisión:</label>
+                        @if (isLoadingComisiones)
+                        {
+                            <p>Cargando comisiones...</p>
+                        }
+                        else
+                        {
+                            <select class="form-select" @bind="cursoSeleccionadoId" disabled="@(isSubmitting || materiasDisponibles == null)">
+                                <option value="0">-- Seleccione una comisión --</option>
+                                @if (comisionesDisponibles != null)
+                                {
+                                    @foreach (var comision in comisionesDisponibles)
+                                    {
+                                        <option value="@comision.IdCurso">@comision.DescripcionComision</option>
+                                    }
+                                }
+                            </select>
+                        }
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button class="btn btn-success" @onclick="Inscribirse" disabled="@(cursoSeleccionadoId == 0 || isSubmitting)">
+                        @if (isSubmitting)
+                        {
+                            <span class="spinner-border spinner-border-sm"></span>
+                            <span> Inscribiendo...</span>
+                        }
+                        else
+                        {
+                            <span class="bi bi-check-circle-fill">Confirmar Inscripción</span>
+                        }
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string alumnoLegajo;
+    private int alumnoPlanId;
+    private bool isLoading = true;
+    private bool isSubmitting = false;
+    private bool isLoadingComisiones = false;
+    private string errorMessage;
+
+    private List<InscripcionViewModel> misInscripciones = new();
+    private List<MateriaDTO> materiasDisponibles;
+    private List<ComisionViewModel> comisionesDisponibles;
+    
+    private int cursoSeleccionadoId = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        
+        alumnoLegajo = user.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        var planIdClaim = user.Claims.FirstOrDefault(c => c.Type == "planId")?.Value;
+
+        if (string.IsNullOrEmpty(alumnoLegajo) || string.IsNullOrEmpty(planIdClaim) || !int.TryParse(planIdClaim, out alumnoPlanId))
+        {
+            errorMessage = "No se pudo obtener la información del plan del alumno. Por favor, vuelva a iniciar sesión.";
+            isLoading = false;
+            return;
+        }
+        
+        await CargarDatos();
+        isLoading = false;
+    }
+
+    private async Task CargarDatos()
+    {
+        try
+        {
+            errorMessage = null;
+            var todasLasInscripciones = (await InscripcionClient.GetAll()).Where(i => i.LegajoAlumno == alumnoLegajo).ToList();
+            var todosLosCursos = (await CursoClient.GetAll()).ToList();
+            var todasLasMaterias = (await MateriaClient.GetAll()).ToList();
+            var todasLasComisiones = (await ComisionClient.GetAll()).ToList();
+
+            misInscripciones = (from insc in todasLasInscripciones
+                                join curso in todosLosCursos on insc.IdCurso equals curso.Id
+                                join materia in todasLasMaterias on curso.IdMateria equals materia.Id
+                                join comision in todasLasComisiones on curso.IdComision equals comision.Nro
+                                select new InscripcionViewModel
+                                {
+                                    CursoId = curso.Id,
+                                    MateriaNombre = materia.Nombre,
+                                    ComisionDescripcion = comision.Descripcion,
+                                    Condicion = insc.Condicion,
+                                    Nota = insc.Nota
+                                }).ToList();
+
+            var idsCursosInscripto = misInscripciones.Select(i => i.CursoId).ToHashSet();
+            var materiasDelPlan = todasLasMaterias.Where(m => m.Planes.Any(p => p.Id == alumnoPlanId)).ToList();
+            materiasDisponibles = materiasDelPlan.Where(m => todosLosCursos.Any(c => c.IdMateria == m.Id && !idsCursosInscripto.Contains(c.Id))).ToList();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error crítico al cargar los datos: {ex.Message}";
+        }
+    }
+
+    private async Task OnMateriaSeleccionada(ChangeEventArgs e)
+    {
+        var materiaId = int.Parse(e.Value.ToString());
+        cursoSeleccionadoId = 0;
+        comisionesDisponibles = null;
+        if (materiaId > 0)
+        {
+            isLoadingComisiones = true;
+            StateHasChanged();
+            try
+            {
+                var todosLosCursos = await CursoClient.GetAll();
+                var todasLasComisiones = await ComisionClient.GetAll();
+                var idsCursosInscripto = misInscripciones.Select(i => i.CursoId).ToHashSet();
+
+                comisionesDisponibles = (from curso in todosLosCursos
+                                     where curso.IdMateria == materiaId && !idsCursosInscripto.Contains(curso.Id) && curso.Cupo > 0
+                                     join comision in todasLasComisiones on curso.IdComision equals comision.Nro
+                                     select new ComisionViewModel
+                                     {
+                                         IdCurso = curso.Id,
+                                         DescripcionComision = $"{comision.Descripcion} (Cupo: {curso.Cupo})"
+                                     }).ToList();
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Error al cargar comisiones: {ex.Message}";
+            }
+            finally
+            {
+                isLoadingComisiones = false;
+            }
+        }
+        StateHasChanged();
+    }
+
+    private async Task Inscribirse()
+    {
+        if (cursoSeleccionadoId == 0) return;
+        isSubmitting = true;
+
+        try
+        {
+            await InscripcionClient.Add(new AlumnoInscripcionDTO
+            {
+                LegajoAlumno = alumnoLegajo,
+                IdCurso = cursoSeleccionadoId,
+                Condicion = "Inscripto",
+                Nota = 0
+            });
+            
+            await CargarDatos(); 
+            comisionesDisponibles = null;
+            cursoSeleccionadoId = 0;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al inscribir: {ex.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private async Task AnularInscripcion(int cursoId, string materiaNombre)
+    {
+        var confirmado = await JSRuntime.InvokeAsync<bool>("confirm", $"¿Está seguro de que desea anular su inscripción a la materia '{materiaNombre}'?");
+        if (!confirmado) return;
+
+        isSubmitting = true;
+        try
+        {
+            await InscripcionClient.Delete(alumnoLegajo, cursoId);
+            await CargarDatos();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al anular la inscripción: {ex.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+    
+    public class InscripcionViewModel {
+        public int CursoId { get; set; }
+        public string MateriaNombre { get; set; }
+        public string ComisionDescripcion { get; set; }
+        public string Condicion { get; set; }
+        public int Nota { get; set; }
+    }
+    public class ComisionViewModel {
+        public int IdCurso { get; set; }
+        public string DescripcionComision { get; set; }
+    }
+}

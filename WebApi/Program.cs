@@ -7,6 +7,12 @@ using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
@@ -17,6 +23,19 @@ builder.Services.AddControllers()
 
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("https://localhost:7283", "http://localhost:5256")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
 
 builder.Services.AddDbContext<TPIContext>(options =>
     options.UseMySql(
@@ -48,6 +67,22 @@ builder.Services.AddScoped<ICursoService, CursoService>();
 builder.Services.AddScoped<IAlumnoInscripcionService,AlumnoInscripcionService>();
 builder.Services.AddScoped<IDocenteCursoService,DocenteCursoService>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+builder.Services.AddAuthorization();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpLogging(o => { });
@@ -63,6 +98,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(MyAllowSpecificOrigins);
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

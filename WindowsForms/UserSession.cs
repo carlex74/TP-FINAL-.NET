@@ -6,15 +6,19 @@ namespace WindowsForms
     public static class UserSession
     {
         private static UsuarioDTO _currentUser;
+        public static string Token { get; private set; } // <-- AÑADIR ESTA LÍNEA
 
-        public static void Login(UsuarioDTO user)
+        // Modificar el método Login
+        public static void Login(UsuarioDTO user, string token)
         {
             _currentUser = user;
+            Token = token; // <-- AÑADIR ESTA LÍNEA
         }
 
         public static void Logout()
         {
             _currentUser = null;
+            Token = null; // <-- AÑADIR ESTA LÍNEA
         }
 
         public static UsuarioDTO GetCurrentUser()
@@ -22,7 +26,7 @@ namespace WindowsForms
             return _currentUser;
         }
 
-        public static bool IsLoggedIn => _currentUser != null;
+        public static bool IsLoggedIn => _currentUser != null && !string.IsNullOrEmpty(Token);
 
         public static TipoUsuario? UserRole => _currentUser?.Tipo;
     }

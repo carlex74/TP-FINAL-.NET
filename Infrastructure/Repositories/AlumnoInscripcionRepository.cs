@@ -42,5 +42,14 @@ namespace Infrastructure.Repositories
             _context.Inscripciones.Remove(inscripcion);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<AlumnoInscripcion>> GetInscripcionesPorCursoAsync(int idCurso)
+        {
+            return await _context.Inscripciones
+                                 .Where(i => i.IdCurso == idCurso)
+                                 .Include(i => i.Alumno) 
+                                    .ThenInclude(a => a.Persona)
+                                 .ToListAsync();
+        }
     }
 }

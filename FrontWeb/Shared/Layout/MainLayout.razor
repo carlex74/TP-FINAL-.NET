@@ -1,4 +1,8 @@
 ﻿@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+@inject FrontWeb.Auth.LocalStorageService LocalStorage
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -6,7 +10,27 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <a class="navbar-brand" href="">Academia Web</a>
+
+            <AuthorizeView>
+                <Authorized>
+                    <div class="d-flex align-items-center ms-auto">
+
+                        <span class="me-3">
+                            <span class="bi bi-person-circle me-1"></span>
+                            Hola, <strong>@context.User.Claims.FirstOrDefault(c => c.Type == "nombreCompleto")?.Value</strong>
+                        </span>
+
+                        <button class="btn btn-outline-secondary btn-sm" @onclick="Logout">
+                            <span class="bi bi-box-arrow-right me-1"></span>Cerrar Sesión
+                        </button>
+
+                    </div>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="login" class="ms-auto">Iniciar Sesión</a>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
 
         <article class="content px-4">
@@ -14,3 +38,11 @@
         </article>
     </main>
 </div>
+
+@code {
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItem("authToken");
+        NavigationManager.NavigateTo("/login", forceLoad: true);
+    }
+}

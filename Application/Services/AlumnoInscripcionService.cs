@@ -86,5 +86,10 @@ namespace ApplicationClean.Services
             return true;
         }
 
+        public async Task<IEnumerable<AlumnoInscripcionDTO>> GetInscripcionesPorCursoAsync(int idCurso)
+        {
+            var inscripciones = await _repository.GetInscripcionesPorCursoAsync(idCurso);
+            return _mapper.Map<IEnumerable<AlumnoInscripcionDTO>>(inscripciones);
+        }
     }
 }

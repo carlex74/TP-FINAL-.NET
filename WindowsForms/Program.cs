@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Forms;
 using static Domain.Entities.Usuario;
+using WindowsForms.HttpHandlers;
 
 namespace WindowsForms
 {
@@ -67,7 +68,7 @@ namespace WindowsForms
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            string baseAddress = "https://localhost:7111/"; 
+            string baseAddress = "https://localhost:7111/";
 
             var jsonSerializerOptions = new JsonSerializerOptions
             {
@@ -76,49 +77,69 @@ namespace WindowsForms
             };
             services.AddSingleton(jsonSerializerOptions);
 
+            services.AddTransient<AuthHeaderHandler>();
+
             services.AddHttpClient<IAPIAuthClients, AuthApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
             services.AddHttpClient<IAPIEspecialidadClients, EspecialidadApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
             services.AddHttpClient<IAPIPlanClients, PlanApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
             services.AddHttpClient<IAPIPersonaClients, PersonaApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
             services.AddHttpClient<IAPIUsuarioClients, UsuarioApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
             services.AddHttpClient<IAPIMateriaClient, MateriaApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
             services.AddHttpClient<IAPIComisionClient, ComisionApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
             services.AddHttpClient<IAPICursoClient, CursoApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
             services.AddHttpClient<IAPIDocenteCursoClient, DocenteCursoApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
             services.AddHttpClient<IAlumnoInscripcionClients, AlumnoInscripcionApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
-            });
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
 
             services.AddTransient<LoginForm>();
-            services.AddTransient<EnConstruccionForm>();
             services.AddTransient<Home>();
             services.AddTransient<EspecialidadLista>();
             services.AddTransient<EspecialidadDetalle>();
@@ -138,6 +159,8 @@ namespace WindowsForms
             services.AddTransient<DocenteCursoDetalle>();
             services.AddTransient<PortalAlumno>();
             services.AddTransient<PortalDocente>();
+            services.AddTransient<ReporteRendimientoForm>();
+            services.AddTransient<ReporteHistorialForm>();
         }
     }
 }
