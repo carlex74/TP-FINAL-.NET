@@ -31,6 +31,7 @@ builder.Services.AddAuthorizationCore(options =>
 {
     options.AddPolicy("Alumno", policy => policy.RequireRole("Alumno"));
     options.AddPolicy("Docente", policy => policy.RequireRole("Docente"));
+    options.AddPolicy("Administrador", policy => policy.RequireRole("Administrador"));
 });
 
 builder.Services.AddScoped<LocalStorageService>();

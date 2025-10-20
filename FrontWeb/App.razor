@@ -1,29 +1,12 @@
-﻿<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(App).Assembly">
-        <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                <NotAuthorized>
-                    <div class="container mt-4">
-                        <h3>Acceso Denegado</h3>
-                        <p>No tienes permiso para acceder a esta página. Intenta <a href="login">iniciar sesión</a>.</p>
-                    </div>
-                </NotAuthorized>
-                <Authorizing>
-                    <div class="container mt-4">
-                        <p>Verificando autorización...</p>
-                    </div>
-                </Authorizing>
-            </AuthorizeRouteView>
-            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-        </Found>
-        <NotFound>
-            <PageTitle>No encontrado</PageTitle>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <div class="container mt-4">
-                    <h3>Página no encontrada</h3>
-                    <p role="alert">Lo sentimos, no hay nada en esta dirección.</p>
-                </div>
-            </LayoutView>
-        </NotFound>
-    </Router>
-</CascadingAuthenticationState>
+﻿<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>

@@ -57,6 +57,51 @@
         <div class="col-lg-8">
             @if (cursoSeleccionadoId.HasValue)
             {
+                @* ESTADÍSTICAS DEL CURSO *@
+                @if (alumnosDelCurso != null && alumnosDelCurso.Any())
+                {
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">📊 Estadísticas del Curso</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <div class="border rounded p-3 bg-light">
+                                                <h4 class="mb-0 text-primary">@alumnosDelCurso.Count</h4>
+                                                <small class="text-muted">Total Alumnos</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="border rounded p-3 bg-light">
+                                                <h4 class="mb-0 text-success">@alumnosDelCurso.Count(a => a.Condicion == "Aprobado")</h4>
+                                                <small class="text-muted">Aprobados</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="border rounded p-3 bg-light">
+                                                <h4 class="mb-0 text-warning">@alumnosDelCurso.Count(a => a.Condicion == "Inscripto")</h4>
+                                                <small class="text-muted">Inscriptos</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @if (_pieChartConfig != null)
+                                    {
+                                        <div style="max-height: 150px;">
+                                            <Chart Config="_pieChartConfig"></Chart>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @* TABLA DE ALUMNOS *@
                 <div class="card shadow-sm">
                     <div class="card-header">
                         <h5 class="mb-0">Alumnos Inscriptos</h5>
@@ -92,8 +137,16 @@
                                             <tr>
                                                 <td>@alumno.LegajoAlumno</td>
                                                 <td>@alumno.NombreCompleto</td>
-                                                <td><InputText class="form-control form-control-sm" @bind-Value="alumno.Condicion" /></td>
-                                                <td><InputNumber class="form-control form-control-sm" @bind-Value="alumno.Nota" /></td>
+                                                <td>
+                                                    <InputSelect class="form-control form-control-sm" @bind-Value="alumno.Condicion">
+                                                        <option value="Inscripto">Inscripto</option>
+                                                        <option value="Cursando">Cursando</option>
+                                                        <option value="Regular">Regular</option>
+                                                        <option value="Aprobado">Aprobado</option>
+                                                        <option value="Libre">Libre</option>
+                                                    </InputSelect>
+                                                </td>
+                                                <td><InputNumber class="form-control form-control-sm" @bind-Value="alumno.Nota" min="0" max="10" /></td>
                                             </tr>
                                         }
                                     </tbody>
@@ -107,7 +160,7 @@
                                 }
                                 else
                                 {
-                                    <span>Guardar Cambios</span>
+                                    <span class="bi bi-save-fill"> Guardar Cambios</span>
                                 }
                             </button>
                         }
@@ -132,6 +185,7 @@
 
     private List<CursoViewModel> misCursos;
     private List<AlumnoViewModel> alumnosDelCurso;
+    private PieConfig? _pieChartConfig;
 
     protected override async Task OnInitializedAsync()
     {
@@ -178,7 +232,8 @@
     private async Task SeleccionarCurso(int idCurso)
     {
         cursoSeleccionadoId = idCurso;
-        alumnosDelCurso = null; 
+        alumnosDelCurso = null;
+        _pieChartConfig = null;
         StateHasChanged();
 
         try
@@ -193,14 +248,57 @@
                                {
                                    LegajoAlumno = insc.LegajoAlumno,
                                    NombreCompleto = usuario.PersonaNombreCompleto,
-                                   Condicion = insc.Condicion,
+                                   Condicion = insc.Condicion ?? "Inscripto",
                                    Nota = insc.Nota
                                }).ToList();
+
+            // Generar gráfico de estadísticas
+            GenerarGraficoEstadisticas();
         }
         catch (Exception ex)
         {
             errorMessage = $"Error al cargar los alumnos: {ex.Message}";
         }
+    }
+
+    private void GenerarGraficoEstadisticas()
+    {
+        if (alumnosDelCurso == null || !alumnosDelCurso.Any())
+            return;
+
+        var chartDataGroup = alumnosDelCurso
+            .GroupBy(a => a.Condicion)
+            .Select(g => new { Condicion = g.Key, Cantidad = g.Count() })
+            .ToList();
+
+        _pieChartConfig = new PieConfig
+        {
+            Options = new PieOptions
+            {
+                Responsive = true,
+                MaintainAspectRatio = true
+            }
+        };
+
+        var pieDataset = new PieDataset<int>
+        {
+            BackgroundColor = new[]
+            {
+                "#36A2EB", // Azul - Inscripto
+                "#4BC0C0", // Cyan - Cursando
+                "#FFCE56", // Amarillo - Regular
+                "#4CAF50", // Verde - Aprobado
+                "#FF6384"  // Rojo - Libre
+            }
+        };
+
+        foreach (var item in chartDataGroup)
+        {
+            pieDataset.Add(item.Cantidad);
+            _pieChartConfig.Data.Labels.Add(item.Condicion);
+        }
+
+        _pieChartConfig.Data.Datasets.Add(pieDataset);
     }
 
     private async Task GuardarCambios()
@@ -224,6 +322,11 @@
                 tasks.Add(InscripcionClient.Update(inscripcionActualizada));
             }
             await Task.WhenAll(tasks);
+
+            // Regenerar el gráfico después de guardar
+            GenerarGraficoEstadisticas();
+            StateHasChanged();
+
             await JSRuntime.InvokeVoidAsync("alert", "Cambios guardados con éxito.");
         }
         catch (Exception ex)
@@ -244,6 +347,7 @@
         public int Anio { get; set; }
         public string Cargo { get; set; }
     }
+
     public class AlumnoViewModel
     {
         public string LegajoAlumno { get; set; }
