@@ -48,5 +48,21 @@ namespace Infrastructure.Repositories
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Usuario> GetByLegajoIncludingDeletedAsync(string legajo)
+        {
+            return await _context.Usuarios.IgnoreQueryFilters() // Ignora el filtro
+                                          .Include(u => u.Persona)
+                                          .FirstOrDefaultAsync(u => u.Legajo == legajo);
+        }
+
+        public async Task<bool> LegajoExistsAsync(string legajo)
+        {
+            // Se usa IgnoreQueryFilters() para buscar también entre los usuarios borrados lógicamente.
+            return await _context.Usuarios
+                                 .IgnoreQueryFilters()
+                                 .AnyAsync(u => u.Legajo == legajo);
+        }
+
     }
 }

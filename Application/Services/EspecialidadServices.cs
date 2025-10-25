@@ -22,6 +22,12 @@ namespace ApplicationClean.Services
 
         public async Task<EspecialidadDTO> AddAsync(EspecialidadDTO especialidadDTO)
         {
+
+            if (await _repository.DescripcionExistsAsync(especialidadDTO.Descripcion))
+            {
+                throw new BusinessRuleException($"Ya existe una especialidad con la descripción '{especialidadDTO.Descripcion}'.");
+            }
+
             var nuevaEspecialidad = _mapper.Map<Especialidad>(especialidadDTO);
 
             await _repository.AddAsync(nuevaEspecialidad);
@@ -38,6 +44,11 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró una especialidad con el ID {especialidadDTO.Id}.");
             }
 
+            if (await _repository.DescripcionExistsAsync(especialidadDTO.Descripcion, especialidadDTO.Id))
+            {
+                throw new BusinessRuleException($"La descripción '{especialidadDTO.Descripcion}' ya pertenece a otra especialidad.");
+            }
+
             existingEspecialidad.SetDescripcion(especialidadDTO.Descripcion);
             await _repository.UpdateAsync(existingEspecialidad);
 
@@ -49,10 +60,11 @@ namespace ApplicationClean.Services
             var existingEspecialidad = await _repository.GetByIdAsync(id);
             if (existingEspecialidad == null)
             {
-                return false;
+                throw new KeyNotFoundException($"No se encontró una especialidad con el ID {id} para eliminar.");
             }
 
-            await _repository.DeleteAsync(existingEspecialidad);
+            existingEspecialidad.SoftDelete();
+            await _repository.UpdateAsync(existingEspecialidad);
             return true;
         }
 

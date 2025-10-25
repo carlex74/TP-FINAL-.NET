@@ -120,5 +120,10 @@ namespace WindowsForms
             modificarButton.Enabled = hasRows;
             eliminarButton.Enabled = hasRows;
         }
+
+        private void planDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

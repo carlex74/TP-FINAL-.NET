@@ -46,6 +46,16 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró una persona con el ID {personaDto.Id}.");
             }
 
+            // Validar unicidad de DNI y Email incluso en personas soft-deleted
+            if (await _personaRepository.DniExistsAsync(personaDto.Dni, personaDto.Id))
+            {
+                throw new BusinessRuleException("El DNI ingresado ya pertenece a otra persona.");
+            }
+            if (await _personaRepository.EmailExistsAsync(personaDto.Email, personaDto.Id))
+            {
+                throw new BusinessRuleException("El Email ingresado ya pertenece a otra persona.");
+            }
+
             existingPersona.SetNombre(personaDto.Nombre);
             existingPersona.SetApellido(personaDto.Apellido);
             existingPersona.SetDni(personaDto.Dni);
@@ -62,9 +72,14 @@ namespace ApplicationClean.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var persona = await _personaRepository.GetByIdAsync(id);
-            if (persona == null) return false;
+            if (persona == null)
+            {
+                throw new KeyNotFoundException($"No se encontró una persona con el ID {id} para eliminar.");
+            }
 
-            await _personaRepository.DeleteAsync(persona);
+
+            persona.SoftDelete();
+            await _personaRepository.UpdateAsync(persona);
             return true;
         }
 

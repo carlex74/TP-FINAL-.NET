@@ -1,5 +1,8 @@
 ﻿using Domain.Entities;
+using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using Domain.Interfaces;
 
 namespace Infrastructure.Context
 {
@@ -22,7 +25,23 @@ namespace Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             base.OnModelCreating(modelBuilder);
+
+            #region Global Query Filters for Soft Delete
+
+            // Itera sobre todos los tipos de entidad descubiertos en el DbContext.
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                // Comprueba si la entidad implementa la interfaz ISoftDeletable.
+                if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+                {
+                    // Aplica el filtro global de borrado logico.
+                    entityType.AddSoftDeleteQueryFilter();
+                }
+            }
+
+            #endregion
 
             modelBuilder.Entity<Persona>(entity =>
             {
@@ -143,6 +162,27 @@ namespace Infrastructure.Context
 
             });
 
+        }
+    }
+
+    public static class SoftDeleteQueryFilterExtensions
+    {
+        public static void AddSoftDeleteQueryFilter(
+            this Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType entityData)
+        {
+            var methodToCall = typeof(SoftDeleteQueryFilterExtensions)
+                .GetMethod(nameof(GetSoftDeleteFilter),
+                           System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+                .MakeGenericMethod(entityData.ClrType);
+            var filter = methodToCall.Invoke(null, new object[] { });
+            entityData.SetQueryFilter((LambdaExpression)filter);
+        }
+
+        private static LambdaExpression GetSoftDeleteFilter<TEntity>()
+            where TEntity : class, ISoftDeletable
+        {
+            Expression<Func<TEntity, bool>> filter = x => !x.IsDeleted;
+            return filter;
         }
     }
 }

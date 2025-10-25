@@ -10,5 +10,9 @@ namespace ApplicationClean.Interfaces.Repositories
         Task AddAsync(Usuario usuario);
         Task UpdateAsync(Usuario usuario);
         Task DeleteAsync(Usuario usuario);
+
+        Task<bool> LegajoExistsAsync(string legajo);
+
+        Task<Usuario> GetByLegajoIncludingDeletedAsync(string legajo);
     }
 }

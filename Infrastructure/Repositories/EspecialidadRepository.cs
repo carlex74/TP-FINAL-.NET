@@ -48,5 +48,16 @@ namespace Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> DescripcionExistsAsync(string descripcion, int? excludeId = null)
+        {
+            var query = _context.Especialidades.IgnoreQueryFilters(); // Ignora el filtro
+            if (excludeId.HasValue)
+            {
+                query = query.Where(e => e.Id != excludeId.Value);
+            }
+          
+            return await query.AnyAsync(e => e.Descripcion.ToLower() == descripcion.ToLower());
+        }
     }
 }

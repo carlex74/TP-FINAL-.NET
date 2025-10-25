@@ -49,5 +49,33 @@ namespace Infrastructure.Repositories
         {
             return await _context.Personas.FirstOrDefaultAsync(p => p.Dni == dni);
         }
+
+
+        public async Task<bool> DniExistsAsync(string dni, int? excludeId = null)
+        {
+            var query = _context.Personas.IgnoreQueryFilters(); // Ignora el filtro de borrado lógico
+            if (excludeId.HasValue)
+            {
+                query = query.Where(p => p.Id != excludeId.Value);
+            }
+            return await query.AnyAsync(p => p.Dni == dni);
+        }
+
+        public async Task<bool> EmailExistsAsync(string email, int? excludeId = null)
+        {
+            var query = _context.Personas.IgnoreQueryFilters(); // Ignora el filtro de borrado lógico
+            if (excludeId.HasValue)
+            {
+                query = query.Where(p => p.Id != excludeId.Value);
+            }
+            return await query.AnyAsync(p => p.Email == email);
+        }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            //La consulta respetará el filtro global.
+            return await _context.Personas
+                                 .AnyAsync(p => p.Id == id);
+        }
     }
 }

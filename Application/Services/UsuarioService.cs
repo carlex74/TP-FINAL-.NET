@@ -20,7 +20,7 @@ namespace ApplicationClean.Services
 
         public async Task<UsuarioDTO> LoginAsync(LoginRequestDTO loginRequest)
         {
-            var usuario = await _usuarioRepository.GetByLegajoAsync(loginRequest.Legajo);
+            var usuario = await _usuarioRepository.GetByLegajoIncludingDeletedAsync(loginRequest.Legajo);
             if (usuario == null || !usuario.Habilitado) return null;
             if (!BCrypt.Net.BCrypt.Verify(loginRequest.Clave, usuario.ClaveHash)) return null;
             return MapToUsuarioDTO(usuario);
@@ -28,9 +28,13 @@ namespace ApplicationClean.Services
 
         public async Task<UsuarioDTO> CreateUsuarioAsync(CrearUsuarioDTO crearUsuarioDto)
         {
-            if (await _usuarioRepository.GetByLegajoAsync(crearUsuarioDto.Legajo) != null)
+            if (await _usuarioRepository.LegajoExistsAsync(crearUsuarioDto.Legajo))
             {
-                throw new ArgumentException("El legajo ya está registrado.");
+                throw new BusinessRuleException("El legajo ya está registrado.");
+            }
+            if (!await _personaRepository.ExistsAsync(crearUsuarioDto.IdPersona))
+            {
+                throw new KeyNotFoundException($"No se encontró una persona con el ID {crearUsuarioDto.IdPersona}.");
             }
             var persona = await _personaRepository.GetByIdAsync(crearUsuarioDto.IdPersona);
             if (persona == null)
@@ -100,7 +104,12 @@ namespace ApplicationClean.Services
         public async Task<bool> DeleteAsync(string legajo)
         {
             var usuario = await _usuarioRepository.GetByLegajoAsync(legajo);
-            if (usuario == null) return false;
+            if (usuario == null)
+            {
+                throw new KeyNotFoundException($"No se encontró un usuario con el legajo {legajo} para eliminar.");
+            }
+
+            usuario.SoftDelete(); 
             await _usuarioRepository.DeleteAsync(usuario);
             return true;
         }

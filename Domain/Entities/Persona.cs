@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
+using Domain.Interfaces;
 
 namespace Domain.Entities
 {
-    public class Persona
+    public class Persona : ISoftDeletable
     {
         public int Id { get; private set; }
         public string Nombre { get; private set; }
@@ -12,6 +13,9 @@ namespace Domain.Entities
         public string Telefono { get; private set; }
         public string Email { get; private set; }
         public DateTime FechaNacimiento { get; private set; }
+
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedOnUtc { get; private set; }
 
         public ICollection<Usuario> Usuarios { get; set; }
 
@@ -76,6 +80,19 @@ namespace Domain.Entities
                 throw new ArgumentException("El email no tiene un formato válido.", nameof(email));
             Email = email.Trim();
         }
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedOnUtc = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedOnUtc = null;
+        }
+
         /*
         private static bool EsEmailValido(string email)
         {

@@ -9,5 +9,8 @@ namespace ApplicationClean.Interfaces.Repositories
         Task DeleteAsync(Especialidad especialidad);
         Task<Especialidad> GetByIdAsync(int id);
         Task<IEnumerable<Especialidad>> GetAllAsync();
+
+        Task<bool> DescripcionExistsAsync(string descripcion, int? excludeId = null);
+
     }
 }

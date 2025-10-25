@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
+using Domain.Interfaces;
 using static Domain.Entities.Persona;
 
 namespace Domain.Entities
 {
-    public abstract class Usuario
+    public abstract class Usuario : ISoftDeletable
     {
         public enum TipoUsuario
         {
@@ -18,6 +19,10 @@ namespace Domain.Entities
         public TipoUsuario Tipo { get; protected set; }
         public bool Habilitado { get; private set; }
         public int IdPersona { get; private set; }
+
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedOnUtc { get; private set; }
+
 
         public ICollection<AlumnoInscripcion> AlumnoInscripcions { get; private set; }
         public ICollection<DocenteCurso> DocenteCursos { get; private set; }
@@ -63,5 +68,19 @@ namespace Domain.Entities
         {
             Habilitado = habilitado;
         }
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedOnUtc = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedOnUtc = null;
+        }
+
+
     }
 }

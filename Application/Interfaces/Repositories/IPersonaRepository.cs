@@ -12,5 +12,10 @@ namespace ApplicationClean.Interfaces.Repositories
         Task DeleteAsync(Persona persona);
         Task<Persona> GetByEmailAsync(string email);
         Task<Persona> GetByDniAsync(string dni);
+
+        Task<bool> DniExistsAsync(string dni, int? excludeId = null);
+        Task<bool> EmailExistsAsync(string email, int? excludeId = null);
+
+        Task<bool> ExistsAsync(int id);
     }
 }
