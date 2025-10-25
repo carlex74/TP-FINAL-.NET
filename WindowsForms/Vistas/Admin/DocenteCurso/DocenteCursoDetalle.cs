@@ -66,7 +66,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar datos: " + ex.Message);
+                ErrorHandler.HandleError(ex);
             }
         }
 
@@ -97,7 +97,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar: " + ex.Message);
+                ErrorHandler.HandleError(ex);
             }
         }
 

@@ -17,150 +17,236 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.topPanel = new System.Windows.Forms.Panel();
-            this.titleLabel = new System.Windows.Forms.Label();
-            this.usuarioDataGridView = new System.Windows.Forms.DataGridView();
-            this.agregarButton = new System.Windows.Forms.Button();
-            this.modificarButton = new System.Windows.Forms.Button();
-            this.eliminarButton = new System.Windows.Forms.Button();
-            this.topPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.usuarioDataGridView)).BeginInit();
-            this.SuspendLayout();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            topPanel = new Panel();
+            titleLabel = new Label();
+            usuarioDataGridView = new DataGridView();
+            agregarButton = new Button();
+            modificarButton = new Button();
+            eliminarButton = new Button();
+            panelFiltros = new Panel();
+            btnLimpiarFiltros = new Button();
+            cmbFiltroTipo = new ComboBox();
+            lblFiltroTipo = new Label();
+            txtFiltroLegajo = new TextBox();
+            lblFiltroLegajo = new Label();
+            topPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)usuarioDataGridView).BeginInit();
+            panelFiltros.SuspendLayout();
+            SuspendLayout();
             // 
             // topPanel
             // 
-            this.topPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.topPanel.Controls.Add(this.titleLabel);
-            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.topPanel.Location = new System.Drawing.Point(0, 0);
-            this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(750, 60);
-            this.topPanel.TabIndex = 4;
+            topPanel.BackColor = Color.FromArgb(0, 122, 204);
+            topPanel.Controls.Add(titleLabel);
+            topPanel.Dock = DockStyle.Top;
+            topPanel.Location = new Point(0, 0);
+            topPanel.Margin = new Padding(3, 4, 3, 4);
+            topPanel.Name = "topPanel";
+            topPanel.Size = new Size(750, 75);
+            topPanel.TabIndex = 4;
             // 
             // titleLabel
             // 
-            this.titleLabel.AutoSize = true;
-            this.titleLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 13.8F, System.Drawing.FontStyle.Bold);
-            this.titleLabel.ForeColor = System.Drawing.Color.White;
-            this.titleLabel.Location = new System.Drawing.Point(25, 15);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(234, 32);
-            this.titleLabel.TabIndex = 0;
-            this.titleLabel.Text = "Gestión de Usuarios";
+            titleLabel.AutoSize = true;
+            titleLabel.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold);
+            titleLabel.ForeColor = Color.White;
+            titleLabel.Location = new Point(25, 19);
+            titleLabel.Name = "titleLabel";
+            titleLabel.Size = new Size(221, 31);
+            titleLabel.TabIndex = 0;
+            titleLabel.Text = "Gestión de Usuarios";
             // 
             // usuarioDataGridView
             // 
-            this.usuarioDataGridView.AllowUserToAddRows = false;
-            this.usuarioDataGridView.AllowUserToDeleteRows = false;
-            this.usuarioDataGridView.AllowUserToResizeRows = false;
-            this.usuarioDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.usuarioDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.usuarioDataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.usuarioDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.usuarioDataGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.usuarioDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.usuarioDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.usuarioDataGridView.ColumnHeadersHeight = 40;
-            this.usuarioDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.usuarioDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
-            this.usuarioDataGridView.EnableHeadersVisualStyles = false;
-            this.usuarioDataGridView.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
-            this.usuarioDataGridView.Location = new System.Drawing.Point(28, 140);
-            this.usuarioDataGridView.MultiSelect = false;
-            this.usuarioDataGridView.Name = "usuarioDataGridView";
-            this.usuarioDataGridView.ReadOnly = true;
-            this.usuarioDataGridView.RowHeadersVisible = false;
-            this.usuarioDataGridView.RowTemplate.Height = 40;
-            this.usuarioDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.usuarioDataGridView.Size = new System.Drawing.Size(694, 429);
-            this.usuarioDataGridView.TabIndex = 3;
+            usuarioDataGridView.AllowUserToAddRows = false;
+            usuarioDataGridView.AllowUserToDeleteRows = false;
+            usuarioDataGridView.AllowUserToResizeRows = false;
+            usuarioDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            usuarioDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            usuarioDataGridView.BackgroundColor = Color.White;
+            usuarioDataGridView.BorderStyle = BorderStyle.None;
+            usuarioDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            usuarioDataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.White;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.FromArgb(33, 37, 41);
+            dataGridViewCellStyle1.SelectionBackColor = Color.White;
+            dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(33, 37, 41);
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            usuarioDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            usuarioDataGridView.ColumnHeadersHeight = 40;
+            usuarioDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = Color.FromArgb(64, 64, 64);
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(0, 122, 204);
+            dataGridViewCellStyle2.SelectionForeColor = Color.White;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            usuarioDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            usuarioDataGridView.EnableHeadersVisualStyles = false;
+            usuarioDataGridView.GridColor = Color.FromArgb(238, 238, 238);
+            usuarioDataGridView.Location = new Point(28, 238);
+            usuarioDataGridView.Margin = new Padding(3, 4, 3, 4);
+            usuarioDataGridView.MultiSelect = false;
+            usuarioDataGridView.Name = "usuarioDataGridView";
+            usuarioDataGridView.ReadOnly = true;
+            usuarioDataGridView.RowHeadersVisible = false;
+            usuarioDataGridView.RowHeadersWidth = 51;
+            usuarioDataGridView.RowTemplate.Height = 40;
+            usuarioDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            usuarioDataGridView.Size = new Size(694, 474);
+            usuarioDataGridView.TabIndex = 3;
             // 
             // agregarButton
             // 
-            this.agregarButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.agregarButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.agregarButton.FlatAppearance.BorderSize = 0;
-            this.agregarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.agregarButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.agregarButton.ForeColor = System.Drawing.Color.White;
-            this.agregarButton.Location = new System.Drawing.Point(28, 85);
-            this.agregarButton.Name = "agregarButton";
-            this.agregarButton.Size = new System.Drawing.Size(120, 32);
-            this.agregarButton.TabIndex = 1;
-            this.agregarButton.Text = "AGREGAR";
-            this.agregarButton.UseVisualStyleBackColor = false;
-            this.agregarButton.Click += new System.EventHandler(this.agregarButton_Click);
+            agregarButton.BackColor = Color.FromArgb(0, 122, 204);
+            agregarButton.Cursor = Cursors.Hand;
+            agregarButton.FlatAppearance.BorderSize = 0;
+            agregarButton.FlatStyle = FlatStyle.Flat;
+            agregarButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            agregarButton.ForeColor = Color.White;
+            agregarButton.Location = new Point(28, 94);
+            agregarButton.Margin = new Padding(3, 4, 3, 4);
+            agregarButton.Name = "agregarButton";
+            agregarButton.Size = new Size(120, 40);
+            agregarButton.TabIndex = 1;
+            agregarButton.Text = "AGREGAR";
+            agregarButton.UseVisualStyleBackColor = false;
+            agregarButton.Click += agregarButton_Click;
             // 
             // modificarButton
             // 
-            this.modificarButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(117)))), ((int)(((byte)(125)))));
-            this.modificarButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.modificarButton.FlatAppearance.BorderSize = 0;
-            this.modificarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.modificarButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.modificarButton.ForeColor = System.Drawing.Color.White;
-            this.modificarButton.Location = new System.Drawing.Point(154, 85);
-            this.modificarButton.Name = "modificarButton";
-            this.modificarButton.Size = new System.Drawing.Size(120, 32);
-            this.modificarButton.TabIndex = 2;
-            this.modificarButton.Text = "MODIFICAR";
-            this.modificarButton.UseVisualStyleBackColor = false;
-            this.modificarButton.Click += new System.EventHandler(this.modificarButton_Click);
+            modificarButton.BackColor = Color.FromArgb(108, 117, 125);
+            modificarButton.Cursor = Cursors.Hand;
+            modificarButton.FlatAppearance.BorderSize = 0;
+            modificarButton.FlatStyle = FlatStyle.Flat;
+            modificarButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            modificarButton.ForeColor = Color.White;
+            modificarButton.Location = new Point(154, 94);
+            modificarButton.Margin = new Padding(3, 4, 3, 4);
+            modificarButton.Name = "modificarButton";
+            modificarButton.Size = new Size(120, 40);
+            modificarButton.TabIndex = 2;
+            modificarButton.Text = "MODIFICAR";
+            modificarButton.UseVisualStyleBackColor = false;
+            modificarButton.Click += modificarButton_Click;
             // 
             // eliminarButton
             // 
-            this.eliminarButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
-            this.eliminarButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.eliminarButton.FlatAppearance.BorderSize = 0;
-            this.eliminarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.eliminarButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.eliminarButton.ForeColor = System.Drawing.Color.White;
-            this.eliminarButton.Location = new System.Drawing.Point(280, 85);
-            this.eliminarButton.Name = "eliminarButton";
-            this.eliminarButton.Size = new System.Drawing.Size(120, 32);
-            this.eliminarButton.TabIndex = 3;
-            this.eliminarButton.Text = "ELIMINAR";
-            this.eliminarButton.UseVisualStyleBackColor = false;
-            this.eliminarButton.Click += new System.EventHandler(this.eliminarButton_Click);
+            eliminarButton.BackColor = Color.FromArgb(220, 53, 69);
+            eliminarButton.Cursor = Cursors.Hand;
+            eliminarButton.FlatAppearance.BorderSize = 0;
+            eliminarButton.FlatStyle = FlatStyle.Flat;
+            eliminarButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            eliminarButton.ForeColor = Color.White;
+            eliminarButton.Location = new Point(280, 94);
+            eliminarButton.Margin = new Padding(3, 4, 3, 4);
+            eliminarButton.Name = "eliminarButton";
+            eliminarButton.Size = new Size(120, 40);
+            eliminarButton.TabIndex = 3;
+            eliminarButton.Text = "ELIMINAR";
+            eliminarButton.UseVisualStyleBackColor = false;
+            eliminarButton.Click += eliminarButton_Click;
+            // 
+            // panelFiltros
+            // 
+            panelFiltros.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            panelFiltros.BackColor = Color.WhiteSmoke;
+            panelFiltros.Controls.Add(btnLimpiarFiltros);
+            panelFiltros.Controls.Add(cmbFiltroTipo);
+            panelFiltros.Controls.Add(lblFiltroTipo);
+            panelFiltros.Controls.Add(txtFiltroLegajo);
+            panelFiltros.Controls.Add(lblFiltroLegajo);
+            panelFiltros.Location = new Point(28, 150);
+            panelFiltros.Margin = new Padding(3, 4, 3, 4);
+            panelFiltros.Name = "panelFiltros";
+            panelFiltros.Size = new Size(694, 69);
+            panelFiltros.TabIndex = 5;
+            // 
+            // btnLimpiarFiltros
+            // 
+            btnLimpiarFiltros.BackColor = Color.Gray;
+            btnLimpiarFiltros.Cursor = Cursors.Hand;
+            btnLimpiarFiltros.FlatAppearance.BorderSize = 0;
+            btnLimpiarFiltros.FlatStyle = FlatStyle.Flat;
+            btnLimpiarFiltros.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            btnLimpiarFiltros.ForeColor = Color.White;
+            btnLimpiarFiltros.Location = new Point(580, 19);
+            btnLimpiarFiltros.Margin = new Padding(3, 4, 3, 4);
+            btnLimpiarFiltros.Name = "btnLimpiarFiltros";
+            btnLimpiarFiltros.Size = new Size(90, 32);
+            btnLimpiarFiltros.TabIndex = 4;
+            btnLimpiarFiltros.Text = "LIMPIAR";
+            btnLimpiarFiltros.UseVisualStyleBackColor = false;
+            btnLimpiarFiltros.Click += btnLimpiarFiltros_Click;
+            // 
+            // cmbFiltroTipo
+            // 
+            cmbFiltroTipo.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFiltroTipo.FormattingEnabled = true;
+            cmbFiltroTipo.Location = new Point(402, 19);
+            cmbFiltroTipo.Margin = new Padding(3, 4, 3, 4);
+            cmbFiltroTipo.Name = "cmbFiltroTipo";
+            cmbFiltroTipo.Size = new Size(156, 28);
+            cmbFiltroTipo.TabIndex = 3;
+            cmbFiltroTipo.SelectedIndexChanged += AplicarFiltros;
+            // 
+            // lblFiltroTipo
+            // 
+            lblFiltroTipo.AutoSize = true;
+            lblFiltroTipo.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            lblFiltroTipo.Location = new Point(304, 22);
+            lblFiltroTipo.Name = "lblFiltroTipo";
+            lblFiltroTipo.Size = new Size(92, 20);
+            lblFiltroTipo.TabIndex = 2;
+            lblFiltroTipo.Text = "Filtrar x Rol:";
+            // 
+            // txtFiltroLegajo
+            // 
+            txtFiltroLegajo.Location = new Point(131, 20);
+            txtFiltroLegajo.Margin = new Padding(3, 4, 3, 4);
+            txtFiltroLegajo.Name = "txtFiltroLegajo";
+            txtFiltroLegajo.Size = new Size(167, 27);
+            txtFiltroLegajo.TabIndex = 1;
+            txtFiltroLegajo.TextChanged += AplicarFiltros;
+            // 
+            // lblFiltroLegajo
+            // 
+            lblFiltroLegajo.AutoSize = true;
+            lblFiltroLegajo.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            lblFiltroLegajo.Location = new Point(10, 22);
+            lblFiltroLegajo.Name = "lblFiltroLegajo";
+            lblFiltroLegajo.Size = new Size(115, 20);
+            lblFiltroLegajo.TabIndex = 0;
+            lblFiltroLegajo.Text = "Filtrar x Legajo:";
             // 
             // UsuarioLista
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
-            this.ClientSize = new System.Drawing.Size(750, 600);
-            this.Controls.Add(this.eliminarButton);
-            this.Controls.Add(this.modificarButton);
-            this.Controls.Add(this.agregarButton);
-            this.Controls.Add(this.usuarioDataGridView);
-            this.Controls.Add(this.topPanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "UsuarioLista";
-            this.Text = "UsuarioLista";
-            this.Load += new System.EventHandler(this.UsuarioLista_Load);
-            this.topPanel.ResumeLayout(false);
-            this.topPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.usuarioDataGridView)).EndInit();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(245, 247, 250);
+            ClientSize = new Size(750, 750);
+            Controls.Add(panelFiltros);
+            Controls.Add(eliminarButton);
+            Controls.Add(modificarButton);
+            Controls.Add(agregarButton);
+            Controls.Add(usuarioDataGridView);
+            Controls.Add(topPanel);
+            FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "UsuarioLista";
+            Text = "UsuarioLista";
+            Load += UsuarioLista_Load;
+            topPanel.ResumeLayout(false);
+            topPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)usuarioDataGridView).EndInit();
+            panelFiltros.ResumeLayout(false);
+            panelFiltros.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -170,5 +256,11 @@
         private System.Windows.Forms.Button modificarButton;
         private System.Windows.Forms.Button agregarButton;
         private System.Windows.Forms.DataGridView usuarioDataGridView;
+        private System.Windows.Forms.Panel panelFiltros;
+        private System.Windows.Forms.Button btnLimpiarFiltros;
+        private System.Windows.Forms.ComboBox cmbFiltroTipo;
+        private System.Windows.Forms.Label lblFiltroTipo;
+        private System.Windows.Forms.TextBox txtFiltroLegajo;
+        private System.Windows.Forms.Label lblFiltroLegajo;
     }
 }

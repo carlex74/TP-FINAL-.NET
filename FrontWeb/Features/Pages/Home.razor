@@ -2,20 +2,174 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavigationManager
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Home - Academia Web</PageTitle>
+
+<style>
+    .home-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+    }
+
+    .welcome-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+    }
+
+    .logo-section {
+        margin-bottom: 2rem;
+    }
+
+    .logo-circle {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+        .logo-circle svg {
+            width: 45px;
+            height: 45px;
+            fill: white;
+        }
+
+    .welcome-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+    }
+
+    .welcome-subtitle {
+        font-size: 1.1rem;
+        color: #718096;
+        margin-bottom: 2rem;
+    }
+
+    .login-button {
+        display: inline-block;
+        padding: 0.75rem 2.5rem;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+
+        .login-button:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+    .features-list {
+        margin-top: 2.5rem;
+        text-align: left;
+        padding: 0 1rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        color: #4a5568;
+    }
+
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        background-color: #e6f2ff;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .loading-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+    }
+
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        border: 0.3em solid #007bff;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spinner-border 0.75s linear infinite;
+    }
+
+    .loading-text {
+        margin-top: 1.5rem;
+        color: #4a5568;
+        font-size: 1.1rem;
+    }
+
+    @@keyframes spinner-border {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
 
 <AuthorizeView>
     <Authorized>
-        <div class="text-center mt-5">
+        <div class="loading-container">
             <div class="spinner-border" role="status">
                 <span class="visually-hidden">Redirigiendo...</span>
             </div>
-            <p class="mt-3">Redirigiendo a su portal...</p>
+            <p class="loading-text">Redirigiendo a su portal...</p>
         </div>
     </Authorized>
     <NotAuthorized>
-        <h1>¡Bienvenido a Academia Web!</h1>
-        <p>Por favor, <a href="login">inicie sesión</a> para acceder a su portal.</p>
+        <div class="home-container">
+            <div class="welcome-card">
+                <div class="logo-section">
+                    <div class="logo-circle">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <h1 class="welcome-title">¡Bienvenido a Academia Web!</h1>
+                <p class="welcome-subtitle">Por favor, inicie sesión para acceder a su portal</p>
+
+                <a href="login" class="login-button">Iniciar Sesión</a>
+
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">📚</div>
+                        <span>Accede a tus cursos y materiales</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <span>Consulta tu rendimiento académico</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">👥</div>
+                        <span>Interactúa con docentes y alumnos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -39,7 +193,6 @@
             {
                 NavigationManager.NavigateTo("/reportes/historial", forceLoad: true);
             }
-            // Si no es ningún rol conocido, se queda en home
         }
     }
 }

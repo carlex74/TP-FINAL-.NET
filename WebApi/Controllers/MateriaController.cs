@@ -33,15 +33,8 @@ public class MateriasController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(MateriaDTO materiaDto)
     {
-        try
-        {
-            var nuevaMateria = await _materiaService.AddAsync(materiaDto);
-            return CreatedAtRoute("GetMateriaById", new { id = nuevaMateria.Id }, nuevaMateria);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var nuevaMateria = await _materiaService.AddAsync(materiaDto);
+        return CreatedAtRoute("GetMateriaById", new { id = nuevaMateria.Id }, nuevaMateria);
     }
 
     [HttpPut("{id}")]
@@ -49,36 +42,21 @@ public class MateriasController : ControllerBase
     {
         if (id != materiaDto.Id) return BadRequest("ID de la ruta no coincide con el ID del objeto.");
 
-        try
-        {
-            await _materiaService.UpdateAsync(materiaDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        await _materiaService.UpdateAsync(materiaDto);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await _materiaService.DeleteAsync(id);
-        if (!deleted) return NotFound();
+        await _materiaService.DeleteAsync(id);
         return NoContent();
     }
 
     [HttpPut("{id}/planes")]
     public async Task<IActionResult> AssignPlanes(int id, [FromBody] List<int> planIds)
     {
-        try
-        {
-            await _materiaService.AssignPlanesAsync(id, planIds);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        await _materiaService.AssignPlanesAsync(id, planIds);
+        return NoContent();
     }
 }

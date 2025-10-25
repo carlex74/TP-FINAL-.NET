@@ -51,7 +51,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar especialidades: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 
@@ -82,7 +82,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 

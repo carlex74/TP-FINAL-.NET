@@ -33,8 +33,9 @@ namespace Infrastructure.Context
             // Itera sobre todos los tipos de entidad descubiertos en el DbContext.
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                // Comprueba si la entidad implementa la interfaz ISoftDeletable.
-                if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+                // Comprueba si la entidad implementa la interfaz ISoftDeletable
+                // Y ademas, comprueba que sea una clase base (no una clase derivada).
+                if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType) && entityType.BaseType == null)
                 {
                     // Aplica el filtro global de borrado logico.
                     entityType.AddSoftDeleteQueryFilter();

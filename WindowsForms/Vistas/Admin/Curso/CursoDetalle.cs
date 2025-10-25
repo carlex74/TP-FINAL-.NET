@@ -50,7 +50,7 @@ namespace WindowsForms
                 materiaComboBox.DisplayMember = "Nombre";
                 materiaComboBox.ValueMember = "Id";
             }
-            catch (Exception ex) { MessageBox.Show($"Error al cargar materias: {ex.Message}"); }
+            catch (Exception ex) { ErrorHandler.HandleError(ex); }
         }
 
         private async Task LoadComisionesAsync()
@@ -62,7 +62,7 @@ namespace WindowsForms
                 comisionComboBox.DisplayMember = "Descripcion";
                 comisionComboBox.ValueMember = "nro";
             }
-            catch (Exception ex) { MessageBox.Show($"Error al cargar comisiones: {ex.Message}"); }
+            catch (Exception ex) { ErrorHandler.HandleError(ex); }
         }
 
         private async void aceptarButton_Click(object sender, EventArgs e)
@@ -91,7 +91,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 

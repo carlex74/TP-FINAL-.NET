@@ -66,7 +66,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar plan: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 
@@ -87,7 +87,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al eliminar plan: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 
@@ -105,7 +105,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar la lista: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 

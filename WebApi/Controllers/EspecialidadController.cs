@@ -41,16 +41,9 @@ public class EspecialidadesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(EspecialidadDTO dto)
     {
-        try
-        {
-            var especialidadDTO = await _especialidadService.AddAsync(dto);
+        var especialidadDTO = await _especialidadService.AddAsync(dto);
 
-            return CreatedAtRoute("GetEspecialidadById", new { id = especialidadDTO.Id }, especialidadDTO);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        return CreatedAtRoute("GetEspecialidadById", new { id = especialidadDTO.Id }, especialidadDTO);
     }
 
     [HttpPut("{id}")]
@@ -64,19 +57,8 @@ public class EspecialidadesController : ControllerBase
             return BadRequest("El ID de la ruta no coincide con el ID del cuerpo de la solicitud.");
         }
 
-        try
-        {
-            await _especialidadService.UpdateAsync(dto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { error = ex.Message });
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        await _especialidadService.UpdateAsync(dto);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
@@ -84,11 +66,7 @@ public class EspecialidadesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var deleted = await _especialidadService.DeleteAsync(id);
-        if (!deleted)
-        {
-            return NotFound($"No se encontró una especialidad con el ID {id} para eliminar.");
-        }
+        await _especialidadService.DeleteAsync(id);
         return NoContent();
     }
 }

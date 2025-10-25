@@ -19,20 +19,8 @@ public class UsuariosController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> Create(CrearUsuarioDTO crearUsuarioDto)
     {
-        try
-        {
-            var nuevoUsuario = await _usuarioService.CreateUsuarioAsync(crearUsuarioDto);
-
-            return StatusCode(201, nuevoUsuario);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var nuevoUsuario = await _usuarioService.CreateUsuarioAsync(crearUsuarioDto);
+        return StatusCode(201, nuevoUsuario);
     }
 
     [HttpGet]
@@ -61,15 +49,8 @@ public class UsuariosController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> Update(string legajo, ActualizarUsuarioDTO dto)
     {
-        try
-        {
-            var usuarioActualizado = await _usuarioService.UpdateAsync(legajo, dto);
-            return Ok(usuarioActualizado);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var usuarioActualizado = await _usuarioService.UpdateAsync(legajo, dto);
+        return Ok(usuarioActualizado);
     }
 
     [HttpDelete("{legajo}")]
@@ -77,11 +58,7 @@ public class UsuariosController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> Delete(string legajo)
     {
-        var deleted = await _usuarioService.DeleteAsync(legajo);
-        if (!deleted)
-        {
-            return NotFound();
-        }
+        await _usuarioService.DeleteAsync(legajo);
         return NoContent();
     }
 }

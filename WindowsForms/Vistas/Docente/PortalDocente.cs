@@ -21,7 +21,7 @@ namespace WindowsForms
         private readonly UsuarioDTO _docenteActual;
 
         private bool _isLoadingAlumnos = false;
-        private List<CursoDTO> _misCursosCompletos = new List<CursoDTO>(); // Guardamos los cursos para el reporte
+        private List<CursoDTO> _misCursosCompletos = new List<CursoDTO>();
 
         public PortalDocente(
             IAPIDocenteCursoClient docenteCursoClient,
@@ -87,7 +87,6 @@ namespace WindowsForms
 
                 dgvMisCursos.DataSource = cursosParaMostrar.ToList();
 
-                // Cargar el ComboBox de la pestaña de reportes
                 cmbCursosReporte.DataSource = _misCursosCompletos;
                 cmbCursosReporte.DisplayMember = "Descripcion";
                 cmbCursosReporte.ValueMember = "Id";
@@ -95,7 +94,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar sus cursos: {ex.Message}", "Error de Conexión");
+                ErrorHandler.HandleError(ex);
             }
             finally
             {
@@ -123,7 +122,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar los alumnos del curso: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
                 dgvAlumnosInscriptos.DataSource = null;
             }
             finally
@@ -162,15 +161,67 @@ namespace WindowsForms
 
         private async void btnGuardarCambios_Click(object sender, EventArgs e)
         {
-            // (Tu lógica existente para guardar cambios no necesita ser modificada)
+            if (dgvAlumnosInscriptos.Rows.Count == 0 || dgvMisCursos.SelectedRows.Count == 0) return;
+
+            this.dgvAlumnosInscriptos.EndEdit();
+
+            this.Cursor = Cursors.WaitCursor;
+            btnGuardarCambios.Enabled = false;
+
+            try
+            {
+                dynamic selectedCourse = dgvMisCursos.SelectedRows[0].DataBoundItem;
+                int idCurso = selectedCourse.IdCurso;
+
+                int cambiosRealizados = 0;
+                var tareasDeActualizacion = new List<Task>();
+
+                var listaAlumnos = (List<AlumnoInscripcionViewModel>)dgvAlumnosInscriptos.DataSource;
+
+                foreach (var alumno in listaAlumnos)
+                {
+                    if (alumno.Nota < 0 || alumno.Nota > 10)
+                    {
+                        MessageBox.Show($"La nota '{alumno.Nota}' para el alumno con legajo '{alumno.LegajoAlumno}' no es válida. Debe estar entre 0 y 10.", "Error de Validación");
+                        return;
+                    }
+
+                    var dto = new AlumnoInscripcionDTO
+                    {
+                        LegajoAlumno = alumno.LegajoAlumno,
+                        IdCurso = idCurso,
+                        Condicion = alumno.Condicion,
+                        Nota = alumno.Nota
+                    };
+
+                    tareasDeActualizacion.Add(_inscripcionClient.Update(dto));
+                    cambiosRealizados++;
+                }
+
+                await Task.WhenAll(tareasDeActualizacion);
+
+                MessageBox.Show($"{cambiosRealizados} registros de alumnos actualizados correctamente.", "Éxito");
+                await CargarAlumnosDelCursoAsync(idCurso);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Por favor, asegúrese de que todas las notas ingresadas sean números válidos.", "Error de Formato");
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.HandleError(ex);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+                btnGuardarCambios.Enabled = true;
+            }
         }
 
         private void btnCerrarSesion_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
-        // --- MÉTODOS PARA LA PESTAÑA DE REPORTES ---
 
         private void ConfigurarGridReporte()
         {
@@ -254,7 +305,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al generar el reporte: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
             }
             finally
             {

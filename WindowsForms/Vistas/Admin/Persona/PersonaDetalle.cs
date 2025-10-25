@@ -58,7 +58,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 

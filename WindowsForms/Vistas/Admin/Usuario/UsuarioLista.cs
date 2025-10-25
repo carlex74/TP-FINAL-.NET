@@ -2,7 +2,12 @@
 using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.ApiClients;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Domain.Entities.Usuario;
 
 namespace WindowsForms
 {
@@ -11,6 +16,8 @@ namespace WindowsForms
         private readonly IAPIUsuarioClients _usuarioClient;
         private readonly IAPIPersonaClients _personaClient;
         private readonly IAPIPlanClients _planClient;
+
+        private List<UsuarioDTO> _todosLosUsuarios;
 
         public UsuarioLista(IAPIUsuarioClients usuarioClient, IAPIPersonaClients personaClient, IAPIPlanClients planClient)
         {
@@ -21,10 +28,11 @@ namespace WindowsForms
             _planClient = planClient;
         }
 
-        private void UsuarioLista_Load(object sender, EventArgs e)
+        private async void UsuarioLista_Load(object sender, EventArgs e)
         {
             ConfigureDataGridView();
-            GetAllAndLoad();
+            CargarComboFiltroTipo();
+            await CargarDatosIniciales();
         }
 
         private void ConfigureDataGridView()
@@ -41,7 +49,68 @@ namespace WindowsForms
             usuarioDataGridView.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "PlanDescripcion", HeaderText = "Descripción Plan", FillWeight = 150 });
         }
 
-        private void agregarButton_Click(object sender, EventArgs e)
+        private void CargarComboFiltroTipo()
+        {
+            var tipos = new[] { new { Text = "Todos", Value = (TipoUsuario?)null } }
+                .Concat(Enum.GetValues(typeof(TipoUsuario))
+                    .Cast<TipoUsuario>()
+                    .Select(t => new { Text = t.ToString(), Value = (TipoUsuario?)t }))
+                .ToList();
+
+            cmbFiltroTipo.DataSource = tipos;
+            cmbFiltroTipo.DisplayMember = "Text";
+            cmbFiltroTipo.ValueMember = "Value";
+        }
+
+
+        private async Task CargarDatosIniciales()
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                _todosLosUsuarios = (await _usuarioClient.GetAll()).ToList();
+                AplicarFiltros(null, null);
+                UpdateButtonsState();
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.HandleError(ex);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void AplicarFiltros(object sender, EventArgs e)
+        {
+            if (_todosLosUsuarios == null) return;
+
+            IEnumerable<UsuarioDTO> usuariosFiltrados = _todosLosUsuarios;
+
+            if (!string.IsNullOrWhiteSpace(txtFiltroLegajo.Text))
+            {
+                usuariosFiltrados = usuariosFiltrados.Where(u => u.Legajo.Contains(txtFiltroLegajo.Text.Trim()));
+            }
+
+            if (cmbFiltroTipo.SelectedValue != null)
+            {
+                var tipoSeleccionado = (TipoUsuario)cmbFiltroTipo.SelectedValue;
+                usuariosFiltrados = usuariosFiltrados.Where(u => u.Tipo == tipoSeleccionado);
+            }
+
+            usuarioDataGridView.DataSource = usuariosFiltrados.ToList();
+            UpdateButtonsState();
+        }
+
+        private void btnLimpiarFiltros_Click(object sender, EventArgs e)
+        {
+            txtFiltroLegajo.Clear();
+            cmbFiltroTipo.SelectedIndex = 0;
+            AplicarFiltros(null, null);
+        }
+
+        private async void agregarButton_Click(object sender, EventArgs e)
         {
             using (var usuarioDetalle = new UsuarioDetalle(_usuarioClient, _personaClient, _planClient))
             {
@@ -49,7 +118,7 @@ namespace WindowsForms
                 usuarioDetalle.Usuario = new UsuarioDTO();
                 if (usuarioDetalle.ShowDialog() == DialogResult.OK)
                 {
-                    GetAllAndLoad();
+                    await CargarDatosIniciales();
                 }
             }
         }
@@ -65,7 +134,7 @@ namespace WindowsForms
                 if (usuario == null)
                 {
                     MessageBox.Show("Error al cargar el usuario.", "Error");
-                    GetAllAndLoad();
+                    await CargarDatosIniciales();
                     return;
                 }
 
@@ -75,13 +144,13 @@ namespace WindowsForms
                     usuarioDetalle.Usuario = usuario;
                     if (usuarioDetalle.ShowDialog() == DialogResult.OK)
                     {
-                        GetAllAndLoad();
+                        await CargarDatosIniciales();
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar el usuario: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 
@@ -96,32 +165,12 @@ namespace WindowsForms
                 if (result == DialogResult.Yes)
                 {
                     await _usuarioClient.Delete(usuarioSeleccionado.Legajo);
-                    GetAllAndLoad();
+                    await CargarDatosIniciales();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al eliminar el usuario: {ex.Message}", "Error");
-            }
-        }
-
-        private async void GetAllAndLoad()
-        {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-                usuarioDataGridView.DataSource = null;
-                var usuarios = await _usuarioClient.GetAll();
-                usuarioDataGridView.DataSource = usuarios;
-                UpdateButtonsState();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al cargar la lista de usuarios: {ex.Message}", "Error");
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
+                ErrorHandler.HandleError(ex);
             }
         }
 
@@ -136,9 +185,9 @@ namespace WindowsForms
 
         private void UpdateButtonsState()
         {
-            bool hasRows = usuarioDataGridView.Rows.Count > 0;
-            modificarButton.Enabled = hasRows;
-            eliminarButton.Enabled = hasRows;
+            bool hasSelection = usuarioDataGridView.SelectedRows.Count > 0;
+            modificarButton.Enabled = hasSelection;
+            eliminarButton.Enabled = hasSelection;
         }
     }
 }

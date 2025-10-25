@@ -33,15 +33,8 @@ public class CursosController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CursoDTO cursoDto)
     {
-        try
-        {
-            var nuevaCurso = await _cursoService.AddAsync(cursoDto);
-            return CreatedAtRoute("GetCursoById", new { id = nuevaCurso.Id }, nuevaCurso);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var nuevoCurso = await _cursoService.AddAsync(cursoDto);
+        return CreatedAtRoute("GetCursoById", new { id = nuevoCurso.Id }, nuevoCurso);
     }
 
     [HttpPut("{id}")]
@@ -49,22 +42,14 @@ public class CursosController : ControllerBase
     {
         if (id != cursoDto.Id) return BadRequest("ID de la ruta no coincide con el ID del objeto.");
 
-        try
-        {
-            await _cursoService.UpdateAsync(cursoDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        await _cursoService.UpdateAsync(cursoDto);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await _cursoService.DeleteAsync(id);
-        if (!deleted) return NotFound();
+        await _cursoService.DeleteAsync(id);
         return NoContent();
     }
 }

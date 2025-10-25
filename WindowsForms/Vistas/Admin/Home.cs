@@ -78,14 +78,12 @@ namespace WindowsForms
         private void cursoButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<CursoLista>(), cursoPanel);
         private void asignacionesButton_Click(object sender, EventArgs e) => OpenChildForm(_serviceProvider.GetRequiredService<DocenteCursoLista>(), asignacionesPanel);
 
-        // --- EVENTOS DEL MENÚ DE REPORTES ---
         private void rendimientoPorCursoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var reporteForm = _serviceProvider.GetRequiredService<ReporteRendimientoForm>();
             OpenChildForm(reporteForm, null);
         }
 
-        // --- MÉTODO NUEVO PARA EL REPORTE HISTORIAL ---
         private void historialAcadémicoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var reporteForm = _serviceProvider.GetRequiredService<ReporteHistorialForm>();

@@ -38,7 +38,7 @@ namespace WindowsForms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error al cargar la comisión: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ErrorHandler.HandleError(ex);
                     this.Close();
                     return;
                 }
@@ -91,7 +91,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorHandler.HandleError(ex);
             }
             finally
             {
@@ -119,7 +119,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al abrir asignación de planes: {ex.Message}");
+                ErrorHandler.HandleError(ex);
             }
         }
 

@@ -43,7 +43,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar cursos: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 
@@ -70,13 +70,7 @@ namespace WindowsForms
             {
                 ChartType = SeriesChartType.Pie,
                 IsValueShownAsLabel = true,
-
-                // --- CAMBIO CLAVE 1: MEJORAR LA ETIQUETA DE LA PORCIÓN ---
-                // Ahora mostrará "Condición (XX%)", por ejemplo: "Aprobado (33%)"
                 Label = "#AXISLABEL (#PERCENT{P0})",
-
-                // --- CAMBIO CLAVE 2: CORREGIR EL TEXTO DE LA LEYENDA ---
-                // Le decimos que use la etiqueta del eje (que definiremos luego) como texto.
                 LegendText = "#AXISLABEL"
             };
             rendimientoChart.Series.Add(series);
@@ -104,7 +98,6 @@ namespace WindowsForms
             {
                 this.Cursor = Cursors.WaitCursor;
 
-                // ... (el código para obtener 'reporteData' no cambia) ...
                 var inscripciones = (await _inscripcionClient.GetAll()).Where(i => i.IdCurso == cursoId).ToList();
                 var usuarios = await _usuarioClient.GetAll();
                 var reporteData = (from insc in inscripciones
@@ -122,30 +115,21 @@ namespace WindowsForms
                     .Select(g => new { Condicion = g.Key, Cantidad = g.Count() })
                     .ToList();
 
-                // --- INICIO DE LA SECCIÓN CORREGIDA ---
                 rendimientoChart.Series["Rendimiento"].Points.Clear();
                 foreach (var dataPoint in chartData)
                 {
-                    // Creamos un punto de datos explícitamente
                     DataPoint point = new DataPoint();
 
-                    // Establecemos el valor numérico (la cantidad de alumnos)
                     point.SetValueY(dataPoint.Cantidad);
-
-                    // Le decimos al punto cuál es su etiqueta de texto.
-                    // Esto es lo que usará `#AXISLABEL` en la configuración.
                     point.AxisLabel = dataPoint.Condicion;
-
-                    // También podemos asignar el texto de la leyenda aquí directamente por si acaso
                     point.LegendText = dataPoint.Condicion;
 
                     rendimientoChart.Series["Rendimiento"].Points.Add(point);
                 }
-                // --- FIN DE LA SECCIÓN CORREGIDA ---
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al generar el reporte: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
             }
             finally
             {

@@ -94,7 +94,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error fatal al cargar los datos: " + ex.Message, "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorHandler.HandleError(ex);
             }
             finally
             {
@@ -159,7 +159,7 @@ namespace WindowsForms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al procesar la inscripción: " + ex.Message, "Error");
+                    ErrorHandler.HandleError(ex);
                 }
             }
         }
@@ -193,7 +193,7 @@ namespace WindowsForms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al anular la inscripción: " + ex.Message, "Error");
+                    ErrorHandler.HandleError(ex);
                 }
             }
         }

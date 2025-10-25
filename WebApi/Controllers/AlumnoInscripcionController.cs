@@ -50,19 +50,11 @@ public class AlumnoInscripcionController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<IActionResult> Create(AlumnoInscripcionDTO inscripcionDto)
     {
-        try
-        {
-            var nuevaInscripcion = await _inscripcionService.AddAsync(inscripcionDto);
-
-            return CreatedAtRoute(
-                "GetInscripcionById",
-                new { legajoAlumno = nuevaInscripcion.LegajoAlumno, idCurso = nuevaInscripcion.IdCurso },
-                nuevaInscripcion);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var nuevaInscripcion = await _inscripcionService.AddAsync(inscripcionDto);
+        return CreatedAtRoute(
+            "GetInscripcionById",
+            new { legajoAlumno = nuevaInscripcion.LegajoAlumno, idCurso = nuevaInscripcion.IdCurso },
+            nuevaInscripcion);
     }
 
     /// <summary>
@@ -79,19 +71,8 @@ public class AlumnoInscripcionController : ControllerBase
             return BadRequest("Los identificadores de la ruta no coinciden con los del objeto.");
         }
 
-        try
-        {
-            await _inscripcionService.UpdateAsync(inscripcionDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _inscripcionService.UpdateAsync(inscripcionDto);
+        return NoContent();
     }
 
     /// <summary>
@@ -102,19 +83,8 @@ public class AlumnoInscripcionController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> Delete(string legajoAlumno, int idCurso)
     {
-        try
-        {
-            var success = await _inscripcionService.DeleteAsync(legajoAlumno, idCurso);
-            if (!success)
-            {
-                return NotFound("No se encontró la inscripción para anular.");
-            }
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _inscripcionService.DeleteAsync(legajoAlumno, idCurso);
+        return NoContent();
     }
 
 }

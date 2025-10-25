@@ -41,15 +41,8 @@ public class PersonasController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<IActionResult> Create(PersonaDTO personaDto)
     {
-        try
-        {
-            var nuevaPersona = await _personaService.AddAsync(personaDto);
-            return CreatedAtRoute("GetPersonaById", new { id = nuevaPersona.Id }, nuevaPersona);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var nuevaPersona = await _personaService.AddAsync(personaDto);
+        return CreatedAtRoute("GetPersonaById", new { id = nuevaPersona.Id }, nuevaPersona);
     }
 
     [HttpPut("{id}")]
@@ -63,19 +56,8 @@ public class PersonasController : ControllerBase
             return BadRequest("El ID de la ruta no coincide con el ID del objeto.");
         }
 
-        try
-        {
-            await _personaService.UpdateAsync(personaDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _personaService.UpdateAsync(personaDto);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
@@ -83,11 +65,7 @@ public class PersonasController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await _personaService.DeleteAsync(id);
-        if (!deleted)
-        {
-            return NotFound();
-        }
+        await _personaService.DeleteAsync(id);
         return NoContent();
     }
 }

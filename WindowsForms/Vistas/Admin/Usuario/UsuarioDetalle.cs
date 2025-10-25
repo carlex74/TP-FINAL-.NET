@@ -59,7 +59,7 @@ namespace WindowsForms
                 personaComboBox.DisplayMember = "NombreCompleto";
                 personaComboBox.ValueMember = "Id";
             }
-            catch (Exception ex) { MessageBox.Show($"Error al cargar personas: {ex.Message}"); }
+            catch (Exception ex) { ErrorHandler.HandleError(ex); }
         }
 
         private async Task LoadPlanesAsync()
@@ -72,7 +72,7 @@ namespace WindowsForms
                 planComboBox.ValueMember = "Id";
                 planComboBox.SelectedItem = null;
             }
-            catch (Exception ex) { MessageBox.Show($"Error al cargar planes: {ex.Message}"); }
+            catch (Exception ex) { ErrorHandler.HandleError(ex); }
         }
 
         private void LoadTiposUsuario()
@@ -118,7 +118,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ErrorHandler.HandleError(ex);
             }
         }
 

@@ -111,7 +111,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MostrarError($"Error de conexión o inesperado: {ex.Message}");
+                ErrorHandler.HandleError(ex);
             }
             finally
             {

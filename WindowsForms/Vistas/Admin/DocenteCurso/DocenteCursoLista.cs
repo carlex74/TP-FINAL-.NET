@@ -42,7 +42,7 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar la lista: {ex.Message}", "Error");
+                ErrorHandler.HandleError(ex);
             }
             finally
             {
@@ -95,7 +95,7 @@ namespace WindowsForms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error al eliminar: {ex.Message}", "Error");
+                    ErrorHandler.HandleError(ex);
                 }
             }
         }

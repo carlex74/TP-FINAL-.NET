@@ -96,6 +96,8 @@ if (app.Environment.IsDevelopment())
     app.UseHttpLogging();
 }
 
+app.UseMiddleware<WebApi.Middleware.ExceptionMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);

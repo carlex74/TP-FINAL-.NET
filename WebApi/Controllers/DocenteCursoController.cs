@@ -50,19 +50,11 @@ public class DocenteCursoController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<IActionResult> Create(DocenteCursoDTO docenteCursoDto)
     {
-        try
-        {
-            var nuevaAsignacion = await _docenteCursoService.AddAsync(docenteCursoDto);
-
-            return CreatedAtRoute(
-                "GetDocenteCursoById",
-                new { idCurso = nuevaAsignacion.IdCurso, legajoDocente = nuevaAsignacion.LegajoDocente },
-                nuevaAsignacion);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var nuevaAsignacion = await _docenteCursoService.AddAsync(docenteCursoDto);
+        return CreatedAtRoute(
+            "GetDocenteCursoById",
+            new { idCurso = nuevaAsignacion.IdCurso, legajoDocente = nuevaAsignacion.LegajoDocente },
+            nuevaAsignacion);
     }
 
     /// <summary>
@@ -79,19 +71,8 @@ public class DocenteCursoController : ControllerBase
             return BadRequest("Los identificadores de la ruta no coinciden con los del cuerpo de la solicitud.");
         }
 
-        try
-        {
-            await _docenteCursoService.UpdateAsync(docenteCursoDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _docenteCursoService.UpdateAsync(docenteCursoDto);
+        return NoContent();
     }
 
     /// <summary>
@@ -102,18 +83,7 @@ public class DocenteCursoController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int idCurso, string legajoDocente)
     {
-        try
-        {
-            await _docenteCursoService.DeleteAsync(idCurso, legajoDocente);
-            return NoContent(); 
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _docenteCursoService.DeleteAsync(idCurso, legajoDocente);
+        return NoContent();
     }
 }

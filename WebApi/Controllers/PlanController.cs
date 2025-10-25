@@ -41,15 +41,8 @@ public class PlanesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CrearPlanDTO dto)
     {
-        try
-        {
-            var planDTO = await _planService.AddAsync(dto);
-            return CreatedAtRoute("GetPlanById", new { id = planDTO.Id }, planDTO);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        var planDTO = await _planService.AddAsync(dto);
+        return CreatedAtRoute("GetPlanById", new { id = planDTO.Id }, planDTO);
     }
 
     [HttpPut("{id}")]
@@ -63,19 +56,8 @@ public class PlanesController : ControllerBase
             return BadRequest("El ID de la ruta no coincide con el ID del cuerpo de la solicitud.");
         }
 
-        try
-        {
-            await _planService.UpdateAsync(dto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { error = ex.Message });
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        await _planService.UpdateAsync(dto);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
@@ -83,11 +65,7 @@ public class PlanesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var deleted = await _planService.DeleteAsync(id);
-        if (!deleted)
-        {
-            return NotFound($"No se encontró un plan con el ID {id} para eliminar.");
-        }
+        await _planService.DeleteAsync(id);
         return NoContent();
     }
 }
