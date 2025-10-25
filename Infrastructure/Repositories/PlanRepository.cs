@@ -56,5 +56,20 @@ namespace Infrastructure.Repositories
             _context.Planes.Remove(plan);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> DescripcionExistsAsync(string descripcion, int? excludeId = null)
+        {
+            // Se ignora el filtro de borrado logico.
+            var query = _context.Planes.IgnoreQueryFilters();
+
+            // Si se proporciona un ID para excluir (caso de 'Update'), lo añadimos a la consulta.
+            if (excludeId.HasValue)
+            {
+                query = query.Where(p => p.Id != excludeId.Value);
+            }
+
+              return await query.AnyAsync(p => p.Descripcion.ToLower() == descripcion.ToLower());
+        }
+
     }
 }

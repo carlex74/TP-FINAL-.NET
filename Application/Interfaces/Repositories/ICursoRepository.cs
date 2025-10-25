@@ -15,5 +15,6 @@ namespace ApplicationClean.Interfaces.Repositories
 
         Task<Curso> GetByIdAsync(int id);
         Task<IEnumerable<Curso>> GetAllAsync();
+        Task<bool> CursoExistsAsync(int idMateria, int idComision, int anioCalendario, int? excludeId = null);
     }
 }

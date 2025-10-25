@@ -24,6 +24,13 @@ namespace ApplicationClean.Services
 
         public async Task<MateriaDTO> AddAsync(MateriaDTO materiaDto)
         {
+
+            if (await _materiaRepository.NombreExistsAsync(materiaDto.Nombre))
+            {
+                throw new BusinessRuleException($"Ya existe una materia con el nombre '{materiaDto.Nombre}'.");
+            }
+
+                
             var nuevaMateria = _mapper.Map<Materia>(materiaDto);
 
             await _materiaRepository.AddAsync(nuevaMateria);
@@ -39,6 +46,11 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró una materia con el ID {materiaDto.Id}.");
             }
 
+            if (await _materiaRepository.NombreExistsAsync(materiaDto.Nombre, materiaDto.Id))
+            {
+                throw new BusinessRuleException($"El nombre '{materiaDto.Nombre}' ya pertenece a otra materia.");
+            }
+
             existingMateria.SetNombre(materiaDto.Nombre);
             existingMateria.SetDescripcion(materiaDto.Descripcion);
             existingMateria.SetHsSemanales(materiaDto.HsSemanales);
@@ -51,10 +63,13 @@ namespace ApplicationClean.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var materia = await _materiaRepository.GetByIdAsync(id);
+
             if (materia == null)
             {
-                return false;
+                throw new KeyNotFoundException($"No se encontró una materia con el ID {id} para eliminar.");
             }
+
+            materia.SoftDelete();
             await _materiaRepository.DeleteAsync(materia);
             return true;
         }
@@ -82,7 +97,7 @@ namespace ApplicationClean.Services
             }
 
             var todosLosPlanes = await _planRepository.GetAllAsync();
-            var planesAAsignar = todosLosPlanes.Where(p => planIds.Contains(p.Id)).ToList();
+            var planesAAsignar = await _planRepository.GetByIdsAsync(planIds ?? new List<int>());
 
             materia.Planes.Clear();
             foreach (var plan in planesAAsignar)

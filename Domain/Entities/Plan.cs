@@ -1,12 +1,17 @@
 ﻿using System.Text.RegularExpressions;
+using Domain.Interfaces;
 
 namespace Domain.Entities
 {
-    public class Plan
+    public class Plan : ISoftDeletable
     {
         public int Id { get; private set; }
         public string Descripcion { get; private set; }
         public int IdEspecialidad { get; private set; }
+
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedOnUtc { get; private set; }
+
         public Especialidad Especialidad { get; private set; }
         public ICollection<Alumno> Alumnos { get; private set; }
         public ICollection<Comision> Comisiones { get; private set; }
@@ -52,6 +57,19 @@ namespace Domain.Entities
             return Id;
 
         }
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedOnUtc = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedOnUtc = null;
+        }
+
 
     }
 }

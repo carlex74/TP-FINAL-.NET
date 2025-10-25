@@ -1,12 +1,17 @@
 ﻿using System.Text.RegularExpressions;
+using Domain.Interfaces;
 
 namespace Domain.Entities
 {
-    public class Comision
+    public class Comision : ISoftDeletable
     {
         public int Nro { get; private set; }
         public int AnioEspecialidad { get; private set; }
         public string Descripcion { get; private set; }
+
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedOnUtc { get; private set; }
+
         public ICollection<Plan> Planes { get; private set; }
         protected Comision()
         {
@@ -38,5 +43,18 @@ namespace Domain.Entities
                 throw new ArgumentException("La descripción no puede ser nula o vacía.", nameof(descripcion));
             Descripcion = descripcion;
         }
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedOnUtc = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedOnUtc = null;
+        }
+
     }
 }

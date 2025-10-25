@@ -59,5 +59,11 @@ namespace Infrastructure.Repositories
           
             return await query.AnyAsync(e => e.Descripcion.ToLower() == descripcion.ToLower());
         }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+           
+            return await _context.Especialidades.AnyAsync(e => e.Id == id);
+        }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
+using Domain.Interfaces;
 
 namespace Domain.Entities
 {
-    public class Curso
+    public class Curso : ISoftDeletable
     {
         public int Id {  get; private set; }
         public int AnioCalendario { get; private set; }
@@ -10,6 +11,11 @@ namespace Domain.Entities
         public string Descripcion { get; private set; }
         public int IdComision { get; private set; }
         public int IdMateria { get; private set; }
+
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedOnUtc { get; private set; }
+
+
         public Materia Materia { get; private set; }
         public Comision Comision { get; private set; }
 
@@ -60,6 +66,18 @@ namespace Domain.Entities
             if (idMateria <= 0)
                 throw new ArgumentException("El ID de materia debe ser un número positivo.", nameof(idMateria));
             IdMateria = idMateria;
+        }
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedOnUtc = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedOnUtc = null;
         }
     }
 }

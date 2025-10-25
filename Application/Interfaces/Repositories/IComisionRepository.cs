@@ -10,5 +10,8 @@ namespace ApplicationClean.Interfaces.Repositories
         Task<Comision> GetByIdAsync(int id);
         Task<IEnumerable<Comision>> GetAllAsync();
         Task<Comision> GetByIdWithPlanesAsync(int id);
+        Task<bool> DescripcionExistsAsync(string descripcion, int? excludeId = null);
+
+        Task<bool> ExistsAsync(int id);
     }
 }

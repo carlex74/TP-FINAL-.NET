@@ -43,5 +43,17 @@ namespace Infrastructure.Repositories
             _context.Cursos.Remove(curso);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> CursoExistsAsync(int idMateria, int idComision, int anioCalendario, int? excludeId = null)
+        {
+            var query = _context.Cursos.IgnoreQueryFilters(); // Validar contra todos, borrados o no
+            if (excludeId.HasValue)
+            {
+                query = query.Where(c => c.Id != excludeId.Value);
+            }
+            return await query.AnyAsync(c => c.IdMateria == idMateria &&
+                                             c.IdComision == idComision &&
+                                             c.AnioCalendario == anioCalendario);
+        }
     }
 }

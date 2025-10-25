@@ -25,6 +25,11 @@ namespace ApplicationClean.Services
 
         public async Task<ComisionDTO> AddAsync(ComisionDTO comisionDto)
         {
+            if (await _comisionRepository.DescripcionExistsAsync(comisionDto.Descripcion))
+            {
+                throw new BusinessRuleException($"Ya existe una comisión con la descripción '{comisionDto.Descripcion}'.");
+            }
+
             var comision = _mapper.Map<Comision>(comisionDto);
             await _comisionRepository.AddAsync(comision);
 
@@ -39,6 +44,11 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró una Comisión con el ID {comisionDto.Nro}.");
             }
 
+            if (await _comisionRepository.DescripcionExistsAsync(comisionDto.Descripcion, comisionDto.Nro))
+            {
+                throw new BusinessRuleException($"La descripción '{comisionDto.Descripcion}' ya pertenece a otra comisión.");
+            }
+
             _mapper.Map(comisionDto, comisionExistente);
 
             await _comisionRepository.UpdateAsync(comisionExistente);
@@ -51,9 +61,11 @@ namespace ApplicationClean.Services
             var comision = await _comisionRepository.GetByIdAsync(id);
             if (comision == null)
             {
-                return false;
+                throw new KeyNotFoundException($"No se encontró una Comisión con el ID {id} para eliminar.");
             }
-            await _comisionRepository.DeleteAsync(comision);
+
+            comision.SoftDelete();
+            await _comisionRepository.UpdateAsync(comision);
             return true;
         }
 

@@ -16,5 +16,7 @@ namespace ApplicationClean.Interfaces.Repositories
         Task UpdateAsync(Materia materia);
         Task DeleteAsync(Materia materia);
         Task<Materia> GetByIdWithPlanesAsync(int id);
+        Task<bool> NombreExistsAsync(string nombre, int? excludeId = null);
+        Task<bool> ExistsAsync(int id);
     }
 }

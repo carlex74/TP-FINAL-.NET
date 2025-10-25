@@ -25,9 +25,16 @@ namespace ApplicationClean.Services
         public async Task<PlanDTO> AddAsync(CrearPlanDTO planDTO)
         {
             var especialidad = await _especialidadRepository.GetByIdAsync(planDTO.IdEspecialidad);
-            if (especialidad == null)
+
+            if (await _planRepository.DescripcionExistsAsync(planDTO.Descripcion))
             {
-                throw new KeyNotFoundException($"No existe una especialidad con el ID {planDTO.IdEspecialidad}. No se puede crear el plan.");
+                throw new BusinessRuleException($"Ya existe un plan con la descripción '{planDTO.Descripcion}'.");
+            }
+
+           
+            if (!await _especialidadRepository.ExistsAsync(planDTO.IdEspecialidad))
+            {
+                throw new BusinessRuleException($"La especialidad con ID {planDTO.IdEspecialidad} no es válida o no existe.");
             }
 
             var newPlan = _mapper.Map<Plan>(planDTO);
@@ -45,13 +52,13 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró un plan con el ID {planDTO.Id}.");
             }
 
-            if (existingPlan.IdEspecialidad != planDTO.IdEspecialidad)
+            if (await _planRepository.DescripcionExistsAsync(planDTO.Descripcion, planDTO.Id))
             {
-                var nuevaEspecialidad = await _especialidadRepository.GetByIdAsync(planDTO.IdEspecialidad);
-                if (nuevaEspecialidad == null)
-                {
-                    throw new KeyNotFoundException($"No existe la nueva especialidad con ID {planDTO.IdEspecialidad}.");
-                }
+                throw new BusinessRuleException($"La descripción '{planDTO.Descripcion}' ya pertenece a otro plan.");
+            }
+            if (!await _especialidadRepository.ExistsAsync(planDTO.IdEspecialidad))
+            {
+                throw new BusinessRuleException($"La nueva especialidad con ID {planDTO.IdEspecialidad} no es válida o no existe.");
             }
 
             existingPlan.SetDescripcion(planDTO.Descripcion);
@@ -66,9 +73,11 @@ namespace ApplicationClean.Services
             var plan = await _planRepository.GetByIdAsync(id);
             if (plan == null)
             {
-                return false;
+                throw new KeyNotFoundException($"No se encontró un plan con el ID {id} para eliminar.");
             }
-            await _planRepository.DeleteAsync(plan);
+
+            plan.SoftDelete();
+            await _planRepository.UpdateAsync(plan);
             return true;
         }
 

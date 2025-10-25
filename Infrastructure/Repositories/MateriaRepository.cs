@@ -53,5 +53,24 @@ namespace Infrastructure.Repositories
                                     .ThenInclude(p => p.Especialidad)
                                  .FirstOrDefaultAsync(m => m.Id == id);
         }
+
+        public async Task<bool> NombreExistsAsync(string nombre, int? excludeId = null)
+        {
+            var query = _context.Materias.IgnoreQueryFilters();
+            if (excludeId.HasValue)
+            {
+                query = query.Where(m => m.Id != excludeId.Value);
+            }
+            return await query.AnyAsync(m => m.Nombre.ToLower() == nombre.ToLower());
+        }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+ 
+            // Esto asegura que no se pueda asignar una materia borrada a un nuevo curso.
+            return await _context.Materias.AnyAsync(m => m.Id == id);
+        }
+
+
     }
 }

@@ -1,14 +1,18 @@
 ﻿using System.Text.RegularExpressions;
+using Domain.Interfaces;
 
 namespace Domain.Entities
 {
-    public class Materia
+    public class Materia : ISoftDeletable
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; private set; }
         public int HsSemanales { get; private set; }
         public int HsTotales { get; private set; }
+
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedOnUtc { get; private set; }
 
         public ICollection<Plan> Planes { get; private set; }
 
@@ -50,5 +54,19 @@ namespace Domain.Entities
                 throw new ArgumentException("Las horas totales deben ser un número positivo.", nameof(hsTotales));
             HsTotales = hsTotales;
         }
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedOnUtc = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedOnUtc = null;
+        }
+
+
     }
 }

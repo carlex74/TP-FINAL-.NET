@@ -12,5 +12,7 @@ namespace ApplicationClean.Interfaces.Repositories
 
         Task<bool> DescripcionExistsAsync(string descripcion, int? excludeId = null);
 
+        Task<bool> ExistsAsync(int id);
+
     }
 }

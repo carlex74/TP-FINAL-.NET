@@ -10,5 +10,7 @@ namespace ApplicationClean.Interfaces.Repositories
         Task<Plan> GetByIdAsync(int id);
         Task<List<Plan>> GetByIdsAsync(IEnumerable<int> ids);
         Task<IEnumerable<Plan>> GetAllAsync();
+        Task<bool> DescripcionExistsAsync(string descripcion, int? excludeId = null);
+
     }
 }

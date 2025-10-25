@@ -26,10 +26,15 @@ namespace ApplicationClean.Services
 
         public async Task<CursoDTO> AddAsync(CursoDTO cursoDto)
         {
-            if (await _materiaRepository.GetByIdAsync(cursoDto.IdMateria) == null)
-                throw new KeyNotFoundException($"La materia con ID {cursoDto.IdMateria} no existe.");
-            if (await _comisionRepository.GetByIdAsync(cursoDto.IdComision) == null)
-                throw new KeyNotFoundException($"La comisión con ID {cursoDto.IdComision} no existe.");
+            if (!await _materiaRepository.ExistsAsync(cursoDto.IdMateria))
+                throw new BusinessRuleException($"La materia con ID {cursoDto.IdMateria} no es válida o no existe.");
+            if (!await _comisionRepository.ExistsAsync(cursoDto.IdComision))
+                throw new BusinessRuleException($"La comisión con ID {cursoDto.IdComision} no es válida o no existe.");
+
+            if (await _cursoRepository.CursoExistsAsync(cursoDto.IdMateria, cursoDto.IdComision, cursoDto.AnioCalendario))
+            {
+                throw new BusinessRuleException("Ya existe un curso para esa materia y comisión en el año especificado.");
+            }
 
             var nuevoCurso = _mapper.Map<Curso>(cursoDto);
 
@@ -46,6 +51,16 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró un curso con el ID {cursoDto.Id}.");
             }
 
+            if (!await _materiaRepository.ExistsAsync(cursoDto.IdMateria))
+                throw new BusinessRuleException($"La nueva materia con ID {cursoDto.IdMateria} no es válida o no existe.");
+            if (!await _comisionRepository.ExistsAsync(cursoDto.IdComision))
+                throw new BusinessRuleException($"La nueva comisión con ID {cursoDto.IdComision} no es válida o no existe.");
+
+            if (await _cursoRepository.CursoExistsAsync(cursoDto.IdMateria, cursoDto.IdComision, cursoDto.AnioCalendario, cursoDto.Id))
+            {
+                throw new BusinessRuleException("La combinación de materia, comisión y año ya pertenece a otro curso.");
+            }
+
             existingCurso.SetAnioCalendario(cursoDto.AnioCalendario);
             existingCurso.SetCupo(cursoDto.Cupo);
             existingCurso.SetDescripcion(cursoDto.Descripcion);
@@ -59,8 +74,12 @@ namespace ApplicationClean.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var curso = await _cursoRepository.GetByIdAsync(id);
-            if (curso == null) return false;
+            if (curso == null)
+            {
+                throw new KeyNotFoundException($"No se encontró un curso con el ID {id} para eliminar.");
+            }
 
+            curso.SoftDelete();
             await _cursoRepository.DeleteAsync(curso);
             return true;
         }
