@@ -2,8 +2,6 @@
 using Domain.Entities;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -66,7 +64,7 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> ExistsAsync(int id)
         {
- 
+
             // Esto asegura que no se pueda asignar una materia borrada a un nuevo curso.
             return await _context.Materias.AnyAsync(m => m.Id == id);
         }

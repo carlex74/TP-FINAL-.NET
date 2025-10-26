@@ -1,7 +1,7 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 [Authorize]
 [ApiController]

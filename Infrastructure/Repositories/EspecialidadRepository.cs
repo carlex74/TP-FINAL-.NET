@@ -1,11 +1,7 @@
-﻿using ApplicationClean.Interfaces;
-using ApplicationClean.Interfaces.Repositories;
+﻿using ApplicationClean.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -56,13 +52,13 @@ namespace Infrastructure.Repositories
             {
                 query = query.Where(e => e.Id != excludeId.Value);
             }
-          
+
             return await query.AnyAsync(e => e.Descripcion.ToLower() == descripcion.ToLower());
         }
 
         public async Task<bool> ExistsAsync(int id)
         {
-           
+
             return await _context.Especialidades.AnyAsync(e => e.Id == id);
         }
     }

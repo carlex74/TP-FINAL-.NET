@@ -1,10 +1,5 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.ApiClients;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using System.Windows.Forms;
-using System.Threading.Tasks;
 
 namespace WindowsForms
 {

@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class DocenteCursoRepository:IDocenteCursoRepository
+    public class DocenteCursoRepository : IDocenteCursoRepository
     {
         private readonly TPIContext _context;
 
         public DocenteCursoRepository(TPIContext context) { _context = context; }
 
 
-        public async Task<DocenteCurso> GetByIdAsync(int idCurso,string legajo)
+        public async Task<DocenteCurso> GetByIdAsync(int idCurso, string legajo)
         {
             return await _context.DocentesCurso.FindAsync(idCurso, legajo);
 

@@ -1,7 +1,5 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.ApiClients;
-using System;
-using System.Windows.Forms;
 
 namespace WindowsForms
 {
@@ -50,7 +48,7 @@ namespace WindowsForms
                 if (especialidad == null)
                 {
                     MessageBox.Show("No se encontró la especialidad seleccionada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    GetAllAndLoad(); 
+                    GetAllAndLoad();
                     return;
                 }
 

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class AlumnoInscripcionRepository:IAlumnoInscripcionRepository
+    public class AlumnoInscripcionRepository : IAlumnoInscripcionRepository
     {
         private readonly TPIContext _context;
 
@@ -47,19 +47,19 @@ namespace Infrastructure.Repositories
         {
             return await _context.Inscripciones
                                  .Where(i => i.IdCurso == idCurso)
-                                 .Include(i => i.Alumno) 
+                                 .Include(i => i.Alumno)
                                     .ThenInclude(a => a.Persona)
                                  .ToListAsync();
         }
 
         public async Task<AlumnoInscripcion> GetWithDetailsByIdAsync(string legajo, int idCurso)
         {
-           
-     
+
+
             return await _context.Inscripciones
-                                 .IgnoreQueryFilters() 
+                                 .IgnoreQueryFilters()
                                  .Include(i => i.Curso)
-                                     .ThenInclude(c => c.Materia) 
+                                     .ThenInclude(c => c.Materia)
                                  .Include(i => i.Alumno)
                                      .ThenInclude(a => a.Persona)
                                  .FirstOrDefaultAsync(i => i.LegajoAlumno == legajo && i.IdCurso == idCurso);

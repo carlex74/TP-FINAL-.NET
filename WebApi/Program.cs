@@ -1,16 +1,15 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Text.Json.Serialization;
 using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
 using ApplicationClean.Services;
 using Infrastructure.Context;
 using Infrastructure.Repositories;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -55,7 +54,7 @@ builder.Services.AddScoped<IMateriaRepository, MateriaRepository>();
 builder.Services.AddScoped<IComisionRepository, ComisionRepository>();
 builder.Services.AddScoped<ICursoRepository, CursoRepository>();
 builder.Services.AddScoped<IAlumnoInscripcionRepository, AlumnoInscripcionRepository>();
-builder.Services.AddScoped<IDocenteCursoRepository,DocenteCursoRepository>();
+builder.Services.AddScoped<IDocenteCursoRepository, DocenteCursoRepository>();
 
 builder.Services.AddScoped<IEspecialidadService, EspecialidadServices>();
 builder.Services.AddScoped<IPlanService, PlanServices>();
@@ -64,8 +63,8 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IMateriaService, MateriaService>();
 builder.Services.AddScoped<IComisionService, ComisionService>();
 builder.Services.AddScoped<ICursoService, CursoService>();
-builder.Services.AddScoped<IAlumnoInscripcionService,AlumnoInscripcionService>();
-builder.Services.AddScoped<IDocenteCursoService,DocenteCursoService>();
+builder.Services.AddScoped<IAlumnoInscripcionService, AlumnoInscripcionService>();
+builder.Services.AddScoped<IDocenteCursoService, DocenteCursoService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

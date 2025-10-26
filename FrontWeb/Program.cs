@@ -1,17 +1,13 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.ApiClients;
-using FrontWeb;
 using FrontWeb.Auth;
 using Infrastructure.ApiClient;
 using Infrastructure.ApiClients;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

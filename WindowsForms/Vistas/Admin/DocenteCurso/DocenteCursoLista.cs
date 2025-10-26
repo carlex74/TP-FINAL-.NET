@@ -1,11 +1,5 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.ApiClients;
-using System;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static Domain.Entities.Usuario;
 
 namespace WindowsForms
 {

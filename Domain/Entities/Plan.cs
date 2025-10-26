@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 
 namespace Domain.Entities
 {
@@ -24,7 +23,7 @@ namespace Domain.Entities
             Comisiones = new HashSet<Comision>();
         }
 
-        public Plan(int id,string descripcion, int idEspecialidad)
+        public Plan(int id, string descripcion, int idEspecialidad)
         {
             SetId(id);
             SetDescripcion(descripcion);
@@ -52,7 +51,8 @@ namespace Domain.Entities
             IdEspecialidad = idEspecialidad;
         }
 
-        public int GetId() {
+        public int GetId()
+        {
 
             return Id;
 

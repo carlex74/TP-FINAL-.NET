@@ -1,8 +1,5 @@
 ﻿using ApplicationClean.DTOs;
-using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.ApiClients;
-using System;
-using System.Windows.Forms;
 
 namespace WindowsForms
 {

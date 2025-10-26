@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 
 namespace Domain.Entities
 {
@@ -18,7 +17,7 @@ namespace Domain.Entities
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedOnUtc { get; private set; }
 
-        public Usuario Docente {  get; private set; }
+        public Usuario Docente { get; private set; }
         public Curso Curso { get; private set; }
 
         public DocenteCurso(int idCurso, string legajoDocente, TipoCargos cargo)

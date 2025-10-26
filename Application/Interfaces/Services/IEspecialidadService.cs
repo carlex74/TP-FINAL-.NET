@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ApplicationClean.DTOs;
+﻿using ApplicationClean.DTOs;
 
 namespace ApplicationClean.Interfaces.Services
 {
-   public interface IEspecialidadService
+    public interface IEspecialidadService
     {
         Task<EspecialidadDTO> AddAsync(EspecialidadDTO especialidadDTO);
         Task<EspecialidadDTO> UpdateAsync(EspecialidadDTO especialidadDTO);

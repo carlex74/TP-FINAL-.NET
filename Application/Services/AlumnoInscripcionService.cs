@@ -6,7 +6,7 @@ using Domain.Entities;
 
 namespace ApplicationClean.Services
 {
-    public class AlumnoInscripcionService: IAlumnoInscripcionService
+    public class AlumnoInscripcionService : IAlumnoInscripcionService
     {
 
         private readonly IAlumnoInscripcionRepository _repository;
@@ -14,7 +14,7 @@ namespace ApplicationClean.Services
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IMapper _mapper;
 
-        public AlumnoInscripcionService(IAlumnoInscripcionRepository repository, ICursoRepository cursoRepository,IMapper mapper, IUsuarioRepository usuarioRepository)
+        public AlumnoInscripcionService(IAlumnoInscripcionRepository repository, ICursoRepository cursoRepository, IMapper mapper, IUsuarioRepository usuarioRepository)
         {
             _repository = repository;
             _cursoRepository = cursoRepository;
@@ -44,11 +44,11 @@ namespace ApplicationClean.Services
                 }
                 else
                 {
-     
-                    inscripcionExistente.Restore(); 
+
+                    inscripcionExistente.Restore();
                     await _repository.UpdateAsync(inscripcionExistente);
 
-                 
+
                     return _mapper.Map<AlumnoInscripcionDTO>(inscripcionExistente);
                 }
             }

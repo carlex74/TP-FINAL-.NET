@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace FrontWeb.Auth
 {
@@ -57,7 +54,7 @@ namespace FrontWeb.Auth
                 claims: claims,
                 authenticationType: "jwt",
                 nameType: ClaimTypes.Name,
-                roleType: ClaimTypes.Role 
+                roleType: ClaimTypes.Role
             );
 
             var user = new ClaimsPrincipal(identity);

@@ -52,7 +52,7 @@ namespace ApplicationClean.Services
             _mapper.Map(comisionDto, comisionExistente);
 
             await _comisionRepository.UpdateAsync(comisionExistente);
-           
+
             return comisionDto;
         }
 
@@ -92,7 +92,7 @@ namespace ApplicationClean.Services
             }
 
             var planesAAsignar = await _planRepository.GetByIdsAsync(planIds ?? new List<int>());
-            
+
             comision.Planes.Clear();
             foreach (var plan in planesAAsignar)
             {

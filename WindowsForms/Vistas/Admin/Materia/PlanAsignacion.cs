@@ -1,9 +1,5 @@
-﻿using ApplicationClean.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Windows.Forms;
+﻿using System.Data;
+using ApplicationClean.DTOs;
 
 namespace WindowsForms
 {

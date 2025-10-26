@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 
 namespace Domain.Entities
 {
@@ -19,7 +18,7 @@ namespace Domain.Entities
             Planes = new HashSet<Plan>();
         }
 
-        public Especialidad(int id,string descripcion)
+        public Especialidad(int id, string descripcion)
         {
             SetId(id);
             SetDescripcion(descripcion);

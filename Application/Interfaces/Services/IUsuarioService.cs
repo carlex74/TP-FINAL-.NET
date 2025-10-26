@@ -1,5 +1,4 @@
 ﻿using ApplicationClean.DTOs;
-using System.Threading.Tasks;
 
 namespace ApplicationClean.Interfaces.Services
 {

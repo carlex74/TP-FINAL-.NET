@@ -1,11 +1,7 @@
-﻿using ApplicationClean.DTOs;
-using ApplicationClean.Interfaces;
-using ApplicationClean.Interfaces.ApiClients;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
-using System.Threading.Tasks;
+using ApplicationClean.DTOs;
+using ApplicationClean.Interfaces.ApiClients;
 
 namespace Infrastructure.ApiClients
 {

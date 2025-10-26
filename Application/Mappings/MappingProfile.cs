@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using ApplicationClean.DTOs;
+using AutoMapper;
 using Domain.Entities;
-using ApplicationClean.DTOs;
 
 public class MappingProfile : Profile
 {
@@ -8,10 +8,10 @@ public class MappingProfile : Profile
     {
         // Mapeo de Entidad a DTO
         CreateMap<AlumnoInscripcion, AlumnoInscripcionDTO>();
-        CreateMap<DocenteCurso,DocenteCursoDTO>();
+        CreateMap<DocenteCurso, DocenteCursoDTO>();
         CreateMap<Comision, ComisionDTO>();
         CreateMap<Curso, CursoDTO>();
-        CreateMap<Especialidad,EspecialidadDTO>();
+        CreateMap<Especialidad, EspecialidadDTO>();
         CreateMap<Plan, PlanDTO>()
         .ForMember(dest => dest.EspecialidadDescripcion,
                opt => opt.MapFrom(src => src.Especialidad.Descripcion));

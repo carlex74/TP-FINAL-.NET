@@ -3,9 +3,6 @@ using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
 using AutoMapper;
 using Domain.Entities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApplicationClean.Services
 {
@@ -31,7 +28,7 @@ namespace ApplicationClean.Services
                 throw new BusinessRuleException($"Ya existe un plan con la descripción '{planDTO.Descripcion}'.");
             }
 
-           
+
             if (!await _especialidadRepository.ExistsAsync(planDTO.IdEspecialidad))
             {
                 throw new BusinessRuleException($"La especialidad con ID {planDTO.IdEspecialidad} no es válida o no existe.");

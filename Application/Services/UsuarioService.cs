@@ -1,9 +1,7 @@
 ﻿using ApplicationClean.DTOs;
-using BCrypt.Net;
-using System.Threading.Tasks;
-using Domain.Entities;
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
+using Domain.Entities;
 using static Domain.Entities.Usuario;
 
 namespace ApplicationClean.Services
@@ -109,7 +107,7 @@ namespace ApplicationClean.Services
                 throw new KeyNotFoundException($"No se encontró un usuario con el legajo {legajo} para eliminar.");
             }
 
-            usuario.SoftDelete(); 
+            usuario.SoftDelete();
             await _usuarioRepository.UpdateAsync(usuario);
             return true;
         }

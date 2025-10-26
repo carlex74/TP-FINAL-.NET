@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.RegularExpressions;
-using Domain.Interfaces;
-using static Domain.Entities.Persona;
+﻿using Domain.Interfaces;
 
 namespace Domain.Entities
 {

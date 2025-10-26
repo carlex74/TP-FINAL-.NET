@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 
 namespace Domain.Entities
 {
@@ -56,7 +55,7 @@ namespace Domain.Entities
         }
         public void SetDni(string dni)
         {
-            if (string.IsNullOrWhiteSpace(dni)) 
+            if (string.IsNullOrWhiteSpace(dni))
                 throw new ArgumentException("El DNI no puede ser nulo o vacío.", nameof(dni));
             Dni = dni;
         }

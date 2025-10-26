@@ -1,8 +1,7 @@
-﻿using Domain.Entities;
+﻿using System.Linq.Expressions;
+using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using Domain.Interfaces;
 
 namespace Infrastructure.Context
 {
@@ -137,7 +136,7 @@ namespace Infrastructure.Context
                 entity.Property(c => c.Nota);
 
                 entity.HasOne(c => c.Alumno)
-                    .WithMany(a=>a.AlumnoInscripcions)
+                    .WithMany(a => a.AlumnoInscripcions)
                     .HasForeignKey(c => c.LegajoAlumno);
 
                 entity.HasOne(c => c.Curso)
@@ -151,7 +150,7 @@ namespace Infrastructure.Context
                 entity.HasKey(c => new { c.IdCurso, c.LegajoDocente });
 
                 entity.Property(c => c.Cargo).HasMaxLength(255);
-  
+
 
                 entity.HasOne(c => c.Docente)
                     .WithMany(a => a.DocenteCursos)

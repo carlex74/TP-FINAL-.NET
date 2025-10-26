@@ -10,8 +10,8 @@ namespace ApplicationClean.Services
     {
         private readonly IDocenteCursoRepository _repository;
         private readonly ICursoRepository _cursoRepository;
-        private readonly IUsuarioRepository _usuarioRepository; 
-        private readonly IMapper _mapper; 
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IMapper _mapper;
 
         public DocenteCursoService(
             IDocenteCursoRepository repository,
@@ -80,7 +80,7 @@ namespace ApplicationClean.Services
             return _mapper.Map<IEnumerable<DocenteCursoDTO>>(asignaciones);
         }
 
- 
+
         public async Task DeleteAsync(int idCurso, string legajoDocente)
         {
             var asignacion = await _repository.GetByIdAsync(idCurso, legajoDocente);

@@ -3,9 +3,6 @@ using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
 using AutoMapper;
 using Domain.Entities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApplicationClean.Services
 {
@@ -30,7 +27,7 @@ namespace ApplicationClean.Services
                 throw new BusinessRuleException($"Ya existe una materia con el nombre '{materiaDto.Nombre}'.");
             }
 
-                
+
             var nuevaMateria = _mapper.Map<Materia>(materiaDto);
 
             await _materiaRepository.AddAsync(nuevaMateria);

@@ -1,11 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 
 namespace Domain.Entities
 {
     public class Curso : ISoftDeletable
     {
-        public int Id {  get; private set; }
+        public int Id { get; private set; }
         public int AnioCalendario { get; private set; }
         public int Cupo { get; private set; }
         public string Descripcion { get; private set; }
@@ -22,7 +21,7 @@ namespace Domain.Entities
         public ICollection<AlumnoInscripcion> Inscripciones { get; private set; }
         public ICollection<DocenteCurso> Docentes { get; private set; }
 
-        public Curso(int id, int anioCalendario, int cupo, string descripcion, int idComision, int idMateria) 
+        public Curso(int id, int anioCalendario, int cupo, string descripcion, int idComision, int idMateria)
         {
             SetId(id);
             SetAnioCalendario(anioCalendario);
