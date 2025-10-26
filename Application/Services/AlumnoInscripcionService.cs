@@ -28,22 +28,37 @@ namespace ApplicationClean.Services
             if (!await _cursoRepository.ExistsAsync(inscripcionDto.IdCurso))
                 throw new BusinessRuleException($"El curso con ID {inscripcionDto.IdCurso} no es válido o no existe.");
 
-      
             var alumno = await _usuarioRepository.GetByLegajoAsync(inscripcionDto.LegajoAlumno);
             if (alumno == null || !(alumno is Alumno))
                 throw new BusinessRuleException($"El legajo {inscripcionDto.LegajoAlumno} no corresponde a un alumno válido.");
 
-  
-            var inscripcionExistente = await _repository.GetByIdAsync(inscripcionDto.LegajoAlumno, inscripcionDto.IdCurso);
+            var inscripcionExistente = await _repository.GetHistoricalByIdAsync(inscripcionDto.LegajoAlumno, inscripcionDto.IdCurso);
+
             if (inscripcionExistente != null)
-                throw new BusinessRuleException("El alumno ya se encuentra inscrito en este curso.");
-            
+            {
 
-            var nuevaInscripcion = _mapper.Map<AlumnoInscripcion>(inscripcionDto);
+                if (!inscripcionExistente.IsDeleted)
+                {
 
-            await _repository.AddAsync(nuevaInscripcion);
+                    throw new BusinessRuleException("El alumno ya se encuentra inscrito en este curso.");
+                }
+                else
+                {
+     
+                    inscripcionExistente.Restore(); 
+                    await _repository.UpdateAsync(inscripcionExistente);
 
-            return _mapper.Map<AlumnoInscripcionDTO>(nuevaInscripcion);
+                 
+                    return _mapper.Map<AlumnoInscripcionDTO>(inscripcionExistente);
+                }
+            }
+            else
+            {
+                var nuevaInscripcion = _mapper.Map<AlumnoInscripcion>(inscripcionDto);
+                await _repository.AddAsync(nuevaInscripcion);
+
+                return _mapper.Map<AlumnoInscripcionDTO>(nuevaInscripcion);
+            }
         }
 
         public async Task<AlumnoInscripcionDTO> UpdateAsync(AlumnoInscripcionDTO inscripcionDto)

@@ -57,11 +57,20 @@ namespace Infrastructure.Repositories
            
      
             return await _context.Inscripciones
-                                 .IgnoreQueryFilters() // Desactiva el borrado lógico para esta operación
+                                 .IgnoreQueryFilters() 
                                  .Include(i => i.Curso)
-                                     .ThenInclude(c => c.Materia) // Incluimos la materia del curso
+                                     .ThenInclude(c => c.Materia) 
                                  .Include(i => i.Alumno)
-                                     .ThenInclude(a => a.Persona) // Incluimos la persona del alumno
+                                     .ThenInclude(a => a.Persona)
+                                 .FirstOrDefaultAsync(i => i.LegajoAlumno == legajo && i.IdCurso == idCurso);
+        }
+
+        public async Task<AlumnoInscripcion> GetHistoricalByIdAsync(string legajo, int idCurso)
+        {
+            return await _context.Inscripciones
+                                 .IgnoreQueryFilters()
+
+
                                  .FirstOrDefaultAsync(i => i.LegajoAlumno == legajo && i.IdCurso == idCurso);
         }
 
