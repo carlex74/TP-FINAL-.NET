@@ -28,14 +28,13 @@ namespace ApplicationClean.Services
 
         public async Task<DocenteCursoDTO> AddAsync(DocenteCursoDTO docenteCursoDto)
         {
-            var curso = await _cursoRepository.GetByIdAsync(docenteCursoDto.IdCurso);
-            if (curso == null)
-                throw new KeyNotFoundException($"El curso con ID {docenteCursoDto.IdCurso} no existe.");
+            if (!await _cursoRepository.ExistsAsync(docenteCursoDto.IdCurso))
+                throw new BusinessRuleException($"El curso con ID {docenteCursoDto.IdCurso} no es válido o no existe.");
 
+            // Validamos que el legajo corresponde a un Docente activo.
             var docente = await _usuarioRepository.GetByLegajoAsync(docenteCursoDto.LegajoDocente);
-            if (docente == null)
-                throw new KeyNotFoundException($"El docente con legajo {docenteCursoDto.LegajoDocente} no existe.");
-
+            if (docente == null || !(docente is Docente))
+                throw new BusinessRuleException($"El legajo {docenteCursoDto.LegajoDocente} no corresponde a un docente válido.");
             var asignacionExistente = await _repository.GetByIdAsync(docenteCursoDto.IdCurso, docenteCursoDto.LegajoDocente);
             if (asignacionExistente != null)
                 throw new BusinessRuleException("El docente ya se encuentra asignado a este curso.");
@@ -65,9 +64,13 @@ namespace ApplicationClean.Services
         public async Task<DocenteCursoDTO> GetByIdAsync(int idCurso, string legajo)
         {
             var asignacion = await _repository.GetByIdAsync(idCurso, legajo);
-            if (asignacion == null) return null;
+            if (asignacion == null)
+            {
+                throw new KeyNotFoundException($"No se encontró la asignación a eliminar.");
+            }
 
-        
+            asignacion.SoftDelete();
+
             return _mapper.Map<DocenteCursoDTO>(asignacion);
         }
 

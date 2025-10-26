@@ -55,5 +55,13 @@ namespace Infrastructure.Repositories
                                              c.IdComision == idComision &&
                                              c.AnioCalendario == anioCalendario);
         }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+
+            return await _context.Cursos.AnyAsync(c => c.Id == id);
+        }
+
+
     }
 }

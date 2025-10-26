@@ -25,17 +25,19 @@ namespace ApplicationClean.Services
 
         public async Task<AlumnoInscripcionDTO> AddAsync(AlumnoInscripcionDTO inscripcionDto)
         {
-            var curso = await _cursoRepository.GetByIdAsync(inscripcionDto.IdCurso);
-            if (curso == null)
-                throw new KeyNotFoundException($"El curso con ID {inscripcionDto.IdCurso} no existe.");
+            if (!await _cursoRepository.ExistsAsync(inscripcionDto.IdCurso))
+                throw new BusinessRuleException($"El curso con ID {inscripcionDto.IdCurso} no es válido o no existe.");
 
+      
             var alumno = await _usuarioRepository.GetByLegajoAsync(inscripcionDto.LegajoAlumno);
-            if (alumno == null)
-                throw new KeyNotFoundException($"El alumno con legajo {inscripcionDto.LegajoAlumno} no existe.");
+            if (alumno == null || !(alumno is Alumno))
+                throw new BusinessRuleException($"El legajo {inscripcionDto.LegajoAlumno} no corresponde a un alumno válido.");
 
+  
             var inscripcionExistente = await _repository.GetByIdAsync(inscripcionDto.LegajoAlumno, inscripcionDto.IdCurso);
             if (inscripcionExistente != null)
                 throw new BusinessRuleException("El alumno ya se encuentra inscrito en este curso.");
+            
 
             var nuevaInscripcion = _mapper.Map<AlumnoInscripcion>(inscripcionDto);
 
@@ -79,10 +81,11 @@ namespace ApplicationClean.Services
             var inscripcion = await _repository.GetByIdAsync(legajo, idCurso);
             if (inscripcion == null)
             {
-                return false;
+                throw new KeyNotFoundException($"No se encontró la inscripción a eliminar.");
             }
 
-            await _repository.DeleteAsync(inscripcion);
+            inscripcion.SoftDelete();
+            await _repository.UpdateAsync(inscripcion);
             return true;
         }
 

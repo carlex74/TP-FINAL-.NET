@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
+using Domain.Interfaces;
 
 namespace Domain.Entities
 {
-    public class DocenteCurso
+    public class DocenteCurso : ISoftDeletable
     {
         public enum TipoCargos //por ahora solo estos tipos de cargos, se pueden agregar más si es necesario
         {
@@ -14,6 +15,9 @@ namespace Domain.Entities
         public int IdCurso { get; private set; }
         public string LegajoDocente { get; private set; }
         public TipoCargos Cargo { get; private set; }
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedOnUtc { get; private set; }
+
         public Usuario Docente {  get; private set; }
         public Curso Curso { get; private set; }
 
@@ -41,5 +45,18 @@ namespace Domain.Entities
                 throw new ArgumentException("El tipo de cargo no es válido.", nameof(cargo));
             Cargo = cargo;
         }
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedOnUtc = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedOnUtc = null;
+        }
+
     }
 }

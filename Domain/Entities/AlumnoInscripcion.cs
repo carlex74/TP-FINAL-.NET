@@ -1,11 +1,18 @@
-﻿namespace Domain.Entities
+﻿using Domain.Interfaces;
+
+namespace Domain.Entities
 {
-    public class AlumnoInscripcion
+    public class AlumnoInscripcion : ISoftDeletable
     {
         public string Condicion { get; private set; }
         public string LegajoAlumno { get; private set; }
         public int IdCurso { get; private set; }
         public int Nota { get; private set; }
+
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedOnUtc { get; private set; }
+
+
         public Usuario Alumno { get; private set; }
         public Curso Curso { get; private set; }
 
@@ -42,5 +49,19 @@
                 throw new ArgumentException("La nota debe estar entre 0 y 10.", nameof(nota));
             Nota = nota;
         }
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedOnUtc = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedOnUtc = null;
+        }
+
+
     }
 }
