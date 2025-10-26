@@ -80,7 +80,7 @@ namespace ApplicationClean.Services
             }
 
             curso.SoftDelete();
-            await _cursoRepository.DeleteAsync(curso);
+            await _cursoRepository.UpdateAsync(curso);
             return true;
         }
 

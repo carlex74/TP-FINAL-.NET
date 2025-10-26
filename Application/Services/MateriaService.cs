@@ -70,7 +70,7 @@ namespace ApplicationClean.Services
             }
 
             materia.SoftDelete();
-            await _materiaRepository.DeleteAsync(materia);
+            await _materiaRepository.UpdateAsync(materia);
             return true;
         }
 

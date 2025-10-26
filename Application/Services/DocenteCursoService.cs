@@ -88,7 +88,9 @@ namespace ApplicationClean.Services
             {
                 throw new KeyNotFoundException($"No se encontró la asignación a eliminar.");
             }
-            await _repository.DeleteAsync(asignacion);
+
+            asignacion.SoftDelete();
+            await _repository.UpdateAsync(asignacion);
         }
 
     }

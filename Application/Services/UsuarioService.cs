@@ -110,7 +110,7 @@ namespace ApplicationClean.Services
             }
 
             usuario.SoftDelete(); 
-            await _usuarioRepository.DeleteAsync(usuario);
+            await _usuarioRepository.UpdateAsync(usuario);
             return true;
         }
 
