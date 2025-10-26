@@ -64,7 +64,7 @@ namespace ApplicationClean.Services
 
         public async Task<AlumnoInscripcionDTO> GetByIdAsync(string legajo, int idCurso)
         {
-            var inscripcion = await _repository.GetByIdAsync(legajo, idCurso);
+            var inscripcion = await _repository.GetWithDetailsByIdAsync(legajo, idCurso);
             if (inscripcion == null) return null;
 
             return _mapper.Map<AlumnoInscripcionDTO>(inscripcion);

@@ -51,5 +51,19 @@ namespace Infrastructure.Repositories
                                     .ThenInclude(a => a.Persona)
                                  .ToListAsync();
         }
+
+        public async Task<AlumnoInscripcion> GetWithDetailsByIdAsync(string legajo, int idCurso)
+        {
+           
+     
+            return await _context.Inscripciones
+                                 .IgnoreQueryFilters() // Desactiva el borrado lógico para esta operación
+                                 .Include(i => i.Curso)
+                                     .ThenInclude(c => c.Materia) // Incluimos la materia del curso
+                                 .Include(i => i.Alumno)
+                                     .ThenInclude(a => a.Persona) // Incluimos la persona del alumno
+                                 .FirstOrDefaultAsync(i => i.LegajoAlumno == legajo && i.IdCurso == idCurso);
+        }
+
     }
 }

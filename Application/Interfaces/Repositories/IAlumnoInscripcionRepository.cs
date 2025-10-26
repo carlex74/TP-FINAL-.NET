@@ -15,5 +15,7 @@ namespace ApplicationClean.Interfaces.Repositories
         Task UpdateAsync(AlumnoInscripcion inscripcion);
         Task DeleteAsync(AlumnoInscripcion inscripcion);
         Task<IEnumerable<AlumnoInscripcion>> GetInscripcionesPorCursoAsync(int idCurso);
+        Task<AlumnoInscripcion> GetWithDetailsByIdAsync(string legajo, int idCurso);
+
     }
 }
