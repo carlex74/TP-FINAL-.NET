@@ -1,8 +1,21 @@
-﻿using System.Data;
-using System.Windows.Forms.DataVisualization.Charting;
+﻿using Application.Interfaces.ApiClients;
+using Application.Interfaces.Repositories;
 using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.ApiClients;
+using Infrastructure.Reportes;
 using Infrastructure.ViewModels;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
+using ScottPlot; // <-- NUEVO USING PARA SCOTTPLOT
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+using WinFormsChart = System.Windows.Forms.DataVisualization.Charting; // <-- ALIAS PARA EVITAR CONFLICTOS
 
 namespace WindowsForms
 {
@@ -14,6 +27,7 @@ namespace WindowsForms
         private readonly IAPIComisionClient _comisionClient;
         private readonly IAlumnoInscripcionClients _inscripcionClient;
         private readonly IAPIUsuarioClients _usuarioClient;
+        private readonly IAPIReportesClient _reportesClient;
         private readonly UsuarioDTO _docenteActual;
 
         private bool _isLoadingAlumnos = false;
@@ -25,7 +39,8 @@ namespace WindowsForms
             IAPIMateriaClient materiaClient,
             IAPIComisionClient comisionClient,
             IAlumnoInscripcionClients inscripcionClient,
-            IAPIUsuarioClients usuarioClient)
+            IAPIUsuarioClients usuarioClient,
+            IAPIReportesClient reportesClient)
         {
             InitializeComponent();
             _docenteCursoClient = docenteCursoClient;
@@ -34,9 +49,11 @@ namespace WindowsForms
             _comisionClient = comisionClient;
             _inscripcionClient = inscripcionClient;
             _usuarioClient = usuarioClient;
+            _reportesClient = reportesClient;
             _docenteActual = UserSession.GetCurrentUser();
         }
 
+        // ... (Todos los métodos desde PortalDocente_Load hasta btnGenerarReporte_Click se mantienen exactamente igual que en la versión anterior) ...
         private async void PortalDocente_Load(object sender, EventArgs e)
         {
             if (_docenteActual == null)
@@ -45,14 +62,12 @@ namespace WindowsForms
                 this.Close();
                 return;
             }
-
             lblBienvenida.Text = $"Bienvenido, {_docenteActual.PersonaNombreCompleto} (Legajo: {_docenteActual.Legajo})";
-
             ConfigurarGridReporte();
             ConfigurarChartReporte();
             await CargarMisCursosAsync();
+            btnGenerarPdf.Enabled = false;
         }
-
         private async Task CargarMisCursosAsync()
         {
             try
@@ -61,13 +76,10 @@ namespace WindowsForms
                 var todasLasAsignaciones = (await _docenteCursoClient.GetAllAsync()).ToList();
                 var misAsignaciones = todasLasAsignaciones.Where(a => a.LegajoDocente == _docenteActual.Legajo).ToList();
                 var misCursosIds = misAsignaciones.Select(a => a.IdCurso).ToHashSet();
-
                 var todosLosCursos = (await _cursoClient.GetAll()).ToList();
                 var todasLasMaterias = (await _materiaClient.GetAll()).ToList();
                 var todasLasComisiones = (await _comisionClient.GetAll()).ToList();
-
                 _misCursosCompletos = todosLosCursos.Where(c => misCursosIds.Contains(c.Id)).ToList();
-
                 var cursosParaMostrar = from asig in misAsignaciones
                                         join curso in _misCursosCompletos on asig.IdCurso equals curso.Id
                                         join materia in todasLasMaterias on curso.IdMateria equals materia.Id
@@ -80,10 +92,8 @@ namespace WindowsForms
                                             Año = curso.AnioCalendario,
                                             Cargo = asig.Cargo.ToString()
                                         };
-
                 dgvMisCursos.DataSource = cursosParaMostrar.ToList();
-
-                cmbCursosReporte.DataSource = _misCursosCompletos;
+                cmbCursosReporte.DataSource = _misCursosCompletos.Select(c => new { c.Id, Descripcion = $"{todasLasMaterias.FirstOrDefault(m => m.Id == c.IdMateria)?.Nombre} - {todasLasComisiones.FirstOrDefault(com => com.Nro == c.IdComision)?.Descripcion} ({c.AnioCalendario})" }).ToList();
                 cmbCursosReporte.DisplayMember = "Descripcion";
                 cmbCursosReporte.ValueMember = "Id";
                 cmbCursosReporte.SelectedIndex = -1;
@@ -97,7 +107,6 @@ namespace WindowsForms
                 this.Cursor = Cursors.Default;
             }
         }
-
         private async void dgvMisCursos_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvMisCursos.SelectedRows.Count == 0 || _isLoadingAlumnos)
@@ -106,10 +115,8 @@ namespace WindowsForms
                 dgvAlumnosInscriptos.DataSource = null;
                 return;
             }
-
             _isLoadingAlumnos = true;
             this.Cursor = Cursors.WaitCursor;
-
             try
             {
                 dynamic selectedCourse = dgvMisCursos.SelectedRows[0].DataBoundItem;
@@ -127,19 +134,16 @@ namespace WindowsForms
                 _isLoadingAlumnos = false;
             }
         }
-
         private async Task CargarAlumnosDelCursoAsync(int idCurso)
         {
             var todasLasInscripciones = (await _inscripcionClient.GetAll()).ToList();
             var inscripcionesDelCurso = todasLasInscripciones.Where(i => i.IdCurso == idCurso).ToList();
-
             if (!inscripcionesDelCurso.Any())
             {
                 dgvAlumnosInscriptos.DataSource = null;
                 btnGuardarCambios.Enabled = false;
                 return;
             }
-
             var todosLosUsuarios = (await _usuarioClient.GetAll()).ToList();
             var alumnosParaMostrar = from insc in inscripcionesDelCurso
                                      join usuario in todosLosUsuarios on insc.LegajoAlumno equals usuario.Legajo
@@ -150,30 +154,21 @@ namespace WindowsForms
                                          Condicion = insc.Condicion,
                                          Nota = insc.Nota
                                      };
-
             dgvAlumnosInscriptos.DataSource = alumnosParaMostrar.ToList();
             btnGuardarCambios.Enabled = true;
         }
-
         private async void btnGuardarCambios_Click(object sender, EventArgs e)
         {
             if (dgvAlumnosInscriptos.Rows.Count == 0 || dgvMisCursos.SelectedRows.Count == 0) return;
-
             this.dgvAlumnosInscriptos.EndEdit();
-
             this.Cursor = Cursors.WaitCursor;
             btnGuardarCambios.Enabled = false;
-
             try
             {
                 dynamic selectedCourse = dgvMisCursos.SelectedRows[0].DataBoundItem;
                 int idCurso = selectedCourse.IdCurso;
-
-                int cambiosRealizados = 0;
                 var tareasDeActualizacion = new List<Task>();
-
                 var listaAlumnos = (List<AlumnoInscripcionViewModel>)dgvAlumnosInscriptos.DataSource;
-
                 foreach (var alumno in listaAlumnos)
                 {
                     if (alumno.Nota < 0 || alumno.Nota > 10)
@@ -181,7 +176,6 @@ namespace WindowsForms
                         MessageBox.Show($"La nota '{alumno.Nota}' para el alumno con legajo '{alumno.LegajoAlumno}' no es válida. Debe estar entre 0 y 10.", "Error de Validación");
                         return;
                     }
-
                     var dto = new AlumnoInscripcionDTO
                     {
                         LegajoAlumno = alumno.LegajoAlumno,
@@ -189,14 +183,10 @@ namespace WindowsForms
                         Condicion = alumno.Condicion,
                         Nota = alumno.Nota
                     };
-
                     tareasDeActualizacion.Add(_inscripcionClient.Update(dto));
-                    cambiosRealizados++;
                 }
-
                 await Task.WhenAll(tareasDeActualizacion);
-
-                MessageBox.Show($"{cambiosRealizados} registros de alumnos actualizados correctamente.", "Éxito");
+                MessageBox.Show($"{tareasDeActualizacion.Count} registros de alumnos actualizados correctamente.", "Éxito");
                 await CargarAlumnosDelCursoAsync(idCurso);
             }
             catch (FormatException)
@@ -213,12 +203,10 @@ namespace WindowsForms
                 btnGuardarCambios.Enabled = true;
             }
         }
-
         private void btnCerrarSesion_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
         private void ConfigurarGridReporte()
         {
             dgvReporteAlumnos.AutoGenerateColumns = false;
@@ -228,17 +216,14 @@ namespace WindowsForms
             dgvReporteAlumnos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Condicion", HeaderText = "Condición", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
             dgvReporteAlumnos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Nota", HeaderText = "Nota", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
         }
-
         private void ConfigurarChartReporte()
         {
             chartRendimiento.Series.Clear();
             chartRendimiento.ChartAreas.Clear();
             chartRendimiento.Legends.Clear();
-
-            ChartArea chartArea = new ChartArea("MainChartArea");
+            WinFormsChart.ChartArea chartArea = new WinFormsChart.ChartArea("MainChartArea");
             chartRendimiento.ChartAreas.Add(chartArea);
-
-            Series series = new Series("Rendimiento")
+            WinFormsChart.Series series = new WinFormsChart.Series("Rendimiento")
             {
                 ChartType = SeriesChartType.Pie,
                 IsValueShownAsLabel = true,
@@ -246,15 +231,13 @@ namespace WindowsForms
                 LegendText = "#AXISLABEL"
             };
             chartRendimiento.Series.Add(series);
-
-            Legend legend = new Legend("DefaultLegend")
+            WinFormsChart.Legend legend = new WinFormsChart.Legend("DefaultLegend")
             {
                 Docking = Docking.Bottom,
                 Alignment = System.Drawing.StringAlignment.Center
             };
             chartRendimiento.Legends.Add(legend);
         }
-
         private async void btnGenerarReporte_Click(object sender, EventArgs e)
         {
             if (cmbCursosReporte.SelectedValue == null)
@@ -262,41 +245,26 @@ namespace WindowsForms
                 MessageBox.Show("Por favor, seleccione un curso.", "Validación");
                 return;
             }
-
             int cursoId = (int)cmbCursosReporte.SelectedValue;
-
+            btnGenerarPdf.Enabled = false;
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-
-                var inscripciones = (await _inscripcionClient.GetAll()).Where(i => i.IdCurso == cursoId).ToList();
-                var usuarios = await _usuarioClient.GetAll();
-
-                var reporteData = (from insc in inscripciones
-                                   join user in usuarios on insc.LegajoAlumno equals user.Legajo
-                                   select new
-                                   {
-                                       LegajoAlumno = insc.LegajoAlumno,
-                                       NombreCompleto = user.PersonaNombreCompleto,
-                                       Condicion = insc.Condicion,
-                                       Nota = insc.Nota
-                                   }).ToList();
-
+                var reporteData = (await _reportesClient.GetRendimientoCursoAsync(cursoId)).ToList();
                 dgvReporteAlumnos.DataSource = reporteData;
-
-                var chartData = reporteData
-                    .GroupBy(r => r.Condicion)
-                    .Select(g => new { Condicion = g.Key, Cantidad = g.Count() })
-                    .ToList();
-
+                var chartData = reporteData.GroupBy(r => r.Condicion).Select(g => new { Condicion = g.Key, Cantidad = g.Count() }).ToList();
                 chartRendimiento.Series["Rendimiento"].Points.Clear();
-                foreach (var dataPoint in chartData)
+                if (chartData.Any())
                 {
-                    DataPoint point = new DataPoint();
-                    point.SetValueY(dataPoint.Cantidad);
-                    point.AxisLabel = dataPoint.Condicion;
-                    point.LegendText = dataPoint.Condicion;
-                    chartRendimiento.Series["Rendimiento"].Points.Add(point);
+                    foreach (var dataPoint in chartData)
+                    {
+                        WinFormsChart.DataPoint point = new WinFormsChart.DataPoint();
+                        point.SetValueY(dataPoint.Cantidad);
+                        point.AxisLabel = dataPoint.Condicion;
+                        point.LegendText = dataPoint.Condicion;
+                        chartRendimiento.Series["Rendimiento"].Points.Add(point);
+                    }
+                    btnGenerarPdf.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -307,6 +275,93 @@ namespace WindowsForms
             {
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        // --- MÉTODO btnGenerarPdf_Click REEMPLAZADO ---
+        private void btnGenerarPdf_Click(object sender, EventArgs e)
+        {
+            if (dgvReporteAlumnos.DataSource == null)
+            {
+                MessageBox.Show("Primero debe generar un reporte para poder exportarlo a PDF.", "Información");
+                return;
+            }
+
+            try
+            {
+                var alumnosDto = (List<RendimientoCursoDto>)dgvReporteAlumnos.DataSource;
+
+                var alumnosViewModel = alumnosDto.Select(a => new AlumnoInscripcionViewModel
+                {
+                    LegajoAlumno = a.LegajoAlumno,
+                    NombreCompleto = a.NombreCompleto,
+                    Condicion = a.Condicion,
+                    Nota = a.Nota
+                }).ToList();
+
+                var resumenCondiciones = alumnosViewModel
+                    .GroupBy(a => a.Condicion)
+                    .ToDictionary(g => g.Key, g => g.Count());
+
+                // Se genera el gráfico con ScottPlot, igual que en la vista del Admin
+                byte[] graficoBytes = GenerarGraficoTortaBytes(resumenCondiciones);
+
+                var dataSource = new RendimientoDataSource
+                {
+                    NombreCurso = cmbCursosReporte.Text,
+                    Alumnos = alumnosViewModel,
+                    GraficoBytes = graficoBytes
+                };
+
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
+                    saveFileDialog.Title = "Guardar Reporte de Rendimiento";
+                    saveFileDialog.FileName = $"Rendimiento_{dataSource.NombreCurso.Replace(" ", "_").Replace("-", "")}_{DateTime.Now:yyyyMMdd}.pdf";
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        this.Cursor = Cursors.WaitCursor;
+                        QuestPDF.Settings.License = LicenseType.Community;
+                        var report = new RendimientoReport(dataSource);
+                        report.GeneratePdf(saveFileDialog.FileName);
+                        this.Cursor = Cursors.Default;
+                        MessageBox.Show($"El reporte se ha guardado exitosamente en:\n{saveFileDialog.FileName}", "PDF Generado");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Cursor = Cursors.Default;
+                ErrorHandler.HandleError(ex);
+            }
+        }
+
+        // --- NUEVO MÉTODO AUXILIAR PARA SCOTTPLOT ---
+        private byte[] GenerarGraficoTortaBytes(Dictionary<string, int> data)
+        {
+            if (data == null || !data.Any()) return null;
+
+            var plt = new Plot();
+            plt.Title("Distribución de Condiciones");
+
+            List<PieSlice> slices = data.Select(entry => new PieSlice
+            {
+                Value = entry.Value,
+                Label = entry.Key
+            }).ToList();
+
+            var pie = plt.Add.Pie(slices);
+
+            double total = slices.Sum(s => s.Value);
+            foreach (var slice in pie.Slices)
+            {
+                slice.Label += $" ({slice.Value / total:P1})";
+            }
+
+            plt.Legend.IsVisible = true;
+            plt.Legend.Location = Alignment.LowerRight;
+
+            return plt.GetImageBytes(400, 250);
         }
     }
 }
