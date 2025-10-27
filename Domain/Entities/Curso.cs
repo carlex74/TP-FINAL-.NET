@@ -80,10 +80,6 @@ namespace Domain.Entities
             }
             Cupo--;
         }
-        public void IncrementarCupo()
-        {
-            Cupo++;
-        }
 
         /*
         A FUTURO: Métodos para gestionar el borrado lógico.
