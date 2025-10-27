@@ -87,7 +87,7 @@
             this.lblBienvenida.ForeColor = System.Drawing.Color.White;
             this.lblBienvenida.Location = new System.Drawing.Point(22, 16);
             this.lblBienvenida.Name = "lblBienvenida";
-            this.lblBienvenida.Size = new System.Drawing.Size(155, 21);
+            this.lblBienvenida.Size = new System.Drawing.Size(193, 28);
             this.lblBienvenida.TabIndex = 1;
             this.lblBienvenida.Text = "Portal del Docente";
             // 
@@ -132,10 +132,10 @@
             // tabPageCalificaciones
             // 
             this.tabPageCalificaciones.Controls.Add(this.splitContainerCalificaciones);
-            this.tabPageCalificaciones.Location = new System.Drawing.Point(4, 24);
+            this.tabPageCalificaciones.Location = new System.Drawing.Point(4, 29);
             this.tabPageCalificaciones.Name = "tabPageCalificaciones";
             this.tabPageCalificaciones.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCalificaciones.Size = new System.Drawing.Size(1054, 545);
+            this.tabPageCalificaciones.Size = new System.Drawing.Size(1054, 540);
             this.tabPageCalificaciones.TabIndex = 0;
             this.tabPageCalificaciones.Text = "Calificaciones";
             this.tabPageCalificaciones.UseVisualStyleBackColor = true;
@@ -156,7 +156,7 @@
             this.splitContainerCalificaciones.Panel2.Controls.Add(this.btnGuardarCambios);
             this.splitContainerCalificaciones.Panel2.Controls.Add(this.lblAlumnosInscriptos);
             this.splitContainerCalificaciones.Panel2.Controls.Add(this.dgvAlumnosInscriptos);
-            this.splitContainerCalificaciones.Size = new System.Drawing.Size(1048, 539);
+            this.splitContainerCalificaciones.Size = new System.Drawing.Size(1048, 534);
             this.splitContainerCalificaciones.SplitterDistance = 450;
             this.splitContainerCalificaciones.TabIndex = 0;
             // 
@@ -166,7 +166,7 @@
             this.lblMisCursos.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold);
             this.lblMisCursos.Location = new System.Drawing.Point(11, 8);
             this.lblMisCursos.Name = "lblMisCursos";
-            this.lblMisCursos.Size = new System.Drawing.Size(78, 19);
+            this.lblMisCursos.Size = new System.Drawing.Size(95, 23);
             this.lblMisCursos.TabIndex = 1;
             this.lblMisCursos.Text = "Mis Cursos";
             // 
@@ -207,6 +207,7 @@
             this.dgvMisCursos.Name = "dgvMisCursos";
             this.dgvMisCursos.ReadOnly = true;
             this.dgvMisCursos.RowHeadersVisible = false;
+            this.dgvMisCursos.RowHeadersWidth = 51;
             this.dgvMisCursos.RowTemplate.Height = 40;
             this.dgvMisCursos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMisCursos.Size = new System.Drawing.Size(422, 495);
@@ -236,7 +237,7 @@
             this.lblAlumnosInscriptos.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold);
             this.lblAlumnosInscriptos.Location = new System.Drawing.Point(11, 8);
             this.lblAlumnosInscriptos.Name = "lblAlumnosInscriptos";
-            this.lblAlumnosInscriptos.Size = new System.Drawing.Size(128, 19);
+            this.lblAlumnosInscriptos.Size = new System.Drawing.Size(158, 23);
             this.lblAlumnosInscriptos.TabIndex = 1;
             this.lblAlumnosInscriptos.Text = "Alumnos Inscriptos";
             // 
@@ -282,6 +283,7 @@
             this.dgvAlumnosInscriptos.MultiSelect = false;
             this.dgvAlumnosInscriptos.Name = "dgvAlumnosInscriptos";
             this.dgvAlumnosInscriptos.RowHeadersVisible = false;
+            this.dgvAlumnosInscriptos.RowHeadersWidth = 51;
             this.dgvAlumnosInscriptos.RowTemplate.Height = 40;
             this.dgvAlumnosInscriptos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dgvAlumnosInscriptos.Size = new System.Drawing.Size(569, 449);
@@ -292,6 +294,7 @@
             this.LegajoColumn.DataPropertyName = "LegajoAlumno";
             this.LegajoColumn.FillWeight = 80F;
             this.LegajoColumn.HeaderText = "Legajo";
+            this.LegajoColumn.MinimumWidth = 6;
             this.LegajoColumn.Name = "LegajoColumn";
             this.LegajoColumn.ReadOnly = true;
             // 
@@ -300,6 +303,7 @@
             this.NombreCompletoColumn.DataPropertyName = "NombreCompleto";
             this.NombreCompletoColumn.FillWeight = 200F;
             this.NombreCompletoColumn.HeaderText = "Nombre Completo";
+            this.NombreCompletoColumn.MinimumWidth = 6;
             this.NombreCompletoColumn.Name = "NombreCompletoColumn";
             this.NombreCompletoColumn.ReadOnly = true;
             // 
@@ -307,6 +311,7 @@
             // 
             this.CondicionColumn.DataPropertyName = "Condicion";
             this.CondicionColumn.HeaderText = "Condición";
+            this.CondicionColumn.MinimumWidth = 6;
             this.CondicionColumn.Name = "CondicionColumn";
             // 
             // NotaColumn
@@ -314,16 +319,17 @@
             this.NotaColumn.DataPropertyName = "Nota";
             this.NotaColumn.FillWeight = 60F;
             this.NotaColumn.HeaderText = "Nota";
+            this.NotaColumn.MinimumWidth = 6;
             this.NotaColumn.Name = "NotaColumn";
             // 
             // tabPageReportes
             // 
             this.tabPageReportes.Controls.Add(this.splitContainerReporte);
             this.tabPageReportes.Controls.Add(this.panelFiltroReporte);
-            this.tabPageReportes.Location = new System.Drawing.Point(4, 24);
+            this.tabPageReportes.Location = new System.Drawing.Point(4, 29);
             this.tabPageReportes.Name = "tabPageReportes";
             this.tabPageReportes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageReportes.Size = new System.Drawing.Size(1054, 545);
+            this.tabPageReportes.Size = new System.Drawing.Size(1054, 540);
             this.tabPageReportes.TabIndex = 1;
             this.tabPageReportes.Text = "Reporte de Rendimiento";
             this.tabPageReportes.UseVisualStyleBackColor = true;
@@ -341,7 +347,7 @@
             // splitContainerReporte.Panel2
             // 
             this.splitContainerReporte.Panel2.Controls.Add(this.chartRendimiento);
-            this.splitContainerReporte.Size = new System.Drawing.Size(1048, 486);
+            this.splitContainerReporte.Size = new System.Drawing.Size(1048, 481);
             this.splitContainerReporte.SplitterDistance = 650;
             this.splitContainerReporte.TabIndex = 1;
             // 
@@ -355,9 +361,10 @@
             this.dgvReporteAlumnos.Name = "dgvReporteAlumnos";
             this.dgvReporteAlumnos.ReadOnly = true;
             this.dgvReporteAlumnos.RowHeadersVisible = false;
+            this.dgvReporteAlumnos.RowHeadersWidth = 51;
             this.dgvReporteAlumnos.RowTemplate.Height = 25;
             this.dgvReporteAlumnos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvReporteAlumnos.Size = new System.Drawing.Size(650, 486);
+            this.dgvReporteAlumnos.Size = new System.Drawing.Size(650, 481);
             this.dgvReporteAlumnos.TabIndex = 0;
             // 
             // chartRendimiento
@@ -373,7 +380,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chartRendimiento.Series.Add(series1);
-            this.chartRendimiento.Size = new System.Drawing.Size(394, 486);
+            this.chartRendimiento.Size = new System.Drawing.Size(394, 481);
             this.chartRendimiento.TabIndex = 0;
             this.chartRendimiento.Text = "chart1";
             // 
@@ -390,40 +397,43 @@
             // 
             // btnGenerarReporte
             // 
+            this.btnGenerarReporte.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenerarReporte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
             this.btnGenerarReporte.FlatAppearance.BorderSize = 0;
             this.btnGenerarReporte.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGenerarReporte.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnGenerarReporte.ForeColor = System.Drawing.Color.White;
-            this.btnGenerarReporte.Location = new System.Drawing.Point(461, 12);
+            this.btnGenerarReporte.Location = new System.Drawing.Point(904, 11);
             this.btnGenerarReporte.Name = "btnGenerarReporte";
-            this.btnGenerarReporte.Size = new System.Drawing.Size(129, 26);
+            this.btnGenerarReporte.Size = new System.Drawing.Size(129, 29);
             this.btnGenerarReporte.TabIndex = 2;
-            this.btnGenerarReporte.Text = "Generar Reporte";
+            this.btnGenerarReporte.Text = "Generar";
             this.btnGenerarReporte.UseVisualStyleBackColor = false;
             this.btnGenerarReporte.Click += new System.EventHandler(this.btnGenerarReporte_Click);
             // 
             // cmbCursosReporte
             // 
+            this.cmbCursosReporte.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbCursosReporte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCursosReporte.FormattingEnabled = true;
-            this.cmbCursosReporte.Location = new System.Drawing.Point(135, 14);
+            this.cmbCursosReporte.Location = new System.Drawing.Point(168, 12);
             this.cmbCursosReporte.Name = "cmbCursosReporte";
-            this.cmbCursosReporte.Size = new System.Drawing.Size(320, 23);
+            this.cmbCursosReporte.Size = new System.Drawing.Size(730, 28);
             this.cmbCursosReporte.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 18);
+            this.label1.Location = new System.Drawing.Point(14, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(115, 15);
+            this.label1.Size = new System.Drawing.Size(148, 20);
             this.label1.TabIndex = 0;
             this.label1.Text = "Seleccione un Curso:";
             // 
             // PortalDocente
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
             this.ClientSize = new System.Drawing.Size(1082, 653);
