@@ -8,7 +8,6 @@ namespace ApplicationClean.Services
 {
     public class AlumnoInscripcionService : IAlumnoInscripcionService
     {
-
         private readonly IAlumnoInscripcionRepository _repository;
         private readonly ICursoRepository _cursoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
@@ -20,12 +19,12 @@ namespace ApplicationClean.Services
             _cursoRepository = cursoRepository;
             _usuarioRepository = usuarioRepository;
             _mapper = mapper;
-            _usuarioRepository = usuarioRepository;
         }
 
         public async Task<AlumnoInscripcionDTO> AddAsync(AlumnoInscripcionDTO inscripcionDto)
         {
-            if (!await _cursoRepository.ExistsAsync(inscripcionDto.IdCurso))
+            var curso = await _cursoRepository.GetByIdAsync(inscripcionDto.IdCurso);
+            if (curso == null)
                 throw new BusinessRuleException($"El curso con ID {inscripcionDto.IdCurso} no es válido o no existe.");
 
             var alumno = await _usuarioRepository.GetByLegajoAsync(inscripcionDto.LegajoAlumno);
@@ -36,29 +35,53 @@ namespace ApplicationClean.Services
 
             if (inscripcionExistente != null)
             {
-
                 if (!inscripcionExistente.IsDeleted)
                 {
-
                     throw new BusinessRuleException("El alumno ya se encuentra inscrito en este curso.");
                 }
                 else
                 {
-
+                    curso.DecrementarCupo();
                     inscripcionExistente.Restore();
-                    await _repository.UpdateAsync(inscripcionExistente);
 
+                    await _repository.UpdateAsync(inscripcionExistente);
+                    await _cursoRepository.UpdateAsync(curso);
 
                     return _mapper.Map<AlumnoInscripcionDTO>(inscripcionExistente);
                 }
             }
             else
             {
+                curso.DecrementarCupo();
                 var nuevaInscripcion = _mapper.Map<AlumnoInscripcion>(inscripcionDto);
+
                 await _repository.AddAsync(nuevaInscripcion);
+                await _cursoRepository.UpdateAsync(curso);
 
                 return _mapper.Map<AlumnoInscripcionDTO>(nuevaInscripcion);
             }
+        }
+
+        public async Task<bool> DeleteAsync(string legajo, int idCurso)
+        {
+            var inscripcion = await _repository.GetByIdAsync(legajo, idCurso);
+            if (inscripcion == null)
+            {
+                throw new KeyNotFoundException($"No se encontró la inscripción a eliminar.");
+            }
+
+            var curso = await _cursoRepository.GetByIdAsync(idCurso);
+
+            inscripcion.SoftDelete();
+
+            if (curso != null)
+            {
+                curso.IncrementarCupo();
+                await _cursoRepository.UpdateAsync(curso);
+            }
+
+            await _repository.UpdateAsync(inscripcion);
+            return true;
         }
 
         public async Task<AlumnoInscripcionDTO> UpdateAsync(AlumnoInscripcionDTO inscripcionDto)
@@ -89,19 +112,6 @@ namespace ApplicationClean.Services
         {
             var inscripciones = await _repository.GetAllAsync();
             return _mapper.Map<IEnumerable<AlumnoInscripcionDTO>>(inscripciones);
-        }
-
-        public async Task<bool> DeleteAsync(string legajo, int idCurso)
-        {
-            var inscripcion = await _repository.GetByIdAsync(legajo, idCurso);
-            if (inscripcion == null)
-            {
-                throw new KeyNotFoundException($"No se encontró la inscripción a eliminar.");
-            }
-
-            inscripcion.SoftDelete();
-            await _repository.UpdateAsync(inscripcion);
-            return true;
         }
 
         public async Task<IEnumerable<AlumnoInscripcionDTO>> GetInscripcionesPorCursoAsync(int idCurso)

@@ -1,4 +1,5 @@
 ﻿using Domain.Interfaces;
+using Domain.Exceptions;
 
 namespace Domain.Entities
 {
@@ -44,7 +45,7 @@ namespace Domain.Entities
         }
         public void SetCupo(int cupo)
         {
-            if (cupo <= 0)
+            if (cupo < 0)
                 throw new ArgumentException("El cupo debe ser un número positivo.", nameof(cupo));
             Cupo = cupo;
         }
@@ -65,6 +66,19 @@ namespace Domain.Entities
             if (idMateria <= 0)
                 throw new ArgumentException("El ID de materia debe ser un número positivo.", nameof(idMateria));
             IdMateria = idMateria;
+        }
+
+        public void DecrementarCupo()
+        {
+            if (Cupo <= 0)
+            {
+                throw new BusinessRuleException("No hay cupos disponibles en este curso.");
+            }
+            Cupo--;
+        }
+        public void IncrementarCupo()
+        {
+            Cupo++;
         }
 
         public void SoftDelete()
