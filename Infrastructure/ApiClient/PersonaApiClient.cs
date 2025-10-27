@@ -29,14 +29,24 @@ namespace Infrastructure.ApiClients
         public async Task<PersonaDTO> Add(PersonaDTO personaDto)
         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("personas", personaDto);
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, null, response.StatusCode);
+            }
             return await response.Content.ReadFromJsonAsync<PersonaDTO>(_jsonOptions);
         }
 
         public async Task Update(PersonaDTO personaDto)
         {
             HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"personas/{personaDto.Id}", personaDto);
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, null, response.StatusCode);
+            }
         }
 
         /*

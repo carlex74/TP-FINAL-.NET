@@ -38,6 +38,13 @@ namespace WebApi.Middleware
                     errorDetails.StatusCode = context.Response.StatusCode;
                     errorDetails.Message = ex.Message;
                     break;
+
+                case ArgumentException ex:
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    errorDetails.StatusCode = context.Response.StatusCode;
+                    errorDetails.Message = ex.Message;
+                    break;
+
                 case KeyNotFoundException ex:
                     context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                     errorDetails.StatusCode = context.Response.StatusCode;

@@ -1,6 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Application.Interfaces.ApiClients;
 using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.ApiClients;
 using FrontWeb.Auth;
@@ -8,6 +6,9 @@ using Infrastructure.ApiClient;
 using Infrastructure.ApiClients;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -55,6 +56,8 @@ builder.Services.AddHttpClient<IAPICursoClient, CursoApiClient>(client => client
 builder.Services.AddHttpClient<IAPIDocenteCursoClient, DocenteCursoApiClient>(client => client.BaseAddress = new Uri(baseAddress + "api/"))
     .AddHttpMessageHandler<AuthHeaderHandler>();
 builder.Services.AddHttpClient<IAlumnoInscripcionClients, AlumnoInscripcionApiClient>(client => client.BaseAddress = new Uri(baseAddress + "api/"))
+    .AddHttpMessageHandler<AuthHeaderHandler>();
+builder.Services.AddHttpClient<IAPIReportesClient, ReportesApiClient>(client => client.BaseAddress = new Uri(baseAddress + "api/"))
     .AddHttpMessageHandler<AuthHeaderHandler>();
 
 await builder.Build().RunAsync();

@@ -1,357 +1,325 @@
 ﻿@page "/portal-docente"
 @attribute [Authorize(Roles = "Docente")]
 
+@using Application.Interfaces.ApiClients
+@using Application.Interfaces.Repositories
+@using ChartJs.Blazor.PieChart
+@using ChartJs.Blazor.Common
+@using ChartJs.Blazor.Common.Enums
+@using ChartJs.Blazor.Util
+
 @inject IAPIDocenteCursoClient DocenteCursoClient
-@inject IAlumnoInscripcionClients InscripcionClient
-@inject IAPIUsuarioClients UsuarioClient
 @inject IAPICursoClient CursoClient
 @inject IAPIMateriaClient MateriaClient
 @inject IAPIComisionClient ComisionClient
+@inject IAlumnoInscripcionClients InscripcionClient
+@inject IAPIUsuarioClients UsuarioClient
+@inject IAPIReportesClient ReportesClient
 @inject AuthenticationStateProvider AuthStateProvider
-@inject IJSRuntime JSRuntime
 
 <PageTitle>Portal del Docente</PageTitle>
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">@(_docenteActual?.PersonaNombreCompleto) <small class="text-muted">(Legajo: @_docenteActual?.Legajo)</small></h4>
+        </div>
+        <div class="card-body">
 
-    @if (!string.IsNullOrEmpty(errorMessage))
-    {
-        <div class="alert alert-danger">@errorMessage</div>
-    }
+            <ul class="nav nav-tabs" id="docenteTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link @(activeTab == "calificaciones" ? "active" : "")" @onclick='() => SetActiveTab("calificaciones")' type="button">Gestión de Calificaciones</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link @(activeTab == "reportes" ? "active" : "")" @onclick='() => SetActiveTab("reportes")' type="button">Reporte de Rendimiento</button>
+                </li>
+            </ul>
 
-    <div class="row">
-        <div class="col-lg-4 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Mis Cursos Asignados</h5>
-                </div>
-                @if (misCursos == null)
+            <div class="tab-content pt-3">
+                @if (isLoading)
                 {
-                    <div class="card-body">
-                        <p><em>Cargando cursos...</em></p>
-                    </div>
-                }
-                else if (!misCursos.Any())
-                {
-                    <div class="card-body">
-                        <p class="text-muted">No tienes cursos asignados.</p>
-                    </div>
+                    <div class="text-center p-4"><div class="spinner-border" role="status"><span class="visually-hidden">Cargando...</span></div></div>
                 }
                 else
                 {
-                    <div class="list-group list-group-flush">
-                        @foreach (var curso in misCursos)
-                        {
-                            <a href="javascript:void(0)" @onclick="() => SeleccionarCurso(curso.IdCurso)"
-                               class="list-group-item list-group-item-action @(curso.IdCurso == cursoSeleccionadoId ? "active" : "")">
-                                <strong>@curso.MateriaNombre</strong> - @curso.ComisionDescripcion (@curso.Anio)
-                                <br />
-                                <small class="text-muted">Cargo: @curso.Cargo</small>
-                            </a>
-                        }
-                    </div>
-                }
-            </div>
-        </div>
-
-        <div class="col-lg-8">
-            @if (cursoSeleccionadoId.HasValue)
-            {
-                @* ESTADÍSTICAS DEL CURSO *@
-                @if (alumnosDelCurso != null && alumnosDelCurso.Any())
-                {
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0"> Estadísticas del Curso</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="row text-center">
-                                        <div class="col-4">
-                                            <div class="border rounded p-3 bg-light">
-                                                <h4 class="mb-0 text-primary">@alumnosDelCurso.Count</h4>
-                                                <small class="text-muted">Total Alumnos</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="border rounded p-3 bg-light">
-                                                <h4 class="mb-0 text-success">@alumnosDelCurso.Count(a => a.Condicion == "Aprobado")</h4>
-                                                <small class="text-muted">Aprobados</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="border rounded p-3 bg-light">
-                                                <h4 class="mb-0 text-warning">@alumnosDelCurso.Count(a => a.Condicion == "Inscripto")</h4>
-                                                <small class="text-muted">Inscriptos</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    @if (_pieChartConfig != null)
+                    @if (activeTab == "calificaciones")
+                    {
+                        <div class="row g-3">
+                            <div class="col-lg-5">
+                                <h5 class="mb-3">Mis Cursos Asignados</h5>
+                                <div class="list-group">
+                                    @foreach (var curso in _misCursosParaMostrar)
                                     {
-                                        <div style="max-height: 150px;">
-                                            <Chart Config="_pieChartConfig"></Chart>
-                                        </div>
+                                        <button type="button" class="list-group-item list-group-item-action @(curso.IdCurso == _cursoSeleccionadoId ? "active" : "")" @onclick="() => SeleccionarCurso(curso.IdCurso)">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">@curso.Materia</h6><small>Año: @curso.Año</small>
+                                            </div>
+                                            <p class="mb-1">Comisión: @curso.Comision</p><small>Cargo: @curso.Cargo</small>
+                                        </button>
                                     }
                                 </div>
                             </div>
+                            <div class="col-lg-7">
+                                <h5 class="mb-3">Alumnos Inscriptos</h5>
+                                @if (_isLoadingAlumnos)
+                                {
+                                    <div class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div></div>
+                                }
+                                else if (_alumnosDelCurso.Any())
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover">
+                                            <thead><tr><th>Legajo</th><th>Nombre Completo</th><th>Condición</th><th>Nota</th></tr></thead>
+                                            <tbody>
+                                                @foreach (var alumno in _alumnosDelCurso)
+                                                {
+                                                    <tr>
+                                                        <td>@alumno.LegajoAlumno</td><td>@alumno.NombreCompleto</td>
+                                                        <td><input type="text" class="form-control form-control-sm" @bind="alumno.Condicion" /></td>
+                                                        <td><input type="number" class="form-control form-control-sm" @bind="alumno.Nota" /></td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <button class="btn btn-primary" @onclick="GuardarCambios" disabled="@_isSaving">
+                                        @if(_isSaving) { <span class="spinner-border spinner-border-sm"></span> } else { <text>Guardar Cambios</text> }
+                                    </button>
+                                }
+                                else { <p class="text-muted">Seleccione un curso para ver los alumnos o no hay alumnos inscriptos.</p> }
+                            </div>
                         </div>
-                    </div>
-                }
+                    }
 
-                @* TABLA DE ALUMNOS *@
-                <div class="card shadow-sm">
-                    <div class="card-header">
-                        <h5 class="mb-0">Alumnos Inscriptos</h5>
-                    </div>
-                    <div class="card-body">
-                        @if (alumnosDelCurso == null)
+                    @if (activeTab == "reportes")
+                    {
+                        <div class="row align-items-end mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Seleccione un Curso para el Reporte:</label>
+                                <InputSelect class="form-select" @bind-Value="_cursoReporteId">
+                                    <option value="0">-- Seleccionar --</option>
+                                    @foreach (var curso in _misCursosParaMostrar)
+                                    {
+                                        <option value="@curso.IdCurso">@curso.Materia - @curso.Comision (@curso.Año)</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-success w-100" @onclick="GenerarReporte" disabled="@(_cursoReporteId == 0)">
+                                    <span class="bi bi-bar-chart-fill"></span> Generar Reporte
+                                </button>
+                            </div>
+                        </div>
+
+                        @if (_isLoadingReporte)
                         {
-                            <div class="d-flex justify-content-center p-4">
-                                <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Cargando alumnos...</span>
+                            <div class="text-center p-4"><div class="spinner-border" role="status"></div></div>
+                        }
+                        else if (_reporteData != null && _reporteData.Any())
+                        {
+                             <div class="row mt-3">
+                                <div class="col-lg-7">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead class="table-dark"><tr><th>Legajo</th><th>Alumno</th><th>Condición</th><th>Nota</th></tr></thead>
+                                            <tbody>
+                                                @foreach (var item in _reporteData)
+                                                {
+                                                    <tr><td>@item.LegajoAlumno</td><td>@item.NombreCompleto</td><td><span class="badge bg-info text-dark">@item.Condicion</span></td><td><strong>@item.Nota</strong></td></tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="card border-0 shadow-sm"><div class="card-body">
+                                        <h5 class="card-title text-center mb-3">Distribución por Condición</h5>
+                                            @if (_chartConfig != null && _chartConfig.Data.Datasets.Any())
+                                            {
+                                                <Chart Config="_chartConfig" @ref="_chart"></Chart>
+                                            }
+                                        <Chart Config="_chartConfig" @ref="_chart"></Chart>
+                                    </div></div>
                                 </div>
                             </div>
                         }
-                        else if (!alumnosDelCurso.Any())
+                        else if (_reporteData != null && !_reporteData.Any())
                         {
-                            <p>No hay alumnos inscriptos en este curso.</p>
+                            <div class="alert alert-info mt-3"><span class="bi bi-info-circle"></span> No se encontraron inscripciones para este curso.</div>
                         }
-                        else
-                        {
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Legajo</th>
-                                            <th>Nombre Completo</th>
-                                            <th style="width: 150px;">Condición</th>
-                                            <th style="width: 100px;">Nota</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var alumno in alumnosDelCurso)
-                                        {
-                                            <tr>
-                                                <td>@alumno.LegajoAlumno</td>
-                                                <td>@alumno.NombreCompleto</td>
-                                                <td>
-                                                    <InputSelect class="form-control form-control-sm" @bind-Value="alumno.Condicion">
-                                                        <option value="Inscripto">Inscripto</option>
-                                                        <option value="Regular">Regular</option>
-                                                        <option value="Aprobado">Aprobado</option>
-                                                        <option value="Libre">Libre</option>
-                                                    </InputSelect>
-                                                </td>
-                                                <td><InputNumber class="form-control form-control-sm" @bind-Value="alumno.Nota" min="0" max="10" /></td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <button class="btn btn-primary mt-3" @onclick="GuardarCambios" disabled="@isSaving">
-                                @if (isSaving)
-                                {
-                                    <span class="spinner-border spinner-border-sm"></span>
-                                    <span> Guardando...</span>
-                                }
-                                else
-                                {
-                                    <span class="bi bi-save-fill"> Guardar Cambios</span>
-                                }
-                            </button>
-                        }
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="text-center p-5 border rounded bg-light">
-                    <p class="text-muted">Seleccione un curso de la lista para ver los alumnos inscriptos.</p>
-                </div>
-            }
+                    }
+                }
+            </div>
         </div>
     </div>
 </div>
 
 @code {
-    private string docenteLegajo;
-    private int? cursoSeleccionadoId;
-    private bool isSaving = false;
-    private string errorMessage;
+    private string activeTab = "calificaciones";
+    private bool isLoading = true;
+    private bool _isLoadingAlumnos = false;
+    private bool _isSaving = false;
+    private bool _isLoadingReporte = false;
 
-    private List<CursoViewModel> misCursos;
-    private List<AlumnoViewModel> alumnosDelCurso;
-    private PieConfig? _pieChartConfig;
+    private UsuarioDTO _docenteActual;
+    private List<CursoViewModel> _misCursosParaMostrar = new();
+    private int _cursoSeleccionadoId;
+
+    private List<AlumnoInscripcionViewModel> _alumnosDelCurso = new();
+    private List<RendimientoCursoDto>? _reporteData;
+    
+    private int _cursoReporteId = 0;
+    private PieConfig _chartConfig;
+    private Chart _chart;
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        docenteLegajo = authState.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-        if (string.IsNullOrEmpty(docenteLegajo))
-        {
-            errorMessage = "No se pudo obtener la información del docente.";
-            return;
-        }
-        await CargarMisCursos();
+        _docenteActual = new UsuarioDTO { Legajo = authState.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value, PersonaNombreCompleto = authState.User.Claims.FirstOrDefault(c => c.Type == "nombreCompleto")?.Value };
+        
+        InitializeChartConfig();
+        await CargarMisCursosAsync();
+        isLoading = false;
     }
 
-    private async Task CargarMisCursos()
+    private void SetActiveTab(string tabName)
     {
-        try
-        {
-            errorMessage = null;
-            var todasLasAsignaciones = (await DocenteCursoClient.GetAllAsync()).Where(a => a.LegajoDocente == docenteLegajo).ToList();
-            var todosLosCursos = await CursoClient.GetAll();
-            var todasLasMaterias = await MateriaClient.GetAll();
-            var todasLasComisiones = await ComisionClient.GetAll();
-
-            misCursos = (from asig in todasLasAsignaciones
-                         join curso in todosLosCursos on asig.IdCurso equals curso.Id
-                         join materia in todasLasMaterias on curso.IdMateria equals materia.Id
-                         join comision in todasLasComisiones on curso.IdComision equals comision.Nro
-                         select new CursoViewModel
-                         {
-                             IdCurso = curso.Id,
-                             MateriaNombre = materia.Nombre,
-                             ComisionDescripcion = comision.Descripcion,
-                             Anio = curso.AnioCalendario,
-                             Cargo = asig.Cargo.ToString()
-                         }).ToList();
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error al cargar los cursos: {ex.Message}";
-        }
+        activeTab = tabName;
+        _reporteData = null;
+        _cursoReporteId = 0;
     }
-
-    private async Task SeleccionarCurso(int idCurso)
+    
+    private async Task CargarMisCursosAsync() 
     {
-        cursoSeleccionadoId = idCurso;
-        alumnosDelCurso = null;
-        _pieChartConfig = null;
+        var todasLasAsignaciones = (await DocenteCursoClient.GetAllAsync()).Where(a => a.LegajoDocente == _docenteActual.Legajo).ToList();
+        var todosLosCursos = (await CursoClient.GetAll()).ToList();
+        var todasLasMaterias = (await MateriaClient.GetAll()).ToList();
+        var todasLasComisiones = (await ComisionClient.GetAll()).ToList();
+
+        _misCursosParaMostrar = (from asig in todasLasAsignaciones
+                                join curso in todosLosCursos on asig.IdCurso equals curso.Id
+                                join materia in todasLasMaterias on curso.IdMateria equals materia.Id
+                                join comision in todasLasComisiones on curso.IdComision equals comision.Nro
+                                select new CursoViewModel
+                                {
+                                    IdCurso = curso.Id,
+                                    Materia = materia.Nombre,
+                                    Comision = comision.Descripcion,
+                                    Año = curso.AnioCalendario,
+                                    Cargo = asig.Cargo.ToString()
+                                }).ToList();
+    }
+    
+    private async Task SeleccionarCurso(int cursoId) 
+    {
+        _cursoSeleccionadoId = cursoId;
+        _isLoadingAlumnos = true;
+        _alumnosDelCurso.Clear();
         StateHasChanged();
 
-        try
-        {
-            errorMessage = null;
-            var inscripcionesDelCurso = (await InscripcionClient.GetAll()).Where(i => i.IdCurso == idCurso).ToList();
-            var todosLosUsuarios = await UsuarioClient.GetAll();
+        var todasLasInscripciones = (await InscripcionClient.GetAll()).Where(i => i.IdCurso == cursoId).ToList();
+        var todosLosUsuarios = (await UsuarioClient.GetAll()).ToList();
+        _alumnosDelCurso = (from insc in todasLasInscripciones
+                           join usuario in todosLosUsuarios on insc.LegajoAlumno equals usuario.Legajo
+                           select new AlumnoInscripcionViewModel
+                           {
+                               LegajoAlumno = insc.LegajoAlumno,
+                               NombreCompleto = usuario.PersonaNombreCompleto,
+                               Condicion = insc.Condicion,
+                               Nota = insc.Nota
+                           }).ToList();
+        
+        _isLoadingAlumnos = false;
+    }
+    
+    private async Task GuardarCambios() 
+    {
+        _isSaving = true;
+        var tareas = _alumnosDelCurso.Select(alumno => 
+            InscripcionClient.Update(new AlumnoInscripcionDTO
+            {
+                LegajoAlumno = alumno.LegajoAlumno,
+                IdCurso = _cursoSeleccionadoId,
+                Condicion = alumno.Condicion,
+                Nota = alumno.Nota
+            })
+        ).ToList();
 
-            alumnosDelCurso = (from insc in inscripcionesDelCurso
-                               join usuario in todosLosUsuarios on insc.LegajoAlumno equals usuario.Legajo
-                               select new AlumnoViewModel
-                               {
-                                   LegajoAlumno = insc.LegajoAlumno,
-                                   NombreCompleto = usuario.PersonaNombreCompleto,
-                                   Condicion = insc.Condicion ?? "Inscripto",
-                                   Nota = insc.Nota
-                               }).ToList();
-
-            // Generar gráfico de estadísticas
-            GenerarGraficoEstadisticas();
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error al cargar los alumnos: {ex.Message}";
-        }
+        await Task.WhenAll(tareas);
+        _isSaving = false;
     }
 
-    private void GenerarGraficoEstadisticas()
+    private void InitializeChartConfig()
     {
-        if (alumnosDelCurso == null || !alumnosDelCurso.Any())
-            return;
-
-        var chartDataGroup = alumnosDelCurso
-            .GroupBy(a => a.Condicion)
-            .Select(g => new { Condicion = g.Key, Cantidad = g.Count() })
-            .ToList();
-
-        _pieChartConfig = new PieConfig
+        _chartConfig = new PieConfig
         {
             Options = new PieOptions
             {
                 Responsive = true,
-                MaintainAspectRatio = true
+                Title = new OptionsTitle { Display = true, Text = "Distribución de Condiciones" },
+                Legend = new Legend { Position = ChartJs.Blazor.Common.Enums.Position.Bottom } 
             }
         };
-
-        var pieDataset = new PieDataset<int>
-        {
-            BackgroundColor = new[]
-            {
-                "#36A2EB", // Azul - Inscripto
-                "#4BC0C0", // Cyan - Cursando
-                "#FFCE56", // Amarillo - Regular
-                "#4CAF50", // Verde - Aprobado
-                "#FF6384"  // Rojo - Libre
-            }
-        };
-
-        foreach (var item in chartDataGroup)
-        {
-            pieDataset.Add(item.Cantidad);
-            _pieChartConfig.Data.Labels.Add(item.Condicion);
-        }
-
-        _pieChartConfig.Data.Datasets.Add(pieDataset);
     }
-
-    private async Task GuardarCambios()
+    
+    private async Task GenerarReporte()
     {
-        if (alumnosDelCurso == null || !cursoSeleccionadoId.HasValue) return;
-        isSaving = true;
-        errorMessage = null;
+        if (_cursoReporteId == 0) return;
 
-        try
+        _isLoadingReporte = true;
+        _reporteData = null;
+        _chartConfig = null; 
+        await InvokeAsync(StateHasChanged); 
+
+        _reporteData = (await ReportesClient.GetRendimientoCursoAsync(_cursoReporteId)).ToList();
+
+        if (_reporteData.Any())
         {
-            var tasks = new List<Task>();
-            foreach (var alumno in alumnosDelCurso)
+            var chartData = _reporteData
+                .GroupBy(r => r.Condicion)
+                .Select(g => new { Condicion = g.Key, Cantidad = g.Count() })
+                .ToList();
+
+            _chartConfig = new PieConfig
             {
-                var inscripcionActualizada = new AlumnoInscripcionDTO
+                Options = new PieOptions
                 {
-                    LegajoAlumno = alumno.LegajoAlumno,
-                    IdCurso = cursoSeleccionadoId.Value,
-                    Condicion = alumno.Condicion,
-                    Nota = alumno.Nota
-                };
-                tasks.Add(InscripcionClient.Update(inscripcionActualizada));
+                    Responsive = true,
+                    Title = new OptionsTitle { Display = true, Text = "Distribución por Condición" },
+                    Legend = new Legend { Position = Position.Bottom }
+                }
+            };
+
+            var dataset = new PieDataset<int>(chartData.Select(d => d.Cantidad))
+            {
+                BackgroundColor = new[] { "#36A2EB", "#FF6384", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40" }
+            };
+
+            foreach (var label in chartData.Select(d => d.Condicion))
+            {
+                _chartConfig.Data.Labels.Add(label);
             }
-            await Task.WhenAll(tasks);
 
-            // Regenerar el gráfico después de guardar
-            GenerarGraficoEstadisticas();
-            StateHasChanged();
+            _chartConfig.Data.Datasets.Add(dataset);
+        }
 
-            await JSRuntime.InvokeVoidAsync("alert", "Cambios guardados con éxito.");
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error al guardar los cambios: {ex.Message}";
-        }
-        finally
-        {
-            isSaving = false;
-        }
+        _isLoadingReporte = false;
+        await InvokeAsync(StateHasChanged);
     }
 
-    public class CursoViewModel
-    {
-        public int IdCurso { get; set; }
-        public string MateriaNombre { get; set; }
-        public string ComisionDescripcion { get; set; }
-        public int Anio { get; set; }
-        public string Cargo { get; set; }
+    public class CursoViewModel 
+    { 
+        public int IdCurso { get; set; } 
+        public string Materia { get; set; } 
+        public string Comision { get; set; } 
+        public int Año { get; set; } 
+        public string Cargo { get; set; } 
     }
-
-    public class AlumnoViewModel
-    {
-        public string LegajoAlumno { get; set; }
-        public string NombreCompleto { get; set; }
-        public string Condicion { get; set; }
-        public int Nota { get; set; }
+    public class AlumnoInscripcionViewModel 
+    { 
+        public string LegajoAlumno { get; set; } 
+        public string NombreCompleto { get; set; } 
+        public string Condicion { get; set; } 
+        public int Nota { get; set; } 
     }
 }

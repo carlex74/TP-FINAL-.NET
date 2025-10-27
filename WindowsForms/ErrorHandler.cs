@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http;
+using System.Text.Json;
 
 namespace WindowsForms
 {
@@ -8,26 +9,33 @@ namespace WindowsForms
         {
             if (ex is HttpRequestException httpEx)
             {
-                try
+                if (httpEx.StatusCode.HasValue)
                 {
-                    int jsonStart = httpEx.Message.IndexOf('{');
-                    if (jsonStart >= 0)
+                    if (httpEx.StatusCode == System.Net.HttpStatusCode.BadRequest)
                     {
-                        string jsonBody = httpEx.Message.Substring(jsonStart);
-                        var apiError = JsonSerializer.Deserialize<ApiError>(jsonBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                        MessageBox.Show(apiError.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        try
+                        {
+                            int jsonStart = httpEx.Message.IndexOf('{');
+                            if (jsonStart >= 0)
+                            {
+                                string jsonBody = httpEx.Message.Substring(jsonStart);
+                                var apiError = JsonSerializer.Deserialize<ApiError>(jsonBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                                MessageBox.Show(apiError.Message, "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return; 
+                            }
+                        }
+                        catch
+                        {
+                            MessageBox.Show("La solicitud fue rechazada por el servidor. Verifique los datos ingresados.", "Solicitud Incorrecta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
                     }
                 }
-                catch
-                {
-                }
-
-                MessageBox.Show("No se pudo conectar con el servidor. Verifique su conexión o si el servicio está en línea.", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("No se pudo conectar con el servidor. Verifique que el servicio esté en línea y que su conexión a internet funcione.", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                MessageBox.Show("Ha ocurrido un error inesperado en la aplicación.", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ha ocurrido un error inesperado en la aplicación:\n\n{ex.Message}", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Domain.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace Domain.Entities
 {
@@ -79,12 +80,12 @@ namespace Domain.Entities
         }
         public void SetEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
+            if (!EsEmailValido(email))
                 throw new ArgumentException("El email no tiene un formato válido.", nameof(email));
+
             Email = email.Trim();
         }
 
-        /*
         private static bool EsEmailValido(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -96,7 +97,6 @@ namespace Domain.Entities
 
             return Regex.IsMatch(email, pattern);
         }
-        */
 
         /*
         A FUTURO: Métodos para gestionar el borrado lógico.

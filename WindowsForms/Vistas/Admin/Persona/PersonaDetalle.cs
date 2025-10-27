@@ -1,5 +1,7 @@
 ﻿using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.ApiClients;
+using System.Text.Json;
+using System.Net.Http;
 
 namespace WindowsForms
 {
@@ -31,6 +33,9 @@ namespace WindowsForms
         {
             if (!ValidatePersona()) return;
 
+            aceptarButton.Enabled = false;
+            this.Cursor = Cursors.WaitCursor;
+
             try
             {
                 persona.Nombre = nombreTextBox.Text;
@@ -50,12 +55,48 @@ namespace WindowsForms
                 {
                     await _personaClient.Add(persona);
                 }
+
                 this.DialogResult = DialogResult.OK;
                 this.Close();
+            }
+            catch (HttpRequestException httpEx)
+            {
+                if (httpEx.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    string errorMessage = "Los datos ingresados no son válidos.";
+                    try
+                    {
+                        var apiError = JsonSerializer.Deserialize<ApiError>(httpEx.Message, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        errorMessage = apiError.Message;
+                    }
+                    catch { }
+
+                    if (errorMessage.ToLower().Contains("email"))
+                    {
+                        errorProvider.SetError(emailTextBox, errorMessage);
+                    }
+                    else if (errorMessage.ToLower().Contains("dni"))
+                    {
+                        errorProvider.SetError(dniTextBox, errorMessage);
+                    }
+                    else
+                    {
+                        MessageBox.Show(errorMessage, "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                else
+                {
+                    ErrorHandler.HandleError(httpEx);
+                }
             }
             catch (Exception ex)
             {
                 ErrorHandler.HandleError(ex);
+            }
+            finally
+            {
+                aceptarButton.Enabled = true;
+                this.Cursor = Cursors.Default;
             }
         }
 
