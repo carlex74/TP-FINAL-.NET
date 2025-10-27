@@ -135,13 +135,175 @@ Desde aquí, podrás ver todos los endpoints disponibles, sus parámetros, y pro
 ```
 /tp-final-academia
 │
-└─── src
-     ├─── Domain
-     ├─── Application
-     ├─── Infrastructure
-     └─── Presentation
-          ├─── WebApi
-          └─── WinFormsApp
++---.github
+ª   +---workflows
++---Application
+ª   +---bin
+ª   ª   +---Debug
+ª   ª       +---net8.0
+ª   +---DTOs
+ª   +---Exceptions
+ª   +---Interfaces
+ª   ª   +---ApiClients
+ª   ª   +---Repositories
+ª   ª   +---Services
+ª   +---Mappings
+ª   +---obj
+ª   ª   +---Debug
+ª   ª       +---net8.0
+ª   ª           +---ref
+ª   ª           +---refint
+ª   +---Services
++---Domain
+ª   +---bin
+ª   ª   +---Debug
+ª   ª       +---net8.0
+ª   +---Entities
+ª   +---Interfaces
+ª   +---obj
+ª       +---Debug
+ª           +---net8.0
+ª               +---ref
+ª               +---refint
++---FrontWeb
+ª   +---Auth
+ª   +---bin
+ª   ª   +---Debug
+ª   ª       +---net8.0
+ª   ª           +---wwwroot
+ª   ª               +---_framework
+ª   +---Features
+ª   ª   +---Login
+ª   ª   ª   +---Pages
+ª   ª   +---Pages
+ª   +---obj
+ª   ª   +---Debug
+ª   ª       +---net8.0
+ª   ª           +---compressed
+ª   ª           +---ref
+ª   ª           +---refint
+ª   ª           +---scopedcss
+ª   ª           ª   +---bundle
+ª   ª           ª   +---Layout
+ª   ª           ª   +---projectbundle
+ª   ª           +---service-worker
+ª   ª           +---staticwebassets
+ª   ª           +---tmp-webcil
+ª   ª           +---webcil
+ª   +---Properties
+ª   +---Shared
+ª   ª   +---Layout
+ª   +---wwwroot
+ª       +---css
+ª           +---bootstrap
++---Infrastructure
+ª   +---ApiClient
+ª   +---bin
+ª   ª   +---Debug
+ª   ª       +---net8.0
+ª   +---Context
+ª   +---M-SqlServer
+ª   +---Migrations
+ª   +---obj
+ª   ª   +---Debug
+ª   ª       +---net8.0
+ª   ª           +---ref
+ª   ª           +---refint
+ª   +---Persistance
+ª   +---Repositories
++---WebApi
+ª   +---bin
+ª   ª   +---Debug
+ª   ª       +---net8.0
+ª   ª           +---cs
+ª   ª           +---de
+ª   ª           +---es
+ª   ª           +---fr
+ª   ª           +---it
+ª   ª           +---ja
+ª   ª           +---ko
+ª   ª           +---pl
+ª   ª           +---pt-BR
+ª   ª           +---ru
+ª   ª           +---runtimes
+ª   ª           ª   +---browser
+ª   ª           ª   ª   +---lib
+ª   ª           ª   ª       +---net8.0
+ª   ª           ª   +---unix
+ª   ª           ª   ª   +---lib
+ª   ª           ª   ª       +---net6.0
+ª   ª           ª   ª       +---net8.0
+ª   ª           ª   +---win
+ª   ª           ª   ª   +---lib
+ª   ª           ª   ª       +---net6.0
+ª   ª           ª   ª       +---net8.0
+ª   ª           ª   +---win-arm
+ª   ª           ª   ª   +---native
+ª   ª           ª   +---win-arm64
+ª   ª           ª   ª   +---native
+ª   ª           ª   +---win-x64
+ª   ª           ª   ª   +---native
+ª   ª           ª   +---win-x86
+ª   ª           ª       +---native
+ª   ª           +---tr
+ª   ª           +---zh-Hans
+ª   ª           +---zh-Hant
+ª   +---Controllers
+ª   +---Middleware
+ª   +---obj
+ª   ª   +---Debug
+ª   ª       +---net8.0
+ª   ª           +---EndpointInfo
+ª   ª           +---ref
+ª   ª           +---refint
+ª   ª           +---staticwebassets
+ª   +---Properties
++---WindowsForms
+    +---bin
+    ª   +---Debug
+    ª       +---net8.0-windows
+    ª           +---runtimes
+    ª               +---browser
+    ª               ª   +---lib
+    ª               ª       +---net8.0
+    ª               +---unix
+    ª               ª   +---lib
+    ª               ª       +---net6.0
+    ª               ª       +---net8.0
+    ª               +---win
+    ª               ª   +---lib
+    ª               ª       +---net6.0
+    ª               ª       +---net8.0
+    ª               +---win-arm
+    ª               ª   +---native
+    ª               +---win-arm64
+    ª               ª   +---native
+    ª               +---win-x64
+    ª               ª   +---native
+    ª               +---win-x86
+    ª                   +---native
+    +---HttpHandlers
+    +---obj
+    ª   +---Debug
+    ª       +---net8.0-windows
+    ª           +---ref
+    ª           +---refint
+    +---Properties
+    +---Resources
+    +---Vistas
+        +---Admin
+        ª   +---Comision
+        ª   +---Curso
+        ª   +---DocenteCurso
+        ª   +---Especialidad
+        ª   +---Materia
+        ª   +---Persona
+        ª   +---Plan
+        ª   +---Usuario
+        +---Alumno
+        +---Docente
+        +---Reportes
+
 ```
 
 ## ✒️ Autor
