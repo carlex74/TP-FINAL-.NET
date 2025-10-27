@@ -1,4 +1,4 @@
-﻿namespace WindowsForms
+﻿namespace Infrastructure.ViewModels
 {
     public class AlumnoInscripcionViewModel
     {

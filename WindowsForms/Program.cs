@@ -1,10 +1,11 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Application.Interfaces.ApiClients;
 using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.ApiClients;
 using Infrastructure.ApiClient;
 using Infrastructure.ApiClients;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using WindowsForms.HttpHandlers;
 using static Domain.Entities.Usuario;
 
@@ -17,9 +18,9 @@ namespace WindowsForms
         [STAThread]
         static void Main()
         {
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            System.Windows.Forms.Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
             var services = new ServiceCollection();
             ConfigureServices(services);
@@ -56,7 +57,7 @@ namespace WindowsForms
 
                 if (mainForm != null)
                 {
-                    Application.Run(mainForm);
+                    System.Windows.Forms.Application.Run(mainForm);
                 }
 
                 UserSession.Logout();
@@ -131,6 +132,12 @@ namespace WindowsForms
             .AddHttpMessageHandler<AuthHeaderHandler>();
 
             services.AddHttpClient<IAlumnoInscripcionClients, AlumnoInscripcionApiClient>((serviceProvider, client) =>
+            {
+                client.BaseAddress = new Uri(baseAddress + "api/");
+            })
+            .AddHttpMessageHandler<AuthHeaderHandler>();
+
+            services.AddHttpClient<IAPIReportesClient, ReportesApiClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(baseAddress + "api/");
             })

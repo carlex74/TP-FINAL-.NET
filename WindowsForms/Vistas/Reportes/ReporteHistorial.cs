@@ -1,5 +1,17 @@
-﻿using System.Data;
+﻿// Archivo: WindowsForms/Vistas/Reportes/ReporteHistorialForm.cs (VERSIÓN FINAL CON API)
+
+using Application.Interfaces.ApiClients;
+using Application.Interfaces.Repositories;
 using ApplicationClean.Interfaces.ApiClients;
+using Infrastructure.Reportes;
+using Infrastructure.ViewModels;
+using QuestPDF.Fluent;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using static Domain.Entities.Usuario;
 
 namespace WindowsForms
@@ -7,19 +19,13 @@ namespace WindowsForms
     public partial class ReporteHistorialForm : Form
     {
         private readonly IAPIUsuarioClients _usuarioClient;
-        private readonly IAlumnoInscripcionClients _inscripcionClient;
-        private readonly IAPICursoClient _cursoClient;
-        private readonly IAPIMateriaClient _materiaClient;
-        private readonly IAPIComisionClient _comisionClient;
+        private readonly IAPIReportesClient _reportesClient;
 
-        public ReporteHistorialForm(IAPIUsuarioClients usuarioClient, IAlumnoInscripcionClients inscripcionClient, IAPICursoClient cursoClient, IAPIMateriaClient materiaClient, IAPIComisionClient comisionClient)
+        public ReporteHistorialForm(IAPIUsuarioClients usuarioClient, IAPIReportesClient reportesClient)
         {
             InitializeComponent();
             _usuarioClient = usuarioClient;
-            _inscripcionClient = inscripcionClient;
-            _cursoClient = cursoClient;
-            _materiaClient = materiaClient;
-            _comisionClient = comisionClient;
+            _reportesClient = reportesClient;
         }
 
         private async void ReporteHistorialForm_Load(object sender, EventArgs e)
@@ -73,30 +79,7 @@ namespace WindowsForms
                 reporteDataGridView.DataSource = null;
                 promedioLabel.Text = "Promedio General: -";
 
-                var inscripcionesTask = _inscripcionClient.GetAll();
-                var cursosTask = _cursoClient.GetAll();
-                var materiasTask = _materiaClient.GetAll();
-                var comisionesTask = _comisionClient.GetAll();
-
-                await Task.WhenAll(inscripcionesTask, cursosTask, materiasTask, comisionesTask);
-
-                var inscripciones = inscripcionesTask.Result.Where(i => i.LegajoAlumno == legajoAlumno).ToList();
-                var cursos = cursosTask.Result;
-                var materias = materiasTask.Result;
-                var comisiones = comisionesTask.Result;
-
-                var reporteData = (from insc in inscripciones
-                                   join curso in cursos on insc.IdCurso equals curso.Id
-                                   join materia in materias on curso.IdMateria equals materia.Id
-                                   join comision in comisiones on curso.IdComision equals comision.Nro
-                                   select new
-                                   {
-                                       Materia = materia.Nombre,
-                                       Comision = comision.Descripcion,
-                                       Anio = curso.AnioCalendario,
-                                       Condicion = insc.Condicion,
-                                       Nota = insc.Nota
-                                   }).ToList();
+                var reporteData = (await _reportesClient.GetHistorialAlumnoAsync(legajoAlumno)).ToList();
 
                 reporteDataGridView.DataSource = reporteData;
 
@@ -123,6 +106,58 @@ namespace WindowsForms
             finally
             {
                 this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void btnGenerarPdf_Click(object sender, EventArgs e)
+        {
+            if (reporteDataGridView.DataSource == null)
+            {
+                MessageBox.Show("Primero debe generar un reporte para poder exportarlo a PDF.", "Información");
+                return;
+            }
+            try
+            {
+                var cursadasDto = (List<HistorialAlumnoDto>)reporteDataGridView.DataSource;
+
+                var cursadasViewModel = cursadasDto.Select(c => new HistorialCursadaViewModel
+                {
+                    Materia = c.Materia,
+                    Comision = c.Comision,
+                    Anio = c.Anio,
+                    Condicion = c.Condicion,
+                    Nota = c.Nota
+                }).ToList();
+
+                var dataSource = new HistorialAcademicoDataSource
+                {
+                    NombreCompletoAlumno = alumnosComboBox.Text,
+                    Legajo = alumnosComboBox.SelectedValue.ToString(),
+                    PromedioGeneral = promedioLabel.Text,
+                    Cursadas = cursadasViewModel
+                };
+
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
+                    saveFileDialog.Title = "Guardar Historial Académico";
+                    saveFileDialog.FileName = $"Historial_{dataSource.Legajo}_{DateTime.Now:yyyyMMdd}.pdf";
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        this.Cursor = Cursors.WaitCursor;
+                        QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+                        var report = new HistorialAcademicoReport(dataSource);
+                        report.GeneratePdf(saveFileDialog.FileName);
+                        this.Cursor = Cursors.Default;
+                        MessageBox.Show($"El historial se ha guardado exitosamente en:\n{saveFileDialog.FileName}", "PDF Generado");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Cursor = Cursors.Default;
+                ErrorHandler.HandleError(ex);
             }
         }
     }

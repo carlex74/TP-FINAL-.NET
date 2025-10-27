@@ -110,14 +110,11 @@
 @code {
     private bool _isLoading = true;
 
-    // Datos cacheados
     private List<AlumnoInscripcionDTO> _allInscripciones = new();
     private List<MateriaDTO> _allMaterias = new();
     private List<ComisionDTO> _allComisiones = new();
     private List<UsuarioDTO> _allUsuarios = new();
     private List<CursoDTO> _allCursos = new();
-
-    // Estado del reporte
     private int _selectedCursoId = 0;
     private List<RendimientoViewModel>? _rendimientoData;
     private PieConfig? _pieChartConfig;
@@ -173,7 +170,6 @@
                             .OrderBy(r => r.Nombre)
                             .ToList();
 
-        // Generar el gráfico
         GenerarGraficoRendimiento();
     }
 
@@ -187,7 +183,6 @@
             .Select(g => new { Condicion = g.Key, Cantidad = g.Count() })
             .ToList();
 
-        // Si el gráfico ya existe, solo actualizar los datos
         if (_pieChartConfig != null)
         {
             _pieChartConfig.Data.Labels.Clear();
@@ -195,7 +190,6 @@
         }
         else
         {
-            // Crear nuevo gráfico solo si no existe
             _pieChartConfig = new PieConfig
             {
                 Options = new PieOptions
@@ -219,14 +213,12 @@
             }
         };
 
-        // Agregar los datos al dataset
         foreach (var item in chartDataGroup)
         {
             pieDataset.Add(item.Cantidad);
             _pieChartConfig.Data.Labels.Add(item.Condicion);
         }
 
-        // Agregar el dataset al gráfico
         _pieChartConfig.Data.Datasets.Add(pieDataset);
     }
 

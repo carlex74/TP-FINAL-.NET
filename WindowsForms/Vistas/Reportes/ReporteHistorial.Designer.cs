@@ -24,6 +24,7 @@
             generarButton = new Button();
             reporteDataGridView = new DataGridView();
             promedioLabel = new Label();
+            btnGenerarPdf = new Button();
             topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)reporteDataGridView).BeginInit();
             SuspendLayout();
@@ -79,10 +80,10 @@
             generarButton.FlatStyle = FlatStyle.Flat;
             generarButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             generarButton.ForeColor = Color.White;
-            generarButton.Location = new Point(507, 77);
+            generarButton.Location = new Point(519, 77);
             generarButton.Margin = new Padding(2, 3, 2, 3);
             generarButton.Name = "generarButton";
-            generarButton.Size = new Size(128, 28);
+            generarButton.Size = new Size(143, 28);
             generarButton.TabIndex = 4;
             generarButton.Text = "Generar Reporte";
             generarButton.UseVisualStyleBackColor = false;
@@ -117,12 +118,29 @@
             promedioLabel.Text = "Promedio General: -";
             promedioLabel.TextAlign = ContentAlignment.MiddleRight;
             // 
+            // btnGenerarPdf
+            // 
+            btnGenerarPdf.BackColor = Color.DodgerBlue;
+            btnGenerarPdf.FlatAppearance.BorderSize = 0;
+            btnGenerarPdf.FlatStyle = FlatStyle.Flat;
+            btnGenerarPdf.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnGenerarPdf.ForeColor = Color.White;
+            btnGenerarPdf.Location = new Point(676, 77);
+            btnGenerarPdf.Margin = new Padding(2, 3, 2, 3);
+            btnGenerarPdf.Name = "btnGenerarPdf";
+            btnGenerarPdf.Size = new Size(110, 28);
+            btnGenerarPdf.TabIndex = 7;
+            btnGenerarPdf.Text = "Generar PDF";
+            btnGenerarPdf.UseVisualStyleBackColor = false;
+            btnGenerarPdf.Click += btnGenerarPdf_Click;
+            // 
             // ReporteHistorialForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 247, 250);
             ClientSize = new Size(800, 480);
+            Controls.Add(btnGenerarPdf);
             Controls.Add(promedioLabel);
             Controls.Add(reporteDataGridView);
             Controls.Add(generarButton);
@@ -151,5 +169,6 @@
         private System.Windows.Forms.Button generarButton;
         private System.Windows.Forms.DataGridView reporteDataGridView;
         private System.Windows.Forms.Label promedioLabel;
+        private Button btnGenerarPdf;
     }
 }

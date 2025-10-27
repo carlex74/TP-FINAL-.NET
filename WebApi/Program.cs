@@ -1,6 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json.Serialization;
+using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
+using Application.Services;
 using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.Repositories;
 using ApplicationClean.Interfaces.Services;
@@ -55,6 +58,8 @@ builder.Services.AddScoped<IComisionRepository, ComisionRepository>();
 builder.Services.AddScoped<ICursoRepository, CursoRepository>();
 builder.Services.AddScoped<IAlumnoInscripcionRepository, AlumnoInscripcionRepository>();
 builder.Services.AddScoped<IDocenteCursoRepository, DocenteCursoRepository>();
+builder.Services.AddScoped<IReportesRepository, ReportesRepository>();
+
 
 builder.Services.AddScoped<IEspecialidadService, EspecialidadServices>();
 builder.Services.AddScoped<IPlanService, PlanServices>();
@@ -65,6 +70,7 @@ builder.Services.AddScoped<IComisionService, ComisionService>();
 builder.Services.AddScoped<ICursoService, CursoService>();
 builder.Services.AddScoped<IAlumnoInscripcionService, AlumnoInscripcionService>();
 builder.Services.AddScoped<IDocenteCursoService, DocenteCursoService>();
+builder.Services.AddScoped<IReportesService, ReportesService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

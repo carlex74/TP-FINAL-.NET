@@ -2,6 +2,7 @@
 using System.Windows.Forms.DataVisualization.Charting;
 using ApplicationClean.DTOs;
 using ApplicationClean.Interfaces.ApiClients;
+using Infrastructure.ViewModels;
 
 namespace WindowsForms
 {

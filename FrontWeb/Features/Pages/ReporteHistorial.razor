@@ -97,18 +97,12 @@
 
 @code {
     private bool _isLoading = true;
-
-    // Listas para los dropdowns
     private List<UsuarioDTO> _alumnos = new();
-
-    // Datos cacheados
     private List<AlumnoInscripcionDTO> _allInscripciones = new();
     private List<MateriaDTO> _allMaterias = new();
     private List<ComisionDTO> _allComisiones = new();
     private List<UsuarioDTO> _allUsuarios = new();
     private List<CursoDTO> _allCursos = new();
-
-    // Estado del reporte
     private string _selectedAlumnoLegajo = "";
     private List<HistorialViewModel>? _historialData;
     private string _promedioMessage = "";

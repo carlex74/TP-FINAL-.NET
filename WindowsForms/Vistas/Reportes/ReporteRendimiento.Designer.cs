@@ -28,6 +28,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.reporteDataGridView = new System.Windows.Forms.DataGridView();
             this.rendimientoChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.btnGenerarPdf = new System.Windows.Forms.Button();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -70,21 +71,24 @@
             // 
             // cursosComboBox
             // 
+            this.cursosComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cursosComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cursosComboBox.FormattingEnabled = true;
             this.cursosComboBox.Location = new System.Drawing.Point(153, 72);
             this.cursosComboBox.Name = "cursosComboBox";
-            this.cursosComboBox.Size = new System.Drawing.Size(433, 28);
+            this.cursosComboBox.Size = new System.Drawing.Size(328, 28);
             this.cursosComboBox.TabIndex = 2;
             // 
             // generarButton
             // 
+            this.generarButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.generarButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
             this.generarButton.FlatAppearance.BorderSize = 0;
             this.generarButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.generarButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.generarButton.ForeColor = System.Drawing.Color.White;
-            this.generarButton.Location = new System.Drawing.Point(592, 70);
+            this.generarButton.Location = new System.Drawing.Point(487, 70);
             this.generarButton.Name = "generarButton";
             this.generarButton.Size = new System.Drawing.Size(150, 32);
             this.generarButton.TabIndex = 3;
@@ -144,12 +148,29 @@
             this.rendimientoChart.TabIndex = 0;
             this.rendimientoChart.Text = "chart1";
             // 
+            // btnGenerarPdf
+            // 
+            this.btnGenerarPdf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGenerarPdf.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnGenerarPdf.FlatAppearance.BorderSize = 0;
+            this.btnGenerarPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGenerarPdf.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnGenerarPdf.ForeColor = System.Drawing.Color.White;
+            this.btnGenerarPdf.Location = new System.Drawing.Point(643, 70);
+            this.btnGenerarPdf.Name = "btnGenerarPdf";
+            this.btnGenerarPdf.Size = new System.Drawing.Size(145, 32);
+            this.btnGenerarPdf.TabIndex = 5;
+            this.btnGenerarPdf.Text = "Generar PDF";
+            this.btnGenerarPdf.UseVisualStyleBackColor = false;
+            this.btnGenerarPdf.Click += new System.EventHandler(this.btnGenerarPdf_Click);
+            // 
             // ReporteRendimientoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnGenerarPdf);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.generarButton);
             this.Controls.Add(this.cursosComboBox);
@@ -182,5 +203,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView reporteDataGridView;
         private System.Windows.Forms.DataVisualization.Charting.Chart rendimientoChart;
+        private System.Windows.Forms.Button btnGenerarPdf;
     }
 }
