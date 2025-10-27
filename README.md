@@ -308,4 +308,4 @@ Desde aquí, podrás ver todos los endpoints disponibles, sus parámetros, y pro
 
 ## ✒️ Autor
 
-- **Gugliermino Carlos, Franco Zariaga** - *Desarrollo del proyecto* - [carlex74] - [franquito3]
+- **Gugliermino Carlos, Franco Zariaga** - *Desarrollo del proyecto* - [carlex74] - [Frasquito3]
