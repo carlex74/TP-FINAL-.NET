@@ -1,6 +1,4 @@
-﻿// Archivo: WindowsForms/Vistas/Reportes/ReporteRendimientoForm.cs (VERSIÓN FINAL)
-
-using Application.Interfaces.ApiClients;
+﻿using Application.Interfaces.ApiClients;
 using Application.Interfaces.Repositories;
 using ApplicationClean.Interfaces.ApiClients;
 using Infrastructure.Reportes;

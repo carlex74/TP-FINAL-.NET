@@ -45,6 +45,7 @@
             this.dgvReporteAlumnos = new System.Windows.Forms.DataGridView();
             this.chartRendimiento = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panelFiltroReporte = new System.Windows.Forms.Panel();
+            this.btnGenerarPdf = new System.Windows.Forms.Button();
             this.btnGenerarReporte = new System.Windows.Forms.Button();
             this.cmbCursosReporte = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -87,7 +88,7 @@
             this.lblBienvenida.ForeColor = System.Drawing.Color.White;
             this.lblBienvenida.Location = new System.Drawing.Point(22, 16);
             this.lblBienvenida.Name = "lblBienvenida";
-            this.lblBienvenida.Size = new System.Drawing.Size(193, 28);
+            this.lblBienvenida.Size = new System.Drawing.Size(171, 28);
             this.lblBienvenida.TabIndex = 1;
             this.lblBienvenida.Text = "Portal del Docente";
             // 
@@ -386,6 +387,7 @@
             // 
             // panelFiltroReporte
             // 
+            this.panelFiltroReporte.Controls.Add(this.btnGenerarPdf);
             this.panelFiltroReporte.Controls.Add(this.btnGenerarReporte);
             this.panelFiltroReporte.Controls.Add(this.cmbCursosReporte);
             this.panelFiltroReporte.Controls.Add(this.label1);
@@ -395,6 +397,23 @@
             this.panelFiltroReporte.Size = new System.Drawing.Size(1048, 53);
             this.panelFiltroReporte.TabIndex = 0;
             // 
+            // btnGenerarPdf
+            // 
+            this.btnGenerarPdf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGenerarPdf.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnGenerarPdf.Enabled = false;
+            this.btnGenerarPdf.FlatAppearance.BorderSize = 0;
+            this.btnGenerarPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGenerarPdf.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnGenerarPdf.ForeColor = System.Drawing.Color.White;
+            this.btnGenerarPdf.Location = new System.Drawing.Point(894, 11);
+            this.btnGenerarPdf.Name = "btnGenerarPdf";
+            this.btnGenerarPdf.Size = new System.Drawing.Size(140, 32);
+            this.btnGenerarPdf.TabIndex = 3;
+            this.btnGenerarPdf.Text = "Generar PDF";
+            this.btnGenerarPdf.UseVisualStyleBackColor = false;
+            this.btnGenerarPdf.Click += new System.EventHandler(this.btnGenerarPdf_Click);
+            // 
             // btnGenerarReporte
             // 
             this.btnGenerarReporte.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -403,11 +422,11 @@
             this.btnGenerarReporte.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGenerarReporte.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnGenerarReporte.ForeColor = System.Drawing.Color.White;
-            this.btnGenerarReporte.Location = new System.Drawing.Point(904, 11);
+            this.btnGenerarReporte.Location = new System.Drawing.Point(748, 11);
             this.btnGenerarReporte.Name = "btnGenerarReporte";
-            this.btnGenerarReporte.Size = new System.Drawing.Size(129, 29);
+            this.btnGenerarReporte.Size = new System.Drawing.Size(140, 32);
             this.btnGenerarReporte.TabIndex = 2;
-            this.btnGenerarReporte.Text = "Generar";
+            this.btnGenerarReporte.Text = "Generar Reporte";
             this.btnGenerarReporte.UseVisualStyleBackColor = false;
             this.btnGenerarReporte.Click += new System.EventHandler(this.btnGenerarReporte_Click);
             // 
@@ -419,7 +438,7 @@
             this.cmbCursosReporte.FormattingEnabled = true;
             this.cmbCursosReporte.Location = new System.Drawing.Point(168, 12);
             this.cmbCursosReporte.Name = "cmbCursosReporte";
-            this.cmbCursosReporte.Size = new System.Drawing.Size(730, 28);
+            this.cmbCursosReporte.Size = new System.Drawing.Size(574, 28);
             this.cmbCursosReporte.TabIndex = 1;
             // 
             // label1
@@ -433,9 +452,6 @@
             // 
             // PortalDocente
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
             this.ClientSize = new System.Drawing.Size(1082, 653);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.topPanel);
@@ -496,5 +512,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn NombreCompletoColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn CondicionColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn NotaColumn;
+        private System.Windows.Forms.Button btnGenerarPdf;
     }
 }
