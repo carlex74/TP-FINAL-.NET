@@ -9,6 +9,7 @@ namespace ApplicationClean.Interfaces.ApiClients
         Task<UsuarioDTO> GetByLegajo(string legajo);
         Task<UsuarioDTO> Add(CrearUsuarioDTO crearUsuarioDto);
         Task Update(string legajo, ActualizarUsuarioDTO actualizarUsuarioDto);
-        Task Delete(string legajo);
+        // A FUTURO: Se puede reactivar la llamada al endpoint de borrado.
+        //Task Delete(string legajo);
     }
 }

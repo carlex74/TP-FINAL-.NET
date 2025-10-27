@@ -6,7 +6,8 @@ namespace ApplicationClean.Interfaces.Services
     {
         Task<CursoDTO> AddAsync(CursoDTO cursoDTO);
         Task<CursoDTO> UpdateAsync(CursoDTO cursoDTO);
-        Task<bool> DeleteAsync(int id);
+        // A FUTURO: Se puede reactivar la funcionalidad de borrado.
+        // Task<bool> DeleteAsync(int id);
         Task<CursoDTO> GetByIdAsync(int id);
         Task<IEnumerable<CursoDTO>> GetAllAsync();
     }

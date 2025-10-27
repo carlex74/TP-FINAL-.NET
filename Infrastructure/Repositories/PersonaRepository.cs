@@ -32,11 +32,14 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        /*
+        A FUTURO: Implementación del borrado físico.
         public async Task DeleteAsync(Persona persona)
         {
             _context.Personas.Remove(persona);
             await _context.SaveChangesAsync();
         }
+        */
 
         public async Task<Persona> GetByEmailAsync(string email)
         {
@@ -51,7 +54,7 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> DniExistsAsync(string dni, int? excludeId = null)
         {
-            var query = _context.Personas.IgnoreQueryFilters(); // Ignora el filtro de borrado lógico
+            var query = _context.Personas.AsQueryable();
             if (excludeId.HasValue)
             {
                 query = query.Where(p => p.Id != excludeId.Value);
@@ -61,7 +64,7 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> EmailExistsAsync(string email, int? excludeId = null)
         {
-            var query = _context.Personas.IgnoreQueryFilters(); // Ignora el filtro de borrado lógico
+            var query = _context.Personas.AsQueryable();
             if (excludeId.HasValue)
             {
                 query = query.Where(p => p.Id != excludeId.Value);

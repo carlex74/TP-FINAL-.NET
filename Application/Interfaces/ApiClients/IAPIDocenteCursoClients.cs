@@ -10,5 +10,6 @@ public interface IAPIDocenteCursoClient
 
     Task UpdateAsync(DocenteCursoDTO docenteCurso);
 
-    Task DeleteAsync(int idCurso, string legajoDocente);
+    // A FUTURO: Se puede reactivar la llamada al endpoint de borrado.
+    //Task DeleteAsync(int idCurso, string legajoDocente);
 }

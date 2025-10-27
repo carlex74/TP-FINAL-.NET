@@ -2,7 +2,8 @@
 
 namespace Domain.Entities
 {
-    public class Persona : ISoftDeletable
+    // A FUTURO: La interfaz ISoftDeletable podría volver a implementarse.
+    public class Persona //: ISoftDeletable
     {
         public int Id { get; private set; }
         public string Nombre { get; private set; }
@@ -13,8 +14,11 @@ namespace Domain.Entities
         public string Email { get; private set; }
         public DateTime FechaNacimiento { get; private set; }
 
+        /*
+        A FUTURO: Propiedades para el borrado lógico.
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedOnUtc { get; private set; }
+        */
 
         public ICollection<Usuario> Usuarios { get; set; }
 
@@ -80,18 +84,6 @@ namespace Domain.Entities
             Email = email.Trim();
         }
 
-        public void SoftDelete()
-        {
-            IsDeleted = true;
-            DeletedOnUtc = DateTime.UtcNow;
-        }
-
-        public void Restore()
-        {
-            IsDeleted = false;
-            DeletedOnUtc = null;
-        }
-
         /*
         private static bool EsEmailValido(string email)
         {
@@ -103,6 +95,21 @@ namespace Domain.Entities
             const string pattern = @"^(([^<>()[\]\\.,;:\s@\""]+(\.[^<>()[\]\\.,;:\s@\""]+)*)|(\"".+\""))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$";
 
             return Regex.IsMatch(email, pattern);
+        }
+        */
+
+        /*
+        A FUTURO: Métodos para gestionar el borrado lógico.
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedOnUtc = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedOnUtc = null;
         }
         */
     }

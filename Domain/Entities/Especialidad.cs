@@ -2,13 +2,17 @@
 
 namespace Domain.Entities
 {
-    public class Especialidad : ISoftDeletable
+    // A FUTURO: La interfaz ISoftDeletable podría volver a implementarse.
+    public class Especialidad //: ISoftDeletable
     {
         public int Id { get; private set; }
         public string Descripcion { get; private set; }
 
+        /*
+        A FUTURO: Propiedades para el borrado lógico.
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedOnUtc { get; private set; }
+        */
 
 
         public virtual ICollection<Plan> Planes { get; set; }
@@ -39,6 +43,8 @@ namespace Domain.Entities
             Descripcion = descripcion;
         }
 
+        /*
+        A FUTURO: Métodos para gestionar el borrado lógico.
         public void SoftDelete()
         {
             IsDeleted = true;
@@ -50,6 +56,7 @@ namespace Domain.Entities
             IsDeleted = false;
             DeletedOnUtc = null;
         }
+        */
 
     }
 }

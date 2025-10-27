@@ -6,8 +6,8 @@ namespace ApplicationClean.Interfaces.Repositories
     {
         Task AddAsync(Curso curso);
         Task UpdateAsync(Curso curso);
-        Task DeleteAsync(Curso curso);
-
+        // A FUTURO: Se puede reactivar el borrado físico o lógico.
+        //Task DeleteAsync(Curso curso);
         Task<Curso> GetByIdAsync(int id);
         Task<IEnumerable<Curso>> GetAllAsync();
         Task<bool> CursoExistsAsync(int idMateria, int idComision, int anioCalendario, int? excludeId = null);

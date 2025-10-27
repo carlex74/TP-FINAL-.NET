@@ -6,7 +6,8 @@ namespace ApplicationClean.Interfaces.Services
     {
         Task<PlanDTO> AddAsync(CrearPlanDTO plan);
         Task<PlanDTO> UpdateAsync(PlanDTO plan);
-        Task<bool> DeleteAsync(int id);
+        // A FUTURO: Se puede reactivar la funcionalidad de borrado.
+        // Task<bool> DeleteAsync(int id);
         Task<PlanDTO> GetByIdAsync(int id);
         Task<IEnumerable<PlanDTO>> GetAllAsync();
     }

@@ -46,12 +46,15 @@ public class MateriasController : ControllerBase
         return NoContent();
     }
 
+    /*
+    A FUTURO: El endpoint de borrado puede ser reactivado.
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         await _materiaService.DeleteAsync(id);
         return NoContent();
     }
+    */
 
     [HttpPut("{id}/planes")]
     public async Task<IActionResult> AssignPlanes(int id, [FromBody] List<int> planIds)

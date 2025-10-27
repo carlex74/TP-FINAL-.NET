@@ -60,6 +60,8 @@ public class PlanesController : ControllerBase
         return NoContent();
     }
 
+    /*
+    A FUTURO: El endpoint de borrado puede ser reactivado.
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -68,4 +70,5 @@ public class PlanesController : ControllerBase
         await _planService.DeleteAsync(id);
         return NoContent();
     }
+    */
 }

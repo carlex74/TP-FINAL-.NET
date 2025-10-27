@@ -6,7 +6,8 @@ namespace ApplicationClean.Interfaces.Services
     {
         Task<EspecialidadDTO> AddAsync(EspecialidadDTO especialidadDTO);
         Task<EspecialidadDTO> UpdateAsync(EspecialidadDTO especialidadDTO);
-        Task<bool> DeleteAsync(int id);
+        // A FUTURO: Se puede reactivar la funcionalidad de borrado.
+        // Task<bool> DeleteAsync(int id);
         Task<EspecialidadDTO> GetByIdAsync(int id);
         Task<IEnumerable<EspecialidadDTO>> GetAllAsync();
     }

@@ -7,7 +7,8 @@ namespace ApplicationClean.Interfaces.ApiClients
         Task<ComisionDTO> GetById(int id);
         Task<IEnumerable<ComisionDTO>> GetAll();
         Task<ComisionDTO> Add(ComisionDTO comision);
-        Task Delete(int id);
+        // A FUTURO: Se puede reactivar la llamada al endpoint de borrado.
+        //Task Delete(int id);
         Task Update(ComisionDTO comision);
         Task AssignPlanes(int comisionId, List<int> planIds);
     }

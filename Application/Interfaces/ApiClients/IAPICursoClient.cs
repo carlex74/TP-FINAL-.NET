@@ -9,7 +9,8 @@ namespace ApplicationClean.Interfaces.ApiClients
 
         Task Add(CursoDTO curso);
 
-        Task Delete(int id);
+        // A FUTURO: Se puede reactivar la llamada al endpoint de borrado.
+        //Task Delete(int id);
 
         Task Update(CursoDTO curso);
     }

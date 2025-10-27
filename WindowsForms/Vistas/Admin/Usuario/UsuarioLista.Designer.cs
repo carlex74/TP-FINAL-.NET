@@ -150,7 +150,7 @@
             eliminarButton.TabIndex = 3;
             eliminarButton.Text = "ELIMINAR";
             eliminarButton.UseVisualStyleBackColor = false;
-            eliminarButton.Click += eliminarButton_Click;
+            eliminarButton.Visible = false;
             // 
             // panelFiltros
             // 

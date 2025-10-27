@@ -38,16 +38,19 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        /*
+        A FUTURO: Implementación del borrado físico.
         public async Task DeleteAsync(Especialidad especialidad)
         {
             _context.Especialidades.Remove(especialidad);
 
             await _context.SaveChangesAsync();
         }
+        */
 
         public async Task<bool> DescripcionExistsAsync(string descripcion, int? excludeId = null)
         {
-            var query = _context.Especialidades.IgnoreQueryFilters(); // Ignora el filtro
+            var query = _context.Especialidades.AsQueryable();
             if (excludeId.HasValue)
             {
                 query = query.Where(e => e.Id != excludeId.Value);

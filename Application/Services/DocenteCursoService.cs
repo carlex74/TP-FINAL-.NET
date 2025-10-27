@@ -66,10 +66,8 @@ namespace ApplicationClean.Services
             var asignacion = await _repository.GetByIdAsync(idCurso, legajo);
             if (asignacion == null)
             {
-                throw new KeyNotFoundException($"No se encontró la asignación a eliminar.");
+                return null;
             }
-
-            asignacion.SoftDelete();
 
             return _mapper.Map<DocenteCursoDTO>(asignacion);
         }
@@ -80,7 +78,8 @@ namespace ApplicationClean.Services
             return _mapper.Map<IEnumerable<DocenteCursoDTO>>(asignaciones);
         }
 
-
+        /*
+        A FUTURO: Implementación del borrado lógico.
         public async Task DeleteAsync(int idCurso, string legajoDocente)
         {
             var asignacion = await _repository.GetByIdAsync(idCurso, legajoDocente);
@@ -92,6 +91,6 @@ namespace ApplicationClean.Services
             asignacion.SoftDelete();
             await _repository.UpdateAsync(asignacion);
         }
-
+        */
     }
 }

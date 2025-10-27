@@ -18,7 +18,7 @@ namespace ApplicationClean.Services
 
         public async Task<UsuarioDTO> LoginAsync(LoginRequestDTO loginRequest)
         {
-            var usuario = await _usuarioRepository.GetByLegajoIncludingDeletedAsync(loginRequest.Legajo);
+            var usuario = await _usuarioRepository.GetByLegajoAsync(loginRequest.Legajo);
             if (usuario == null || !usuario.Habilitado) return null;
             if (!BCrypt.Net.BCrypt.Verify(loginRequest.Clave, usuario.ClaveHash)) return null;
             return MapToUsuarioDTO(usuario);
@@ -99,6 +99,8 @@ namespace ApplicationClean.Services
             return MapToUsuarioDTO(usuario);
         }
 
+        /*
+        A FUTURO: Implementación del borrado lógico.
         public async Task<bool> DeleteAsync(string legajo)
         {
             var usuario = await _usuarioRepository.GetByLegajoAsync(legajo);
@@ -111,6 +113,7 @@ namespace ApplicationClean.Services
             await _usuarioRepository.UpdateAsync(usuario);
             return true;
         }
+        */
 
         private UsuarioDTO MapToUsuarioDTO(Usuario usuario)
         {

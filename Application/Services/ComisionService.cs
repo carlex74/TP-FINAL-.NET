@@ -56,6 +56,8 @@ namespace ApplicationClean.Services
             return comisionDto;
         }
 
+        /*
+        A FUTURO: Implementación del borrado lógico.
         public async Task<bool> DeleteAsync(int id)
         {
             var comision = await _comisionRepository.GetByIdAsync(id);
@@ -68,6 +70,7 @@ namespace ApplicationClean.Services
             await _comisionRepository.UpdateAsync(comision);
             return true;
         }
+        */
 
         public async Task<ComisionDTO> GetByIdAsync(int id)
         {

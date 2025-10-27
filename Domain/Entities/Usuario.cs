@@ -2,7 +2,8 @@
 
 namespace Domain.Entities
 {
-    public abstract class Usuario : ISoftDeletable
+    // A FUTURO: La interfaz ISoftDeletable podría volver a implementarse.
+    public abstract class Usuario //: ISoftDeletable
     {
         public enum TipoUsuario
         {
@@ -17,8 +18,11 @@ namespace Domain.Entities
         public bool Habilitado { get; private set; }
         public int IdPersona { get; private set; }
 
+        /*
+        A FUTURO: Propiedades para el borrado lógico.
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedOnUtc { get; private set; }
+        */
 
 
         public ICollection<AlumnoInscripcion> AlumnoInscripcions { get; private set; }
@@ -66,6 +70,8 @@ namespace Domain.Entities
             Habilitado = habilitado;
         }
 
+        /*
+        A FUTURO: Métodos para gestionar el borrado lógico.
         public void SoftDelete()
         {
             IsDeleted = true;
@@ -77,7 +83,6 @@ namespace Domain.Entities
             IsDeleted = false;
             DeletedOnUtc = null;
         }
-
-
+        */
     }
 }

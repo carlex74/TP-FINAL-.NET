@@ -9,6 +9,7 @@ namespace ApplicationClean.Interfaces.Services
         Task<UsuarioDTO> GetByLegajoAsync(string legajo);
         Task<IEnumerable<UsuarioDTO>> GetAllAsync();
         Task<UsuarioDTO> UpdateAsync(string legajo, ActualizarUsuarioDTO actualizarUsuarioDto);
-        Task<bool> DeleteAsync(string legajo);
+        // A FUTURO: Se puede reactivar la funcionalidad de borrado.
+        // Task<bool> DeleteAsync(int id);
     }
 }

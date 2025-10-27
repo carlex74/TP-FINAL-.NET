@@ -36,15 +36,18 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        /*
+        A FUTURO: Implementación del borrado físico.
         public async Task DeleteAsync(Curso curso)
         {
             _context.Cursos.Remove(curso);
             await _context.SaveChangesAsync();
         }
+        */
 
         public async Task<bool> CursoExistsAsync(int idMateria, int idComision, int anioCalendario, int? excludeId = null)
         {
-            var query = _context.Cursos.IgnoreQueryFilters(); // Validar contra todos, borrados o no
+            var query = _context.Cursos.AsQueryable();
             if (excludeId.HasValue)
             {
                 query = query.Where(c => c.Id != excludeId.Value);

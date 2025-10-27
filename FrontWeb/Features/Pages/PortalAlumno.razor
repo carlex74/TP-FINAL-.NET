@@ -47,7 +47,6 @@
                                     <th>Comisión</th>
                                     <th>Condición</th>
                                     <th>Nota</th>
-                                    <th class="text-center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,7 +57,14 @@
                                         <td>@insc.ComisionDescripcion</td>
                                         <td><span class="badge bg-info text-dark">@insc.Condicion</span></td>
                                         <td>@(insc.Condicion == "Inscripto" ? "-" : insc.Nota.ToString())</td>
-                                        <td class="text-center"><button class="btn btn-danger btn-sm" @onclick="() => AnularInscripcion(insc.CursoId, insc.MateriaNombre)"><span class="bi bi-trash-fill"></span> Anular</button></td>
+                                        @* A FUTURO: Se puede reactivar el botón de anular inscripción. *@
+                                        @*
+                                        <td class="text-center">
+                                            <button class="btn btn-danger btn-sm" @onclick="() => AnularInscripcion(insc.CursoId, insc.MateriaNombre)">
+                                                <span class="bi bi-trash-fill"></span> Anular
+                                            </button>
+                                        </td>
+                                        *@
                                     </tr>
                                 }
                             </tbody>
@@ -257,6 +263,8 @@
         }
     }
 
+    /*
+    A FUTURO: Funcionalidad para anular una inscripción.
     private async Task AnularInscripcion(int cursoId, string materiaNombre)
     {
         var confirmado = await JSRuntime.InvokeAsync<bool>("confirm", $"¿Está seguro de que desea anular su inscripción a la materia '{materiaNombre}'?");
@@ -277,6 +285,7 @@
             isSubmitting = false;
         }
     }
+    */
     
     public class InscripcionViewModel {
         public int CursoId { get; set; }

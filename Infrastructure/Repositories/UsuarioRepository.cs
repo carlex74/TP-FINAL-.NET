@@ -40,25 +40,28 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        /*
+        A FUTURO: Implementación del borrado físico.
         public async Task DeleteAsync(Usuario usuario)
         {
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
         }
+        */
 
+        /*
+        A FUTURO: Implementación para buscar usuarios borrados lógicamente.
         public async Task<Usuario> GetByLegajoIncludingDeletedAsync(string legajo)
         {
-            return await _context.Usuarios.IgnoreQueryFilters() // Ignora el filtro
+            return await _context.Usuarios.IgnoreQueryFilters() 
                                           .Include(u => u.Persona)
                                           .FirstOrDefaultAsync(u => u.Legajo == legajo);
         }
+        */
 
         public async Task<bool> LegajoExistsAsync(string legajo)
         {
-            // Se usa IgnoreQueryFilters() para buscar también entre los usuarios borrados lógicamente.
-            return await _context.Usuarios
-                                 .IgnoreQueryFilters()
-                                 .AnyAsync(u => u.Legajo == legajo);
+            return await _context.Usuarios.AnyAsync(u => u.Legajo == legajo);
         }
 
     }

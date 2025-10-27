@@ -9,6 +9,7 @@ namespace ApplicationClean.Interfaces.ApiClients
         Task<PersonaDTO> GetById(int id);
         Task<PersonaDTO> Add(PersonaDTO personaDto);
         Task Update(PersonaDTO personaDto);
-        Task Delete(int id);
+        // A FUTURO: Se puede reactivar la llamada al endpoint de borrado.
+        //Task Delete(int id);
     }
 }

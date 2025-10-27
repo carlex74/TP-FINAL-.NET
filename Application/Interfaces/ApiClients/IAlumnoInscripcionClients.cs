@@ -12,6 +12,7 @@ namespace ApplicationClean.Interfaces.ApiClients
 
         Task Update(AlumnoInscripcionDTO inscripcion);
 
-        Task Delete(string legajo, int idCurso);
+        // A FUTURO: Se puede reactivar la llamada al endpoint de borrado.
+        //Task Delete(string legajo, int idCurso);
     }
 }

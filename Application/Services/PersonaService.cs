@@ -66,6 +66,8 @@ namespace ApplicationClean.Services
             return personaDto;
         }
 
+        /*
+        A FUTURO: Implementación del borrado lógico.
         public async Task<bool> DeleteAsync(int id)
         {
             var persona = await _personaRepository.GetByIdAsync(id);
@@ -79,6 +81,7 @@ namespace ApplicationClean.Services
             await _personaRepository.UpdateAsync(persona);
             return true;
         }
+        */
 
         public async Task<PersonaDTO> GetByIdAsync(int id)
         {

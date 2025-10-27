@@ -75,9 +75,8 @@ public class AlumnoInscripcionController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>
-    /// Elimina (anula) una inscripción existente.
-    /// </summary>
+    /*
+    A FUTURO: El endpoint de borrado puede ser reactivado.
     [HttpDelete("{legajoAlumno}/{idCurso}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
@@ -86,5 +85,5 @@ public class AlumnoInscripcionController : ControllerBase
         await _inscripcionService.DeleteAsync(legajoAlumno, idCurso);
         return NoContent();
     }
-
+    */
 }

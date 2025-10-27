@@ -65,6 +65,8 @@ namespace WindowsForms
             }
         }
 
+        /*
+        A FUTURO: Funcionalidad de borrado.
         private async void eliminarButton_Click(object sender, EventArgs e)
         {
             if (cursoDataGridView.SelectedRows.Count == 0) return;
@@ -84,6 +86,7 @@ namespace WindowsForms
                 ErrorHandler.HandleError(ex);
             }
         }
+        */
 
         private async void GetAllAndLoad()
         {

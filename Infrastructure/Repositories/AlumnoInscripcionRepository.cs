@@ -37,11 +37,14 @@ namespace Infrastructure.Repositories
                                  .ToListAsync();
         }
 
+        /*
+        A FUTURO: Implementación del borrado físico.
         public async Task DeleteAsync(AlumnoInscripcion inscripcion)
         {
             _context.Inscripciones.Remove(inscripcion);
             await _context.SaveChangesAsync();
         }
+        */
 
         public async Task<IEnumerable<AlumnoInscripcion>> GetInscripcionesPorCursoAsync(int idCurso)
         {
@@ -57,22 +60,22 @@ namespace Infrastructure.Repositories
 
 
             return await _context.Inscripciones
-                                 .IgnoreQueryFilters()
-                                 .Include(i => i.Curso)
-                                     .ThenInclude(c => c.Materia)
-                                 .Include(i => i.Alumno)
-                                     .ThenInclude(a => a.Persona)
-                                 .FirstOrDefaultAsync(i => i.LegajoAlumno == legajo && i.IdCurso == idCurso);
+                             .Include(i => i.Curso)
+                                 .ThenInclude(c => c.Materia)
+                             .Include(i => i.Alumno)
+                                 .ThenInclude(a => a.Persona)
+                             .FirstOrDefaultAsync(i => i.LegajoAlumno == legajo && i.IdCurso == idCurso);
         }
 
+        /*
+        A FUTURO: Implementación para buscar inscripciones borradas lógicamente.
         public async Task<AlumnoInscripcion> GetHistoricalByIdAsync(string legajo, int idCurso)
         {
             return await _context.Inscripciones
                                  .IgnoreQueryFilters()
-
-
                                  .FirstOrDefaultAsync(i => i.LegajoAlumno == legajo && i.IdCurso == idCurso);
         }
+        */
 
     }
 }

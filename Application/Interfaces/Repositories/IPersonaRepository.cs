@@ -7,7 +7,8 @@ namespace ApplicationClean.Interfaces.Repositories
         Task<IEnumerable<Persona>> GetAllAsync();
         Task AddAsync(Persona persona);
         Task UpdateAsync(Persona persona);
-        Task DeleteAsync(Persona persona);
+        // A FUTURO: Se puede reactivar el borrado físico o lógico.
+        // Task DeleteAsync(Persona persona);
         Task<Persona> GetByEmailAsync(string email);
         Task<Persona> GetByDniAsync(string dni);
 

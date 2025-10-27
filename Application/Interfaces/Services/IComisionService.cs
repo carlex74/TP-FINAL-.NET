@@ -6,7 +6,8 @@ namespace ApplicationClean.Interfaces.Services
     {
         Task<ComisionDTO> AddAsync(ComisionDTO comisionDTO);
         Task<ComisionDTO> UpdateAsync(ComisionDTO comisionDTO);
-        Task<bool> DeleteAsync(int id);
+        // A FUTURO: Se puede reactivar la funcionalidad de borrado.
+        // Task<bool> DeleteAsync(int id);
         Task<ComisionDTO> GetByIdAsync(int id);
         Task<IEnumerable<ComisionDTO>> GetAllAsync();
         Task AssignPlanesAsync(int comisionId, List<int> planIds);

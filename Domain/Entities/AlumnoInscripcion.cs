@@ -2,15 +2,19 @@
 
 namespace Domain.Entities
 {
-    public class AlumnoInscripcion : ISoftDeletable
+    // A FUTURO: La interfaz ISoftDeletable podría volver a implementarse.
+    public class AlumnoInscripcion //: ISoftDeletable
     {
         public string Condicion { get; private set; }
         public string LegajoAlumno { get; private set; }
         public int IdCurso { get; private set; }
         public int Nota { get; private set; }
 
+        /*
+        A FUTURO: Propiedades para el borrado lógico.
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedOnUtc { get; private set; }
+        */
 
 
         public Usuario Alumno { get; private set; }
@@ -50,18 +54,19 @@ namespace Domain.Entities
             Nota = nota;
         }
 
-        public void SoftDelete()
-        {
-            IsDeleted = true;
-            DeletedOnUtc = DateTime.UtcNow;
-        }
+        /*
+       A FUTURO: Métodos para gestionar el borrado lógico.
+       public void SoftDelete()
+       {
+           IsDeleted = true;
+           DeletedOnUtc = DateTime.UtcNow;
+       }
 
-        public void Restore()
-        {
-            IsDeleted = false;
-            DeletedOnUtc = null;
-        }
-
-
+       public void Restore()
+       {
+           IsDeleted = false;
+           DeletedOnUtc = null;
+       }
+       */
     }
 }

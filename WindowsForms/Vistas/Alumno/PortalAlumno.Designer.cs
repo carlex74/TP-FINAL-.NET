@@ -191,7 +191,7 @@
             btnAnular.TabIndex = 2;
             btnAnular.Text = "ANULAR INSCRIPCIÓN";
             btnAnular.UseVisualStyleBackColor = false;
-            btnAnular.Click += btnAnular_Click;
+            btnAnular.Visible = false;
             // 
             // lblMisInscripciones
             // 

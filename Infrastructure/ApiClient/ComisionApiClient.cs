@@ -36,11 +36,14 @@ namespace Infrastructure.ApiClients
             response.EnsureSuccessStatusCode();
         }
 
+        /*
+        A FUTURO: Implementación de la llamada al endpoint DELETE.
         public async Task Delete(int id)
         {
             var response = await _client.DeleteAsync($"comisiones/{id}");
             response.EnsureSuccessStatusCode();
         }
+        */
 
         public async Task AssignPlanes(int comisionId, List<int> planIds)
         {

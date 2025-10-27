@@ -39,10 +39,13 @@ namespace Infrastructure.ApiClients
             response.EnsureSuccessStatusCode();
         }
 
+        /*
+        A FUTURO: Implementación de la llamada al endpoint DELETE.
         public async Task Delete(string legajo)
         {
             HttpResponseMessage response = await _httpClient.DeleteAsync($"usuarios/{legajo}");
             response.EnsureSuccessStatusCode();
         }
+        */
     }
 }

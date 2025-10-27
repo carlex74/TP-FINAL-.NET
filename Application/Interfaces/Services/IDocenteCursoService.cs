@@ -8,6 +8,7 @@ namespace ApplicationClean.Interfaces.Services
         Task<DocenteCursoDTO> UpdateAsync(DocenteCursoDTO docenteCursoDTO);
         Task<DocenteCursoDTO> GetByIdAsync(int idCurso, string legajoDocente);
         Task<IEnumerable<DocenteCursoDTO>> GetAllAsync();
-        Task DeleteAsync(int idCurso, string legajoDocente);
+        // A FUTURO: Se puede reactivar la funcionalidad de borrado.
+        // Task<bool> DeleteAsync(int idCurso, string legajoDocente);
     }
 }

@@ -2,7 +2,8 @@
 
 namespace Domain.Entities
 {
-    public class DocenteCurso : ISoftDeletable
+    // A FUTURO: La interfaz ISoftDeletable podría volver a implementarse.
+    public class DocenteCurso //: ISoftDeletable
     {
         public enum TipoCargos //por ahora solo estos tipos de cargos, se pueden agregar más si es necesario
         {
@@ -14,8 +15,12 @@ namespace Domain.Entities
         public int IdCurso { get; private set; }
         public string LegajoDocente { get; private set; }
         public TipoCargos Cargo { get; private set; }
+
+        /*
+        A FUTURO: Propiedades para el borrado lógico.
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedOnUtc { get; private set; }
+        */
 
         public Usuario Docente { get; private set; }
         public Curso Curso { get; private set; }
@@ -45,6 +50,8 @@ namespace Domain.Entities
             Cargo = cargo;
         }
 
+        /*
+        A FUTURO: Métodos para gestionar el borrado lógico.
         public void SoftDelete()
         {
             IsDeleted = true;
@@ -56,6 +63,7 @@ namespace Domain.Entities
             IsDeleted = false;
             DeletedOnUtc = null;
         }
+        */
 
     }
 }

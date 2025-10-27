@@ -10,7 +10,8 @@ namespace ApplicationClean.Interfaces.ApiClients
 
         Task Add(EspecialidadDTO especialidad);
 
-        Task Delete(int id);
+        // A FUTURO: Se puede reactivar la llamada al endpoint de borrado.
+        //Task Delete(int id);
 
         Task Update(EspecialidadDTO especialidad);
     }

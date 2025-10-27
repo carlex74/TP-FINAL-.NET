@@ -60,6 +60,8 @@ public class PersonasController : ControllerBase
         return NoContent();
     }
 
+    /*
+    A FUTURO: El endpoint de borrado puede ser reactivado.
     [HttpDelete("{id}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
@@ -68,4 +70,5 @@ public class PersonasController : ControllerBase
         await _personaService.DeleteAsync(id);
         return NoContent();
     }
+    */
 }

@@ -38,11 +38,14 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        /*
+        A FUTURO: Implementación del borrado físico.
         public async Task DeleteAsync(Materia materia)
         {
             _context.Materias.Remove(materia);
             await _context.SaveChangesAsync();
         }
+        */
 
         public async Task<Materia> GetByIdWithPlanesAsync(int id)
         {
@@ -54,7 +57,7 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> NombreExistsAsync(string nombre, int? excludeId = null)
         {
-            var query = _context.Materias.IgnoreQueryFilters();
+            var query = _context.Materias.AsQueryable();
             if (excludeId.HasValue)
             {
                 query = query.Where(m => m.Id != excludeId.Value);
@@ -64,11 +67,8 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> ExistsAsync(int id)
         {
-
             // Esto asegura que no se pueda asignar una materia borrada a un nuevo curso.
             return await _context.Materias.AnyAsync(m => m.Id == id);
         }
-
-
     }
 }

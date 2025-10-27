@@ -53,6 +53,8 @@ public class UsuariosController : ControllerBase
         return Ok(usuarioActualizado);
     }
 
+    /*
+    A FUTURO: El endpoint de borrado puede ser reactivado.
     [HttpDelete("{legajo}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
@@ -61,4 +63,5 @@ public class UsuariosController : ControllerBase
         await _usuarioService.DeleteAsync(legajo);
         return NoContent();
     }
+    */
 }

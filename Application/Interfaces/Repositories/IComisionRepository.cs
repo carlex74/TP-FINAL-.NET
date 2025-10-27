@@ -6,7 +6,8 @@ namespace ApplicationClean.Interfaces.Repositories
     {
         Task AddAsync(Comision comision);
         Task UpdateAsync(Comision comision);
-        Task DeleteAsync(Comision comision);
+        // A FUTURO: Se puede reactivar el borrado físico o lógico.
+        //Task DeleteAsync(Comision comision);
         Task<Comision> GetByIdAsync(int id);
         Task<IEnumerable<Comision>> GetAllAsync();
         Task<Comision> GetByIdWithPlanesAsync(int id);

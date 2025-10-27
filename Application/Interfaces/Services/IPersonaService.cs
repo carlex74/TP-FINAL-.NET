@@ -8,6 +8,7 @@ namespace ApplicationClean.Interfaces
         Task<IEnumerable<PersonaDTO>> GetAllAsync();
         Task<PersonaDTO> AddAsync(PersonaDTO personaDto);
         Task<PersonaDTO> UpdateAsync(PersonaDTO personaDto);
-        Task<bool> DeleteAsync(int id);
+        // A FUTURO: Se puede reactivar la funcionalidad de borrado.
+        // Task<bool> DeleteAsync(int id);
     }
 }

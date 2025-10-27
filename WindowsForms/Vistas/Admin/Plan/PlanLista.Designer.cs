@@ -35,8 +35,9 @@
             topPanel.Controls.Add(titleLabel);
             topPanel.Dock = DockStyle.Top;
             topPanel.Location = new Point(0, 0);
+            topPanel.Margin = new Padding(3, 4, 3, 4);
             topPanel.Name = "topPanel";
-            topPanel.Size = new Size(656, 56);
+            topPanel.Size = new Size(750, 75);
             topPanel.TabIndex = 3;
             // 
             // titleLabel
@@ -44,9 +45,9 @@
             titleLabel.AutoSize = true;
             titleLabel.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold);
             titleLabel.ForeColor = Color.White;
-            titleLabel.Location = new Point(22, 14);
+            titleLabel.Location = new Point(25, 19);
             titleLabel.Name = "titleLabel";
-            titleLabel.Size = new Size(163, 25);
+            titleLabel.Size = new Size(197, 31);
             titleLabel.TabIndex = 0;
             titleLabel.Text = "Gestión de Planes";
             // 
@@ -81,14 +82,16 @@
             planDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
             planDataGridView.EnableHeadersVisualStyles = false;
             planDataGridView.GridColor = Color.FromArgb(238, 238, 238);
-            planDataGridView.Location = new Point(24, 131);
+            planDataGridView.Location = new Point(27, 175);
+            planDataGridView.Margin = new Padding(3, 4, 3, 4);
             planDataGridView.MultiSelect = false;
             planDataGridView.Name = "planDataGridView";
             planDataGridView.ReadOnly = true;
             planDataGridView.RowHeadersVisible = false;
+            planDataGridView.RowHeadersWidth = 51;
             planDataGridView.RowTemplate.Height = 40;
             planDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            planDataGridView.Size = new Size(607, 402);
+            planDataGridView.Size = new Size(694, 536);
             planDataGridView.TabIndex = 3;
             planDataGridView.CellContentClick += planDataGridView_CellContentClick;
             // 
@@ -100,9 +103,10 @@
             agregarButton.FlatStyle = FlatStyle.Flat;
             agregarButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             agregarButton.ForeColor = Color.White;
-            agregarButton.Location = new Point(24, 80);
+            agregarButton.Location = new Point(27, 107);
+            agregarButton.Margin = new Padding(3, 4, 3, 4);
             agregarButton.Name = "agregarButton";
-            agregarButton.Size = new Size(105, 30);
+            agregarButton.Size = new Size(120, 40);
             agregarButton.TabIndex = 1;
             agregarButton.Text = "AGREGAR";
             agregarButton.UseVisualStyleBackColor = false;
@@ -116,9 +120,10 @@
             modificarButton.FlatStyle = FlatStyle.Flat;
             modificarButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             modificarButton.ForeColor = Color.White;
-            modificarButton.Location = new Point(135, 80);
+            modificarButton.Location = new Point(154, 107);
+            modificarButton.Margin = new Padding(3, 4, 3, 4);
             modificarButton.Name = "modificarButton";
-            modificarButton.Size = new Size(105, 30);
+            modificarButton.Size = new Size(120, 40);
             modificarButton.TabIndex = 2;
             modificarButton.Text = "MODIFICAR";
             modificarButton.UseVisualStyleBackColor = false;
@@ -132,26 +137,28 @@
             eliminarButton.FlatStyle = FlatStyle.Flat;
             eliminarButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             eliminarButton.ForeColor = Color.White;
-            eliminarButton.Location = new Point(245, 80);
+            eliminarButton.Location = new Point(280, 107);
+            eliminarButton.Margin = new Padding(3, 4, 3, 4);
             eliminarButton.Name = "eliminarButton";
-            eliminarButton.Size = new Size(105, 30);
+            eliminarButton.Size = new Size(120, 40);
             eliminarButton.TabIndex = 3;
             eliminarButton.Text = "ELIMINAR";
             eliminarButton.UseVisualStyleBackColor = false;
-            eliminarButton.Click += eliminarButton_Click;
+            eliminarButton.Visible = false;
             // 
             // PlanLista
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 247, 250);
-            ClientSize = new Size(656, 562);
+            ClientSize = new Size(750, 749);
             Controls.Add(eliminarButton);
             Controls.Add(modificarButton);
             Controls.Add(agregarButton);
             Controls.Add(planDataGridView);
             Controls.Add(topPanel);
             FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(3, 4, 3, 4);
             Name = "PlanLista";
             Text = "PlanLista";
             Load += PlanLista_Load;

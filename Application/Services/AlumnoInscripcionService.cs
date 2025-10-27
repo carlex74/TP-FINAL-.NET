@@ -31,37 +31,60 @@ namespace ApplicationClean.Services
             if (alumno == null || !(alumno is Alumno))
                 throw new BusinessRuleException($"El legajo {inscripcionDto.LegajoAlumno} no corresponde a un alumno válido.");
 
+            var inscripcionExistente = await _repository.GetByIdAsync(inscripcionDto.LegajoAlumno, inscripcionDto.IdCurso);
+            if (inscripcionExistente != null)
+            {
+                throw new BusinessRuleException("El alumno ya se encuentra inscrito en este curso.");
+            }
+
+            curso.DecrementarCupo();
+            var nuevaInscripcion = _mapper.Map<AlumnoInscripcion>(inscripcionDto);
+
+            await _repository.AddAsync(nuevaInscripcion);
+            await _cursoRepository.UpdateAsync(curso);
+
+            return _mapper.Map<AlumnoInscripcionDTO>(nuevaInscripcion);
+        }
+
+        /*
+        A FUTURO: La siguiente era la implementación original que manejaba el borrado lógico.
+        Se puede descomentar si se reactiva ISoftDeletable.
+
+        public async Task<AlumnoInscripcionDTO> AddAsync(AlumnoInscripcionDTO inscripcionDto)
+        {
+            if (!await _cursoRepository.ExistsAsync(inscripcionDto.IdCurso))
+                throw new BusinessRuleException($"El curso con ID {inscripcionDto.IdCurso} no es válido o no existe.");
+
+            var alumno = await _usuarioRepository.GetByLegajoAsync(inscripcionDto.LegajoAlumno);
+            if (alumno == null || !(alumno is Alumno))
+                throw new BusinessRuleException($"El legajo {inscripcionDto.LegajoAlumno} no corresponde a un alumno válido.");
+
             var inscripcionExistente = await _repository.GetHistoricalByIdAsync(inscripcionDto.LegajoAlumno, inscripcionDto.IdCurso);
 
             if (inscripcionExistente != null)
             {
-                if (!inscripcionExistente.IsDeleted)
+                if (!inscripcionExistente.IsDeleted) // <-- ESTO CAUSABA EL ERROR
                 {
                     throw new BusinessRuleException("El alumno ya se encuentra inscrito en este curso.");
                 }
                 else
                 {
-                    curso.DecrementarCupo();
-                    inscripcionExistente.Restore();
-
+                    inscripcionExistente.Restore(); // <-- ESTO CAUSABA EL ERROR
                     await _repository.UpdateAsync(inscripcionExistente);
-                    await _cursoRepository.UpdateAsync(curso);
-
                     return _mapper.Map<AlumnoInscripcionDTO>(inscripcionExistente);
                 }
             }
             else
             {
-                curso.DecrementarCupo();
                 var nuevaInscripcion = _mapper.Map<AlumnoInscripcion>(inscripcionDto);
-
                 await _repository.AddAsync(nuevaInscripcion);
-                await _cursoRepository.UpdateAsync(curso);
-
                 return _mapper.Map<AlumnoInscripcionDTO>(nuevaInscripcion);
             }
         }
+        */
 
+        /*
+        A FUTURO: Implementación del borrado lógico.
         public async Task<bool> DeleteAsync(string legajo, int idCurso)
         {
             var inscripcion = await _repository.GetByIdAsync(legajo, idCurso);
@@ -83,6 +106,7 @@ namespace ApplicationClean.Services
             await _repository.UpdateAsync(inscripcion);
             return true;
         }
+        */
 
         public async Task<AlumnoInscripcionDTO> UpdateAsync(AlumnoInscripcionDTO inscripcionDto)
         {

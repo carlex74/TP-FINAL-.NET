@@ -46,10 +46,13 @@ public class CursosController : ControllerBase
         return NoContent();
     }
 
+    /*
+    A FUTURO: El endpoint de borrado puede ser reactivado.
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         await _cursoService.DeleteAsync(id);
         return NoContent();
     }
+    */
 }

@@ -61,6 +61,8 @@ public class EspecialidadesController : ControllerBase
         return NoContent();
     }
 
+    /*
+    A FUTURO: El endpoint de borrado puede ser reactivado.
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -69,4 +71,5 @@ public class EspecialidadesController : ControllerBase
         await _especialidadService.DeleteAsync(id);
         return NoContent();
     }
+    */
 }

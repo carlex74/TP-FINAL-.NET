@@ -68,6 +68,8 @@ namespace ApplicationClean.Services
             return cursoDto;
         }
 
+        /*
+        A FUTURO: Implementación del borrado lógico.
         public async Task<bool> DeleteAsync(int id)
         {
             var curso = await _cursoRepository.GetByIdAsync(id);
@@ -80,6 +82,7 @@ namespace ApplicationClean.Services
             await _cursoRepository.UpdateAsync(curso);
             return true;
         }
+        */
 
         public async Task<CursoDTO> GetByIdAsync(int id)
         {

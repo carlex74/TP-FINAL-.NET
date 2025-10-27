@@ -52,6 +52,8 @@ namespace ApplicationClean.Services
             return especialidadDTO;
         }
 
+        /*
+        A FUTURO: Implementación del borrado lógico.
         public async Task<bool> DeleteAsync(int id)
         {
             var existingEspecialidad = await _repository.GetByIdAsync(id);
@@ -64,6 +66,7 @@ namespace ApplicationClean.Services
             await _repository.UpdateAsync(existingEspecialidad);
             return true;
         }
+        */
 
         public async Task<EspecialidadDTO> GetByIdAsync(int id)
         {

@@ -42,11 +42,14 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        /*
+        A FUTURO: Implementación del borrado físico.
         public async Task DeleteAsync(Comision comision)
         {
             _context.Comisiones.Remove(comision);
             await _context.SaveChangesAsync();
         }
+        */
 
         public async Task<Comision> GetByIdWithPlanesAsync(int id)
         {
@@ -54,7 +57,7 @@ namespace Infrastructure.Repositories
         }
         public async Task<bool> DescripcionExistsAsync(string descripcion, int? excludeId = null)
         {
-            var query = _context.Comisiones.IgnoreQueryFilters();
+            var query = _context.Comisiones.AsQueryable();
             if (excludeId.HasValue)
             {
                 query = query.Where(c => c.Nro != excludeId.Value);

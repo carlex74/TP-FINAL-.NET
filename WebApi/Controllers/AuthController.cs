@@ -43,7 +43,6 @@ public class AuthController : ControllerBase
 
     private string GenerateJwtToken(UsuarioDTO usuario)
     {
-        // Esta es la línea clave. Le decimos al manejador que no reemplace los nombres de los claims.
         var tokenHandler = new JwtSecurityTokenHandler { OutboundClaimTypeMap = new Dictionary<string, string>() };
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -53,7 +52,7 @@ public class AuthController : ControllerBase
         {
         new Claim(JwtRegisteredClaimNames.Sub, usuario.Legajo),
         new Claim("nombreCompleto", usuario.PersonaNombreCompleto ?? string.Empty),
-        new Claim(ClaimTypes.Role, usuario.Tipo.ToString()), // Ahora esto se escribirá como la URL larga
+        new Claim(ClaimTypes.Role, usuario.Tipo.ToString()),
         new Claim("planId", usuario.IdPlan?.ToString() ?? string.Empty),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
     };

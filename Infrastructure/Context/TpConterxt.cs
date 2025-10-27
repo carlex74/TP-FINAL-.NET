@@ -28,6 +28,9 @@ namespace Infrastructure.Context
             base.OnModelCreating(modelBuilder);
 
             #region Global Query Filters for Soft Delete
+            /*
+            A FUTURO: Este bloque puede descomentarse para reactivar el filtro
+            global de borrado lógico en todas las consultas de EF Core.
 
             // Itera sobre todos los tipos de entidad descubiertos en el DbContext.
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
@@ -40,7 +43,7 @@ namespace Infrastructure.Context
                     entityType.AddSoftDeleteQueryFilter();
                 }
             }
-
+            */
             #endregion
 
             modelBuilder.Entity<Persona>(entity =>
@@ -165,6 +168,11 @@ namespace Infrastructure.Context
         }
     }
 
+    /*
+    A FUTURO: Este bloque contiene los métodos de extensión para aplicar 
+    el filtro de borrado lógico. Puede descomentarse junto con el bloque
+    dentro de OnModelCreating para reactivar la funcionalidad.
+
     public static class SoftDeleteQueryFilterExtensions
     {
         public static void AddSoftDeleteQueryFilter(
@@ -185,4 +193,5 @@ namespace Infrastructure.Context
             return filter;
         }
     }
+    */
 }

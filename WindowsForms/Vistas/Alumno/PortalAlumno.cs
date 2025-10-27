@@ -159,6 +159,8 @@ namespace WindowsForms
             }
         }
 
+        /*
+        A FUTURO: Funcionalidad de borrado.
         private async void btnAnular_Click(object sender, EventArgs e)
         {
             if (misInscripcionesDataGridView.SelectedRows.Count == 0) return;
@@ -192,6 +194,7 @@ namespace WindowsForms
                 }
             }
         }
+        */
 
         private void btnCerrarSesion_Click(object sender, EventArgs e)
         {

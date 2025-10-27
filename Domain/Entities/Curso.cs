@@ -3,7 +3,8 @@ using Domain.Exceptions;
 
 namespace Domain.Entities
 {
-    public class Curso : ISoftDeletable
+    // A FUTURO: La interfaz ISoftDeletable podría volver a implementarse.
+    public class Curso //: ISoftDeletable
     {
         public int Id { get; private set; }
         public int AnioCalendario { get; private set; }
@@ -12,8 +13,11 @@ namespace Domain.Entities
         public int IdComision { get; private set; }
         public int IdMateria { get; private set; }
 
+        /*
+        A FUTURO: Propiedades para el borrado lógico.
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedOnUtc { get; private set; }
+        */
 
 
         public Materia Materia { get; private set; }
@@ -81,6 +85,8 @@ namespace Domain.Entities
             Cupo++;
         }
 
+        /*
+        A FUTURO: Métodos para gestionar el borrado lógico.
         public void SoftDelete()
         {
             IsDeleted = true;
@@ -92,5 +98,6 @@ namespace Domain.Entities
             IsDeleted = false;
             DeletedOnUtc = null;
         }
+        */
     }
 }

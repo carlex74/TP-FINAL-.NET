@@ -46,12 +46,15 @@ public class ComisionesController : ControllerBase
         return NoContent();
     }
 
+    /*
+    A FUTURO: El endpoint de borrado puede ser reactivado.
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         await _comisionService.DeleteAsync(id);
         return NoContent();
     }
+    */
 
     [HttpPut("{id}/planes")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

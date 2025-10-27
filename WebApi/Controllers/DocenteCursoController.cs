@@ -75,9 +75,8 @@ public class DocenteCursoController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>
-    /// Elimina una asignación de docente a un curso.
-    /// </summary>
+    /*
+    A FUTURO: El endpoint de borrado puede ser reactivado.
     [HttpDelete("{idCurso}/{legajoDocente}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -86,4 +85,5 @@ public class DocenteCursoController : ControllerBase
         await _docenteCursoService.DeleteAsync(idCurso, legajoDocente);
         return NoContent();
     }
+    */
 }
