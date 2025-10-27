@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Domain.Entities.Administrador">
+    <Position X="1.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Administrador.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.Alumno">
+    <Position X="5.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Alumno.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.AlumnoInscripcion" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQCAAAAAAAAIAAAAAAEQCBAAIAAAEAAQAAA=</HashCode>
+      <FileName>Entities\AlumnoInscripcion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.Comision" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAABAAAAAAAIAAAAAABAAAAAABAAAIAAAAAAQA=</HashCode>
+      <FileName>Entities\Comision.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.Curso" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAASAIAACAAAIAACCACAAAABAAQAAgAAAAIgAICAAQA=</HashCode>
+      <FileName>Entities\Curso.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Materia" />
+      <Property Name="Comision" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Docentes" />
+      <Property Name="Inscripciones" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Domain.Entities.Docente">
+    <Position X="3.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Docente.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.DocenteCurso" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Domain.Entities.DocenteCurso.TipoCargos" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Entities\DocenteCurso.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAACgAAQAAAAAAAAEIAAAAAAAACAABAAAAAAAAIAA=</HashCode>
+      <FileName>Entities\DocenteCurso.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.Especialidad" BaseTypeListCollapsed="true">
+    <Position X="15" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAABAAAAAAAAAAIAAAAAAQA=</HashCode>
+      <FileName>Entities\Especialidad.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Planes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Domain.Entities.Materia" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAACAAAAAAAAIAEAAAgQgAABAAAAgAAAAAIAAAAAAQA=</HashCode>
+      <FileName>Entities\Materia.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.Persona" BaseTypeListCollapsed="true">
+    <Position X="1" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAECAAAAALAAIAAEICkAgAAAAEAAAAAAAACAAgAAAgA=</HashCode>
+      <FileName>Entities\Persona.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Usuarios" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Domain.Entities.Plan">
+    <Position X="10.5" Y="6" Width="1.5" />
+    <AssociationLine Name="Alumnos" Type="Domain.Entities.Alumno" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.188" Y="8.901" />
+        <Point X="11.188" Y="9.276" />
+        <Point X="6.562" Y="9.276" />
+        <Point X="6.562" Y="7.819" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAECAABAAAAAIAAACAAAAEABAAAAAAAAIAAABAIAAQA=</HashCode>
+      <FileName>Entities\Plan.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Comisiones" />
+      <Property Name="Alumnos" />
+      <Property Name="Materias" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Domain.Entities.Usuario">
+    <Position X="4" Y="0.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Domain.Entities.Usuario.TipoUsuario" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Entities\Usuario.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QABABAAAAAAAAAEAAAAAFAAAAAAAARAAABIEAAAgAAQ=</HashCode>
+      <FileName>Entities\Usuario.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="AlumnoInscripcions" />
+      <Property Name="DocenteCursos" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
