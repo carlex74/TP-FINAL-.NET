@@ -1,15 +1,12 @@
-﻿using Application.Interfaces.ApiClients;
+﻿// Archivo: WindowsForms/Vistas/Reportes/ReporteHistorialForm.cs (VERSIÓN FINAL CON API)
+
+using System.Data;
+using Application.Interfaces.ApiClients;
 using Application.Interfaces.Repositories;
 using ApplicationClean.Interfaces.ApiClients;
 using Infrastructure.Reportes;
 using Infrastructure.ViewModels;
 using QuestPDF.Fluent;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using static Domain.Entities.Usuario;
 
 namespace WindowsForms

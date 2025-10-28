@@ -1,5 +1,4 @@
-﻿using Domain.Interfaces;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Domain.Entities
 {

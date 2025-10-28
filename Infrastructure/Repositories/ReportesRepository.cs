@@ -1,9 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {

@@ -1,5 +1,4 @@
 ﻿using Infrastructure.ViewModels;
-using System.Collections.Generic;
 
 namespace Infrastructure.Reportes
 {

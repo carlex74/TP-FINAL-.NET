@@ -1,6 +1,4 @@
-﻿using Domain.Interfaces;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     // A FUTURO: La interfaz ISoftDeletable podría volver a implementarse.
     public class AlumnoInscripcion //: ISoftDeletable

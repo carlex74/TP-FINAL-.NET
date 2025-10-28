@@ -1,5 +1,4 @@
-﻿using Domain.Interfaces;
-using Domain.Exceptions;
+﻿using Domain.Exceptions;
 
 namespace Domain.Entities
 {

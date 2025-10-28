@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Application.Interfaces.Repositories
+﻿namespace Application.Interfaces.Repositories
 {
     public class RendimientoCursoDto
     {

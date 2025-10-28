@@ -1,7 +1,5 @@
 ﻿using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {

@@ -1,11 +1,11 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Application.Interfaces.ApiClients;
 using ApplicationClean.Interfaces;
 using ApplicationClean.Interfaces.ApiClients;
 using Infrastructure.ApiClient;
 using Infrastructure.ApiClients;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using WindowsForms.HttpHandlers;
 using static Domain.Entities.Usuario;
 

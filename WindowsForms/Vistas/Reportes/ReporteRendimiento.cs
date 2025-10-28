@@ -1,18 +1,14 @@
-﻿using Application.Interfaces.ApiClients;
+﻿// Archivo: WindowsForms/Vistas/Reportes/ReporteRendimientoForm.cs (VERSIÓN FINAL)
+
+using System.Data;
+using System.Windows.Forms.DataVisualization.Charting;
+using Application.Interfaces.ApiClients;
 using Application.Interfaces.Repositories;
 using ApplicationClean.Interfaces.ApiClients;
 using Infrastructure.Reportes;
 using Infrastructure.ViewModels;
 using QuestPDF.Fluent;
 using ScottPlot;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using WinFormsChart = System.Windows.Forms.DataVisualization.Charting;
 
 namespace WindowsForms
