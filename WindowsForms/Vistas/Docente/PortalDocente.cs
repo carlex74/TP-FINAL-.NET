@@ -354,7 +354,7 @@ namespace WindowsForms
             }
 
             plt.Legend.IsVisible = true;
-            plt.Legend.Location = Alignment.LowerRight;
+            plt.Legend.Alignment = Alignment.LowerRight;
 
             return plt.GetImageBytes(400, 250);
         }
