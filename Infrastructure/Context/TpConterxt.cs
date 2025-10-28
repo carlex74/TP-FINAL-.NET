@@ -18,7 +18,11 @@ namespace Infrastructure.Context
         public DbSet<AlumnoInscripcion> Inscripciones { get; set; }
         public DbSet<DocenteCurso> DocentesCurso { get; set; }
 
-        public TPIContext(DbContextOptions<TPIContext> options) : base(options) { }
+        public TPIContext(DbContextOptions<TPIContext> options) : base(options) {
+            
+            this.Database.EnsureCreated();
+
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
