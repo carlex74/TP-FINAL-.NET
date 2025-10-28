@@ -1,6 +1,4 @@
-﻿// Archivo: WindowsForms/Vistas/Reportes/ReporteHistorialForm.cs (VERSIÓN FINAL CON API)
-
-using Application.Interfaces.ApiClients;
+﻿using Application.Interfaces.ApiClients;
 using Application.Interfaces.Repositories;
 using ApplicationClean.Interfaces.ApiClients;
 using Infrastructure.Reportes;

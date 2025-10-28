@@ -6,7 +6,7 @@ using Infrastructure.Reportes;
 using Infrastructure.ViewModels;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
-using ScottPlot; // <-- NUEVO USING PARA SCOTTPLOT
+using ScottPlot;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using WinFormsChart = System.Windows.Forms.DataVisualization.Charting; // <-- ALIAS PARA EVITAR CONFLICTOS
+using WinFormsChart = System.Windows.Forms.DataVisualization.Charting;
 
 namespace WindowsForms
 {
@@ -52,8 +52,6 @@ namespace WindowsForms
             _reportesClient = reportesClient;
             _docenteActual = UserSession.GetCurrentUser();
         }
-
-        // ... (Todos los métodos desde PortalDocente_Load hasta btnGenerarReporte_Click se mantienen exactamente igual que en la versión anterior) ...
         private async void PortalDocente_Load(object sender, EventArgs e)
         {
             if (_docenteActual == null)
@@ -277,7 +275,6 @@ namespace WindowsForms
             }
         }
 
-        // --- MÉTODO btnGenerarPdf_Click REEMPLAZADO ---
         private void btnGenerarPdf_Click(object sender, EventArgs e)
         {
             if (dgvReporteAlumnos.DataSource == null)
@@ -302,7 +299,6 @@ namespace WindowsForms
                     .GroupBy(a => a.Condicion)
                     .ToDictionary(g => g.Key, g => g.Count());
 
-                // Se genera el gráfico con ScottPlot, igual que en la vista del Admin
                 byte[] graficoBytes = GenerarGraficoTortaBytes(resumenCondiciones);
 
                 var dataSource = new RendimientoDataSource
@@ -336,7 +332,6 @@ namespace WindowsForms
             }
         }
 
-        // --- NUEVO MÉTODO AUXILIAR PARA SCOTTPLOT ---
         private byte[] GenerarGraficoTortaBytes(Dictionary<string, int> data)
         {
             if (data == null || !data.Any()) return null;

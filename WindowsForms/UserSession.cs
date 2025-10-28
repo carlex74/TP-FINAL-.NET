@@ -6,19 +6,18 @@ namespace WindowsForms
     public static class UserSession
     {
         private static UsuarioDTO _currentUser;
-        public static string Token { get; private set; } // <-- AÑADIR ESTA LÍNEA
+        public static string Token { get; private set; }
 
-        // Modificar el método Login
         public static void Login(UsuarioDTO user, string token)
         {
             _currentUser = user;
-            Token = token; // <-- AÑADIR ESTA LÍNEA
+            Token = token;
         }
 
         public static void Logout()
         {
             _currentUser = null;
-            Token = null; // <-- AÑADIR ESTA LÍNEA
+            Token = null;
         }
 
         public static UsuarioDTO GetCurrentUser()

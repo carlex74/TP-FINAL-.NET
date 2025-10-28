@@ -3,10 +3,8 @@
 @inject NavigationManager NavigationManager
 @inject FrontWeb.Auth.LocalStorageService LocalStorage
 
-@* Esta variable de C# controlará el layout *@
 <div class="page @(_isAdmin ? "admin-layout" : "user-layout")">
 
-    @* Esto renderiza la sidebar SÓLO si _isAdmin es true *@
     @if (_isAdmin)
     {
         <div class="sidebar">
